@@ -41,7 +41,9 @@ def validate(config, allowed):
     mode = config.get("format")
     require(mode in ("stock", "queued"), "format must be stock or queued")
     fields = {"name", "format", "variants", "repeats", "phases_s", "timeout_s"}
-    require(config.keys() == fields | ({"queue"} if mode == "queued" else set()),
+    required = fields | ({"queue"} if mode == "queued" else set())
+    optional = {"policy"} if mode == "queued" else set()
+    require(required <= config.keys() <= required | optional,
             "unexpected or missing config keys")
     require(isinstance(config["name"], str) and re.fullmatch(r"[A-Za-z0-9_-]+", config["name"]),
             "name must contain only ASCII letters, digits, hyphens, and underscores")
@@ -57,6 +59,7 @@ def validate(config, allowed):
         require(phases["warmup"] == phases["drain_limit"] == 0,
                 "stock dbtest has no separate warm-up or drain")
     else:
+        require(config.get("policy", "wait") == "wait", "queued policy must be wait")
         queue = config["queue"]
         require(isinstance(queue, dict) and QUEUE <= queue.keys() <= QUEUE | {"q2_variant"} and
                 ("q2_variant" not in queue or queue["q2_variant"] == Q2_VARIANT) and
@@ -155,6 +158,8 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
             "warmup": phases["warmup"], "drain": phases["drain_limit"], "seed": seed,
         }
         benchmark += ["--queued", run_id]
+        if "policy" in config:
+            benchmark += ["--queued-policy", config["policy"]]
         q2_variant = settings.get("q2_variant")
         if q2_variant:
             benchmark.append("--queued-mixed")
@@ -182,7 +187,7 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
         "queue": queue, "phases_s": phases, "timeout_s": config["timeout_s"], "command": command,
         "cpu_placement": {"inherited_allowed": allowed, "process_mask": cpus or allowed,
                           "worker_cpu_ids": None, "sender_cpu_id": None},
-        "policy": "i09-serial" if q2_variant else "i06-queued" if queue else "stock",
+        "policy": config.get("policy", "wait") if queue else "stock",
         "q2_variant": q2_variant, "logging": "disabled", "workload": workload,
         "yield_interval": None, "starvation_threshold": None,
         "retry_limit": 100 if queue else None, "batch_metadata": "../batch.json",

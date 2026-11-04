@@ -15,7 +15,7 @@ The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a
 | I07 | Explicit context switching | Erin | Implemented and locally validated | Standalone glibc context pair passed one million round trips per build on emulated Linux x86-64. [ABI checks, lifecycle and reproduction commands](results/i07-worker-context/README.md) |
 | I08 | Silo context state and protected regions | Brian / Erin | Implemented and locally validated | [Ownership audit, engine test and regression commands](results/i08-silo-context/README.md) |
 | I09 | Mixed workload and Q2 validation | Erica / Brian | Implemented and locally validated | [Mixed profile, deterministic engine tests and smoke records](results/i09-mixed-workload/README.md). The one- and two-worker runs committed all 783 and 1,375 measured requests |
-| I10 | Wait scheduler | Erica / Brian | Not started | |
+| I10 | Wait scheduler | Erica / Brian | Implemented and locally validated | [Deterministic scheduling test and four mixed runs](results/i10-wait/README.md). All 4,236 measurement requests committed, including 216 short requests |
 | I11 | Cooperative scheduler | Brian | Not started | |
 | I12 | Hardware interrupt delivery | Erin | Not started | Requires qualified host/interface |
 | I13 | Interrupt-driven switching | Erin / Brian | Not started | |
@@ -77,4 +77,12 @@ Implemented November 4, 2026 on Silo source base `642e51553f870f56ec6f22126874a1
 
 The emulated Linux x86-64 build passed the deterministic Q2 and short-transaction checks, the stock and short-only smokes, and both mixed smokes. The measurement phases committed 783 requests with one worker and 1,375 with two workers, including 747 and 1,303 Q2s. The I06 driver test and nine experiment-tool tests passed. [Commands, environment, raw records and reconciliation](results/i09-mixed-workload/README.md)
 
-I10 is ready to use this workload for the Wait baseline. Native PACE execution and policy comparisons remain open.
+I10 uses this workload for the Wait baseline.
+
+## I10 completion record
+
+Implemented November 4, 2026 on Silo source base `1d763ee97838d1593ef80b30e1c48ec3572a4910`. Added `--queued-policy wait` to [dbtest](../benchmarks/dbtest.cc), made the [queued driver's](../benchmarks/request_driver.cc) high-first dispatch boundary explicit, and added a Wait setting to the I05 runner and [mixed configuration](experiments/configs/queued-wait-smoke.json). The deterministic [driver test](tests/request_driver_test.cc) verified that two shorts waited 7 and 8 µs behind an active long request, then ran in FIFO order ahead of the next long request.
+
+The standalone driver, sanitizer checks, ten experiment-tool tests, and Linux TPC-C engine harness passed. The I05 runner completed two repetitions each at one and two workers on emulated Linux x86-64. The four measured phases committed 4,236 requests, including 216 New-Order and Payment requests and 4,020 Q2 requests. The archived traces reconcile every phase and show serial execution per worker. [Commands, manifests, raw traces and analysis](results/i10-wait/README.md)
+
+I11 is ready to add Cooperative and compare it against Wait with matched inputs. Native PACE measurements and cross-policy comparisons remain open.

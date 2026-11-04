@@ -1,0 +1,5 @@
+PASS Q2 region 0 checksum 12860241382490130518
+PASS Q2 region 1 checksum 11649938069444573197
+PASS Q2 region 2 checksum 14695981039346656037
+PASS queued New-Order rollback, retry, linked rows and remote stock changes
+PASS queued Payment rollback, retry, remote lower median, balances and history

@@ -1,0 +1,62 @@
+{
+  "contract_version": 1,
+  "batch_id": "queued-wait-smoke-_4ct4p3i",
+  "config": {
+    "name": "queued-wait-smoke",
+    "format": "queued",
+    "policy": "wait",
+    "variants": [
+      {
+        "workers": 1,
+        "warehouses": 1
+      },
+      {
+        "workers": 2,
+        "warehouses": 2
+      }
+    ],
+    "repeats": 2,
+    "phases_s": {
+      "warmup": 1,
+      "measurement": 1,
+      "drain_limit": 30
+    },
+    "timeout_s": 210,
+    "queue": {
+      "first_seed": 1,
+      "interval_us": 100000,
+      "batch_per_worker": 4,
+      "global_capacity_per_worker": 4,
+      "worker_capacity": 4,
+      "q2_variant": "q2_min_stock_v1"
+    }
+  },
+  "created_at_utc": "2026-11-04T20:29:08+00:00",
+  "hostname": "4ef5fa9b28d2",
+  "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.35",
+  "slurm_job_id": null,
+  "source_checkout": "/i10/source",
+  "revisions": {
+    "masstree": {
+      "head": "1150824e6a10a0384ba4bfed6b916ce62f96315f",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked_paths": []
+    },
+    "silo": {
+      "head": "1d763ee97838d1593ef80b30e1c48ec3572a4910",
+      "tracked_diff_sha256": "6590c79d11eee776a9f9de872259b950f8f1ad09efa9e01243eef79a48fb2561",
+      "untracked_paths": [
+        "replication/experiments/configs/queued-wait-smoke.json"
+      ]
+    }
+  },
+  "binary_sha256": "7c83e0c8b735247850b62f1f2b552bc5c2d1f57973278e0ac79fe0ace6e5de59",
+  "build_info": "GCC 11.4.0; glibc 2.35; MODE=perf MASSTREE=1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1; temporary -O1, BDB omission and pair formatter patch; x86-64 QEMU/Colima",
+  "tool_sha256": "959011e4ff5c6b7da6a81720de09d14e9b6f16fe52c886de742d280b338a7bb4",
+  "run_ids": [
+    "queued-wait-smoke-_4ct4p3i-r1-v1",
+    "queued-wait-smoke-_4ct4p3i-r1-v2",
+    "queued-wait-smoke-_4ct4p3i-r2-v2",
+    "queued-wait-smoke-_4ct4p3i-r2-v1"
+  ]
+}

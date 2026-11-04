@@ -1,0 +1,306 @@
+diff --git a/Makefile b/Makefile
+index 1cd145a..53a840f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -81,7 +81,7 @@ CXXFLAGS += -MD -Ithird-party/lz4 -DCONFIG_H=\"$(CONFIG_H)\"
+ ifeq ($(DEBUG_S),1)
+         CXXFLAGS += -fno-omit-frame-pointer -DDEBUG
+ else
+-        CXXFLAGS += -Werror -O2 -funroll-loops -fno-omit-frame-pointer
++        CXXFLAGS += -O1 -funroll-loops -fno-omit-frame-pointer
+ endif
+ ifeq ($(CHECK_INVARIANTS_S),1)
+ 	CXXFLAGS += -DCHECK_INVARIANTS
+@@ -155,10 +155,9 @@ OBJFILES := $(patsubst %.cc, $(O)/%.o, $(SRCFILES))
+ MASSTREE_OBJFILES := $(patsubst masstree/%.cc, $(O)/%.o, $(MASSTREE_SRCFILES))
+ 
+ BENCH_CXXFLAGS := $(CXXFLAGS)
+-BENCH_LDFLAGS := $(LDFLAGS) -ldb_cxx -lz -lrt -lcrypt -laio -ldl -lssl -lcrypto
++BENCH_LDFLAGS := $(LDFLAGS)
+ 
+-BENCH_SRCFILES = benchmarks/bdb_wrapper.cc \
+-	benchmarks/bench.cc \
++BENCH_SRCFILES = benchmarks/bench.cc \
+ 	benchmarks/request_driver.cc \
+ 	benchmarks/encstress.cc \
+ 	benchmarks/bid.cc \
+diff --git a/benchmarks/dbtest.cc b/benchmarks/dbtest.cc
+index 9d4e667..82836ca 100644
+--- a/benchmarks/dbtest.cc
++++ b/benchmarks/dbtest.cc
+@@ -16,7 +16,6 @@
+ #include "../allocator.h"
+ #include "../stats_server.h"
+ #include "bench.h"
+-#include "bdb_wrapper.h"
+ #include "ndb_wrapper.h"
+ #include "ndb_wrapper_impl.h"
+ #include "kvdb_wrapper.h"
+@@ -30,7 +29,7 @@ using namespace util;
+ 
+ enum {
+   QUEUED_RUN = 1000, QUEUED_BATCH, QUEUED_INTERVAL, QUEUED_GLOBAL, QUEUED_WORKER,
+-  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED
++  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED, QUEUED_POLICY
+ };
+ 
+ static uint64_t
+@@ -137,6 +136,7 @@ main(int argc, char **argv)
+       {"queued-warmup"             , required_argument , 0                          , QUEUED_WARMUP},
+       {"queued-drain"              , required_argument , 0                          , QUEUED_DRAIN},
+       {"queued-mixed"              , no_argument       , 0                          , QUEUED_MIXED},
++      {"queued-policy"             , required_argument , 0                          , QUEUED_POLICY},
+       {0, 0, 0, 0}
+     };
+     int option_index = 0;
+@@ -144,7 +144,7 @@ main(int argc, char **argv)
+     if (c == -1)
+       break;
+ 
+-    if (c > QUEUED_RUN && c <= QUEUED_MIXED)
++    if (c > QUEUED_RUN && c <= QUEUED_POLICY)
+       saw_queue_setting = true;
+     switch (c) {
+     case QUEUED_RUN:
+@@ -181,6 +181,12 @@ main(int argc, char **argv)
+     case QUEUED_MIXED:
+       queued_mixed = true;
+       break;
++    case QUEUED_POLICY:
++      if (string(optarg) != "wait") {
++        cerr << "[ERROR] --queued-policy supports only wait" << endl;
++        return 1;
++      }
++      break;
+ 
+     case 0:
+       if (long_options[option_index].flag != 0)
+@@ -379,12 +385,7 @@ main(int argc, char **argv)
+   }
+ #endif
+ 
+-  if (db_type == "bdb") {
+-    const string cmd = "rm -rf " + basedir + "/db/*";
+-    // XXX(stephentu): laziness
+-    int ret UNUSED = system(cmd.c_str());
+-    db = new bdb_wrapper("db", bench_type + ".db");
+-  } else if (db_type == "ndb-proto1") {
++  if (db_type == "ndb-proto1") {
+     // XXX: hacky simulation of proto1
+     db = new ndb_wrapper<transaction_proto2>(
+         logfiles, assignments, !nofsync, do_compress, fake_writes);
+diff --git a/benchmarks/request_driver.cc b/benchmarks/request_driver.cc
+index 37186a5..a4a923a 100644
+--- a/benchmarks/request_driver.cc
++++ b/benchmarks/request_driver.cc
+@@ -291,14 +291,21 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
+       w.wake.wait(lock, [&] {
+         return s.closed.load(std::memory_order_acquire) || !w.high.empty() || !w.low.empty();
+       });
+-      if (!w.high.pop(request) && !w.low.pop(request)) {
+-        // The wait predicate can only be true for empty queues after close.
+-        break;
++      const bool closed = s.closed.load(std::memory_order_acquire);
++      // Wait chooses high work at the boundary between requests. Only consider
++      // low work already present when we check high, so a concurrent low
++      // publication cannot slip ahead of a high request published before it.
++      const bool low_pending = !w.low.empty();
++      if (!w.high.pop(request) && !(low_pending && w.low.pop(request))) {
++        if (closed)
++          break;
++        continue;
+       }
+     }
+ 
+     const Ns deadline = s.drain_deadline.load(std::memory_order_acquire);
+     Prepared execute;
++    // Run the request on this worker through completion, including retries.
+     while (request.outcome == Outcome::pending) {
+       const Ns now = s.clock();
+       if (now >= deadline || s.fatal.load(std::memory_order_acquire)) {
+diff --git a/replication/experiments/run.py b/replication/experiments/run.py
+index 681c05d..5ed36be 100644
+--- a/replication/experiments/run.py
++++ b/replication/experiments/run.py
+@@ -41,7 +41,9 @@ def validate(config, allowed):
+     mode = config.get("format")
+     require(mode in ("stock", "queued"), "format must be stock or queued")
+     fields = {"name", "format", "variants", "repeats", "phases_s", "timeout_s"}
+-    require(config.keys() == fields | ({"queue"} if mode == "queued" else set()),
++    required = fields | ({"queue"} if mode == "queued" else set())
++    optional = {"policy"} if mode == "queued" else set()
++    require(required <= config.keys() <= required | optional,
+             "unexpected or missing config keys")
+     require(isinstance(config["name"], str) and re.fullmatch(r"[A-Za-z0-9_-]+", config["name"]),
+             "name must contain only ASCII letters, digits, hyphens, and underscores")
+@@ -57,6 +59,7 @@ def validate(config, allowed):
+         require(phases["warmup"] == phases["drain_limit"] == 0,
+                 "stock dbtest has no separate warm-up or drain")
+     else:
++        require(config.get("policy", "wait") == "wait", "queued policy must be wait")
+         queue = config["queue"]
+         require(isinstance(queue, dict) and QUEUE <= queue.keys() <= QUEUE | {"q2_variant"} and
+                 ("q2_variant" not in queue or queue["q2_variant"] == Q2_VARIANT) and
+@@ -155,6 +158,8 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
+             "warmup": phases["warmup"], "drain": phases["drain_limit"], "seed": seed,
+         }
+         benchmark += ["--queued", run_id]
++        if "policy" in config:
++            benchmark += ["--queued-policy", config["policy"]]
+         q2_variant = settings.get("q2_variant")
+         if q2_variant:
+             benchmark.append("--queued-mixed")
+@@ -182,7 +187,7 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
+         "queue": queue, "phases_s": phases, "timeout_s": config["timeout_s"], "command": command,
+         "cpu_placement": {"inherited_allowed": allowed, "process_mask": cpus or allowed,
+                           "worker_cpu_ids": None, "sender_cpu_id": None},
+-        "policy": "i09-serial" if q2_variant else "i06-queued" if queue else "stock",
++        "policy": config.get("policy", "wait") if queue else "stock",
+         "q2_variant": q2_variant, "logging": "disabled", "workload": workload,
+         "yield_interval": None, "starvation_threshold": None,
+         "retry_limit": 100 if queue else None, "batch_metadata": "../batch.json",
+diff --git a/replication/tests/request_driver_test.cc b/replication/tests/request_driver_test.cc
+index 2d991b1..867301a 100644
+--- a/replication/tests/request_driver_test.cc
++++ b/replication/tests/request_driver_test.cc
+@@ -206,54 +206,64 @@ static void fatal_attempt() {
+   std::cout << "PASS fatal adapter error stops new attempts and preserves terminal records\n";
+ }
+ 
+-static void slow_worker() {
++static void wait_policy() {
++  constexpr Ns us = 1000;
+   Config config;
+-  config.batch_size = 1;
+-  config.interval = 60 * ms;
+-  std::promise<void> release, started;
++  config.batch_size = 2;
++  config.interval = 10 * us;
++  std::atomic<Ns> time{100 * us};
++  std::promise<void> release, started, next_low;
+   auto stop = release.get_future();
+   auto active = started.get_future();
+-  Driver driver(config, monotonic_now, [&](Ns next) {
+-    active.wait();
+-    const Ns now = monotonic_now();
+-    if (now < next)
+-      std::this_thread::sleep_for(std::chrono::nanoseconds(next - now));
++  auto drained_batch = next_low.get_future();
++  Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
++    if (next == 110 * us) {
++      active.wait(); // First low request is running before the batch arrives.
++    } else if (next == 120 * us) {
++      // Both high requests and the second low are now admitted.
++      time = 117 * us;
++      release.set_value();
++      drained_batch.wait();
++    }
++    time = next;
+   });
+-  std::vector<Kind> order;
++  std::vector<uint64_t> order;
+   std::thread worker([&] {
+     driver.run_worker(0, [&](const Request &r) {
+-      order.push_back(r.kind);
++      order.push_back(r.id);
+       if (order.size() == 1) {
+         assert(r.kind == Kind::synthetic_low);
+         started.set_value();
+         stop.wait();
+-      } else if (r.kind != Kind::synthetic_low) {
+-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
++      } else if (r.batch) {
++        time += us;
++      } else {
++        assert(order.size() == 4);
++        next_low.set_value();
+       }
+       return Attempt::committed;
+     });
+   });
+-  driver.produce(100 * ms, second);
+-  std::this_thread::sleep_for(std::chrono::milliseconds(40));
+-  release.set_value();
++  driver.produce(20 * us, second);
+   worker.join();
+ 
+   auto records = checked_records(driver);
+-  assert(!driver.failed() && (records.size() == 2 || records.size() == 3));
+-  assert(order.size() == records.size() && order[0] == Kind::synthetic_low && order[1] != Kind::synthetic_low);
+-  if (order.size() == 3)
+-    assert(order[2] == Kind::synthetic_low);
+-  const Request &short_request = *std::find_if(records.begin(), records.end(),
+-                                               [](const Request &r) { return r.batch != 0; });
+-  const Ns global = short_request.admitted - short_request.generated;
+-  const Ns waiting = short_request.first_start - short_request.admitted;
+-  const Ns executing = short_request.finished - short_request.first_start;
+-  const Ns elapsed = short_request.finished - short_request.generated;
+-  assert(waiting >= 40 * ms && elapsed == global + waiting + executing);
+-  assert(short_request.finished >= driver.cutoff());
+-  std::cout << "PASS real-clock slow-worker drain: global_queue_ns=" << global
+-            << " local_queue_ns=" << waiting << " execution_ns=" << executing
+-            << " end_to_end_ns=" << elapsed << '\n';
++  assert(!driver.failed() && records.size() == 4);
++  assert((order == std::vector<uint64_t>{0, 1, 2, 3}));
++  assert(!records[0].batch && records[0].first_start == 100 * us);
++  assert(records[0].finished == 117 * us);
++  for (size_t i = 1; i <= 2; ++i) {
++    const Request &r = records[i];
++    assert(r.batch == 1 && r.scheduled == 110 * us);
++    assert(r.generated == r.scheduled && r.admitted == r.generated);
++    assert(r.first_start == records[i - 1].finished);
++    assert(r.first_start - r.admitted == (6 + i) * us);
++    assert(r.finished - r.generated == (7 + i) * us);
++  }
++  assert(!records[3].batch && records[3].admitted == 110 * us);
++  assert(records[3].first_start == records[2].finished);
++  std::cout << "PASS Wait: running low finishes, two shorts start in FIFO order "
++               "after 7 and 8 us of local queueing, then queued low starts\n";
+ }
+ 
+ static void multiworker_reconciliation() {
+@@ -300,6 +310,6 @@ int main() {
+   late_past_cutoff();
+   retries_and_duplicate_notifications();
+   fatal_attempt();
+-  slow_worker();
++  wait_policy();
+   multiworker_reconciliation();
+ }
+diff --git a/replication/tests/test_i05_experiments.py b/replication/tests/test_i05_experiments.py
+index f8c7837..eb4ec7b 100644
+--- a/replication/tests/test_i05_experiments.py
++++ b/replication/tests/test_i05_experiments.py
+@@ -168,6 +168,18 @@ class RunnerTests(unittest.TestCase):
+         with self.assertRaises(ValueError):
+             run.validate(config, None)
+ 
++    def test_wait_configuration_selects_policy_explicitly(self):
++        config = json.loads((EXPERIMENTS / "configs" / "queued-wait-smoke.json").read_text())
++        run.validate(config, None)
++        planned = run.plan_run(config, config["variants"][0], 1, 1,
++                               Path("/tmp/batch"), Path("/tmp/dbtest"), None)
++        option = planned["command"].index("--queued-policy")
++        self.assertEqual(planned["command"][option + 1], "wait")
++        self.assertEqual(planned["policy"], "wait")
++        config["policy"] = "cooperative"
++        with self.assertRaisesRegex(ValueError, "queued policy must be wait"):
++            run.validate(config, None)
++
+     def test_timeout_retains_run(self):
+         with tempfile.TemporaryDirectory() as temp:
+             directory = Path(temp)
+diff --git a/util.h b/util.h
+index a63f7ae..bb134ef 100644
+--- a/util.h
++++ b/util.h
+@@ -21,6 +21,9 @@
+ #include "macros.h"
+ #include "small_vector.h"
+ 
++template <typename A, typename B>
++std::ostream &operator<<(std::ostream &o, const std::pair<A, B> &p);
++
+ namespace util {
+ 
+ // padded, aligned primitives

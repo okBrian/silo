@@ -291,14 +291,21 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
       w.wake.wait(lock, [&] {
         return s.closed.load(std::memory_order_acquire) || !w.high.empty() || !w.low.empty();
       });
-      if (!w.high.pop(request) && !w.low.pop(request)) {
-        // The wait predicate can only be true for empty queues after close.
-        break;
+      const bool closed = s.closed.load(std::memory_order_acquire);
+      // Wait chooses high work at the boundary between requests. Only consider
+      // low work already present when we check high, so a concurrent low
+      // publication cannot slip ahead of a high request published before it.
+      const bool low_pending = !w.low.empty();
+      if (!w.high.pop(request) && !(low_pending && w.low.pop(request))) {
+        if (closed)
+          break;
+        continue;
       }
     }
 
     const Ns deadline = s.drain_deadline.load(std::memory_order_acquire);
     Prepared execute;
+    // Run the request on this worker through completion, including retries.
     while (request.outcome == Outcome::pending) {
       const Ns now = s.clock();
       if (now >= deadline || s.fatal.load(std::memory_order_acquire)) {

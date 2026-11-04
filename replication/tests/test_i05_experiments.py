@@ -168,6 +168,18 @@ class RunnerTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             run.validate(config, None)
 
+    def test_wait_configuration_selects_policy_explicitly(self):
+        config = json.loads((EXPERIMENTS / "configs" / "queued-wait-smoke.json").read_text())
+        run.validate(config, None)
+        planned = run.plan_run(config, config["variants"][0], 1, 1,
+                               Path("/tmp/batch"), Path("/tmp/dbtest"), None)
+        option = planned["command"].index("--queued-policy")
+        self.assertEqual(planned["command"][option + 1], "wait")
+        self.assertEqual(planned["policy"], "wait")
+        config["policy"] = "cooperative"
+        with self.assertRaisesRegex(ValueError, "queued policy must be wait"):
+            run.validate(config, None)
+
     def test_timeout_retains_run(self):
         with tempfile.TemporaryDirectory() as temp:
             directory = Path(temp)

@@ -206,54 +206,64 @@ static void fatal_attempt() {
   std::cout << "PASS fatal adapter error stops new attempts and preserves terminal records\n";
 }
 
-static void slow_worker() {
+static void wait_policy() {
+  constexpr Ns us = 1000;
   Config config;
-  config.batch_size = 1;
-  config.interval = 60 * ms;
-  std::promise<void> release, started;
+  config.batch_size = 2;
+  config.interval = 10 * us;
+  std::atomic<Ns> time{100 * us};
+  std::promise<void> release, started, next_low;
   auto stop = release.get_future();
   auto active = started.get_future();
-  Driver driver(config, monotonic_now, [&](Ns next) {
-    active.wait();
-    const Ns now = monotonic_now();
-    if (now < next)
-      std::this_thread::sleep_for(std::chrono::nanoseconds(next - now));
+  auto drained_batch = next_low.get_future();
+  Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
+    if (next == 110 * us) {
+      active.wait(); // First low request is running before the batch arrives.
+    } else if (next == 120 * us) {
+      // Both high requests and the second low are now admitted.
+      time = 117 * us;
+      release.set_value();
+      drained_batch.wait();
+    }
+    time = next;
   });
-  std::vector<Kind> order;
+  std::vector<uint64_t> order;
   std::thread worker([&] {
     driver.run_worker(0, [&](const Request &r) {
-      order.push_back(r.kind);
+      order.push_back(r.id);
       if (order.size() == 1) {
         assert(r.kind == Kind::synthetic_low);
         started.set_value();
         stop.wait();
-      } else if (r.kind != Kind::synthetic_low) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      } else if (r.batch) {
+        time += us;
+      } else {
+        assert(order.size() == 4);
+        next_low.set_value();
       }
       return Attempt::committed;
     });
   });
-  driver.produce(100 * ms, second);
-  std::this_thread::sleep_for(std::chrono::milliseconds(40));
-  release.set_value();
+  driver.produce(20 * us, second);
   worker.join();
 
   auto records = checked_records(driver);
-  assert(!driver.failed() && (records.size() == 2 || records.size() == 3));
-  assert(order.size() == records.size() && order[0] == Kind::synthetic_low && order[1] != Kind::synthetic_low);
-  if (order.size() == 3)
-    assert(order[2] == Kind::synthetic_low);
-  const Request &short_request = *std::find_if(records.begin(), records.end(),
-                                               [](const Request &r) { return r.batch != 0; });
-  const Ns global = short_request.admitted - short_request.generated;
-  const Ns waiting = short_request.first_start - short_request.admitted;
-  const Ns executing = short_request.finished - short_request.first_start;
-  const Ns elapsed = short_request.finished - short_request.generated;
-  assert(waiting >= 40 * ms && elapsed == global + waiting + executing);
-  assert(short_request.finished >= driver.cutoff());
-  std::cout << "PASS real-clock slow-worker drain: global_queue_ns=" << global
-            << " local_queue_ns=" << waiting << " execution_ns=" << executing
-            << " end_to_end_ns=" << elapsed << '\n';
+  assert(!driver.failed() && records.size() == 4);
+  assert((order == std::vector<uint64_t>{0, 1, 2, 3}));
+  assert(!records[0].batch && records[0].first_start == 100 * us);
+  assert(records[0].finished == 117 * us);
+  for (size_t i = 1; i <= 2; ++i) {
+    const Request &r = records[i];
+    assert(r.batch == 1 && r.scheduled == 110 * us);
+    assert(r.generated == r.scheduled && r.admitted == r.generated);
+    assert(r.first_start == records[i - 1].finished);
+    assert(r.first_start - r.admitted == (6 + i) * us);
+    assert(r.finished - r.generated == (7 + i) * us);
+  }
+  assert(!records[3].batch && records[3].admitted == 110 * us);
+  assert(records[3].first_start == records[2].finished);
+  std::cout << "PASS Wait: running low finishes, two shorts start in FIFO order "
+               "after 7 and 8 us of local queueing, then queued low starts\n";
 }
 
 static void multiworker_reconciliation() {
@@ -300,6 +310,6 @@ int main() {
   late_past_cutoff();
   retries_and_duplicate_notifications();
   fatal_attempt();
-  slow_worker();
+  wait_policy();
   multiworker_reconciliation();
 }

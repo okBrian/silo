@@ -12,7 +12,8 @@
 - **I07 is locally validated on emulated Linux x86-64.** The standalone worker context pair passed one million round trips with separate stack locals and the tested SysV preserved state. See the [I07 validation](results/i07-worker-context/README.md).
 - **I08 is locally validated on emulated Linux x86-64.** The [Silo audit and engine test](results/i08-silo-context/README.md) cover voluntary snapshot handoffs, shared epoch protection and deferred work.
 - **I09 is locally validated on emulated Linux x86-64.** The [workload and evidence](results/i09-mixed-workload/README.md) cover prepared short inputs, the corrected Q2 variant and one- and two-worker mixed smokes.
-- **M01 has stock baseline and component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I10–I18 and F01–F02 remain open.
+- **I10 is locally validated on emulated Linux x86-64.** Select Wait explicitly with `--queued-policy wait`. The [I10 evidence](results/i10-wait/README.md) covers dispatch order, short-request waiting and four mixed-workload runs through I05.
+- **M01 has stock baseline and component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I11–I18 and F01–F02 remain open.
 
 The milestone is the immediate deadline and the final date remains to be confirmed. Ownership below is proposed coordination responsibility.
 
@@ -295,6 +296,8 @@ Steps:
 Outputs: selectable Wait policy, scheduling tests, and measured baseline logs.
 
 Complete when: known schedules produce expected behavior and matched workload results are reproducible.
+
+Wait reuses the queued driver and I09 adapters. Each worker finishes the active request and its retries before selecting admitted short work in FIFO order ahead of pending Q2. The [I10 record](results/i10-wait/README.md) contains the deterministic test, I05 recipe and four reconciled local runs. I11 can use the same workload and measurement definitions.
 
 Request: **“Implement I10: add the Wait baseline and run a small mixed-workload experiment.”**
 

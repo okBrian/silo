@@ -1,0 +1,17 @@
+Linux 6.8.0-117-generic x86_64
+g++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+ldd (Ubuntu GLIBC 2.35-0ubuntu3.5) 2.35
+PRETTY_NAME="Ubuntu 22.04.3 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.3 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+1d763ee97838d1593ef80b30e1c48ec3572a4910
+1150824e6a10a0384ba4bfed6b916ce62f96315f

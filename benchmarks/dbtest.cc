@@ -30,7 +30,7 @@ using namespace util;
 
 enum {
   QUEUED_RUN = 1000, QUEUED_BATCH, QUEUED_INTERVAL, QUEUED_GLOBAL, QUEUED_WORKER,
-  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED
+  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED, QUEUED_POLICY
 };
 
 static uint64_t
@@ -137,6 +137,7 @@ main(int argc, char **argv)
       {"queued-warmup"             , required_argument , 0                          , QUEUED_WARMUP},
       {"queued-drain"              , required_argument , 0                          , QUEUED_DRAIN},
       {"queued-mixed"              , no_argument       , 0                          , QUEUED_MIXED},
+      {"queued-policy"             , required_argument , 0                          , QUEUED_POLICY},
       {0, 0, 0, 0}
     };
     int option_index = 0;
@@ -144,7 +145,7 @@ main(int argc, char **argv)
     if (c == -1)
       break;
 
-    if (c > QUEUED_RUN && c <= QUEUED_MIXED)
+    if (c > QUEUED_RUN && c <= QUEUED_POLICY)
       saw_queue_setting = true;
     switch (c) {
     case QUEUED_RUN:
@@ -180,6 +181,12 @@ main(int argc, char **argv)
       break;
     case QUEUED_MIXED:
       queued_mixed = true;
+      break;
+    case QUEUED_POLICY:
+      if (string(optarg) != "wait") {
+        cerr << "[ERROR] --queued-policy supports only wait" << endl;
+        return 1;
+      }
       break;
 
     case 0:

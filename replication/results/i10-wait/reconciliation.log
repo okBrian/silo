@@ -1,0 +1,18 @@
+queued-wait-smoke-_4ct4p3i-r1-v1 warmup workers=1 high_offered=36 committed=779 window_commits=778 drain_commits=1 rejected=0 cancelled=0 aborts=0 high_admitted_during_q2=20
+  example: q2_id=151 high_id=152 q2_remaining_at_admission_ns=526985 high_local_queue_ns=529985
+queued-wait-smoke-_4ct4p3i-r1-v1 measurement workers=1 high_offered=36 committed=773 window_commits=772 drain_commits=1 rejected=0 cancelled=0 aborts=0 high_admitted_during_q2=12
+  example: q2_id=933 high_id=934 q2_remaining_at_admission_ns=1616955 high_local_queue_ns=1620955
+queued-wait-smoke-_4ct4p3i-r1-v2 warmup workers=2 high_offered=72 committed=1380 window_commits=1378 drain_commits=2 rejected=0 cancelled=0 aborts=0 high_admitted_during_q2=56
+  example: q2_id=113 high_id=115 q2_remaining_at_admission_ns=948974 high_local_queue_ns=952973
+queued-wait-smoke-_4ct4p3i-r1-v2 measurement workers=2 high_offered=72 committed=1357 window_commits=1355 drain_commits=2 rejected=0 cancelled=0 aborts=0 high_admitted_during_q2=36
+  example: q2_id=1521 high_id=1523 q2_remaining_at_admission_ns=539985 high_local_queue_ns=546985
+queued-wait-smoke-_4ct4p3i-r2-v2 warmup workers=2 high_offered=72 committed=1346 window_commits=1344 drain_commits=2 rejected=0 cancelled=0 aborts=0 high_admitted_during_q2=36
+  example: q2_id=110 high_id=114 q2_remaining_at_admission_ns=789978 high_local_queue_ns=793978
+queued-wait-smoke-_4ct4p3i-r2-v2 measurement workers=2 high_offered=72 committed=1322 window_commits=1319 drain_commits=3 rejected=0 cancelled=0 aborts=0 high_admitted_during_q2=56
+  example: q2_id=1482 high_id=1483 q2_remaining_at_admission_ns=2018944 high_local_queue_ns=2021944
+queued-wait-smoke-_4ct4p3i-r2-v1 warmup workers=1 high_offered=36 committed=783 window_commits=783 drain_commits=0 rejected=0 cancelled=0 aborts=0 high_admitted_during_q2=20
+  example: q2_id=149 high_id=150 q2_remaining_at_admission_ns=302992 high_local_queue_ns=305992
+queued-wait-smoke-_4ct4p3i-r2-v1 measurement workers=1 high_offered=36 committed=784 window_commits=782 drain_commits=2 rejected=0 cancelled=0 aborts=0 high_admitted_during_q2=16
+  example: q2_id=855 high_id=856 q2_remaining_at_admission_ns=821977 high_local_queue_ns=823977
+PASS four Wait manifests, phase reconciliation, high arrival schedules and worker routing
+PASS no overlapping execution intervals on any worker

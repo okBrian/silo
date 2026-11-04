@@ -1,0 +1,4 @@
++ /i10/source/out-perf.masstree.contexts/benchmarks/dbtest --bench tpcc --queued-policy wait
+[ERROR] --queued-* settings require --queued RUN_ID
++ /i10/source/out-perf.masstree.contexts/benchmarks/dbtest --bench tpcc --queued invalid --queued-policy cooperative
+[ERROR] --queued-policy supports only wait
