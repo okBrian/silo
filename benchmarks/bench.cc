@@ -127,7 +127,7 @@ bench_worker::run()
   barrier_b->wait_for();
   if (measured_driver) {
     const auto execute = [this](const queued::Request &request) {
-      return run_queued_attempt(request);
+      return run_queued_attempt(request, *this);
     };
     if (warmup_driver)
       warmup_driver->run_worker(queue_worker, execute);

@@ -1,14 +1,16 @@
 #ifndef _NDB_WRAPPER_H_
 #define _NDB_WRAPPER_H_
 
+#include <cstddef>
+
 #include "abstract_db.h"
 #include "../txn_btree.h"
 
 namespace private_ {
   struct ndbtxn {
     abstract_db::TxnProfileHint hint;
-    char buf[0];
-  } PACKED;
+    alignas(std::max_align_t) char buf[0];
+  };
 
   // XXX: doesn't check to make sure you are passing in an ndbtx
   // of the right hint
@@ -18,6 +20,7 @@ namespace private_ {
     inline ALWAYS_INLINE type *
     operator()(struct ndbtxn *p) const
     {
+      static_assert(alignof(type) <= alignof(ndbtxn), "transaction buffer alignment");
       return reinterpret_cast<type *>(&p->buf[0]);
     }
   };

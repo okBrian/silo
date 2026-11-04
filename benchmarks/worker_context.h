@@ -30,7 +30,16 @@ public:
   // A completed context cannot be resumed.
   bool resume();
 
+  // Coalesces notifications on the owning thread. The original stack services
+  // the queue before resuming. A notification during service can rearm it.
+  void request_service();
+
+  // Call from the entry stack at an audited, voluntary checkpoint. Returns
+  // true after service and resume. Protected checkpoints leave work pending.
+  bool checkpoint();
+
   // Call from the entry stack. Returns when the original stack resumes it.
+  // Like resume(), this rejects a transition while a protected region is live.
   void yield();
 
 private:
@@ -48,6 +57,7 @@ private:
   std::size_t mapping_size_;
   State state_ = State::ready;
   std::exception_ptr failure_;
+  bool service_pending_ = false;
 };
 
 #endif

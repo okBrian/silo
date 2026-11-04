@@ -522,21 +522,19 @@ public:
         << ", " << warehouse_id_end << ")"
         << endl;
     }
-    obj_key0.reserve(str_arena::MinStrReserveLength);
-    obj_key1.reserve(str_arena::MinStrReserveLength);
-    obj_v.reserve(str_arena::MinStrReserveLength);
   }
 
   // XXX(stephentu): tune this
   static const size_t NMaxCustomerIdxScanElems = 512;
 
-  txn_result txn_new_order(const queued::Request *request = nullptr);
+  txn_result txn_new_order(bench_txn_context &state, const queued::Request *request = nullptr);
 
   static txn_result
   TxnNewOrder(bench_worker *w)
   {
     ANON_REGION("TxnNewOrder:", &tpcc_txn_cg);
-    return static_cast<tpcc_worker *>(w)->txn_new_order();
+    auto &worker = *static_cast<tpcc_worker *>(w);
+    return worker.txn_new_order(worker);
   }
 
   txn_result txn_delivery();
@@ -548,13 +546,14 @@ public:
     return static_cast<tpcc_worker *>(w)->txn_delivery();
   }
 
-  txn_result txn_payment(const queued::Request *request = nullptr);
+  txn_result txn_payment(bench_txn_context &state, const queued::Request *request = nullptr);
 
   static txn_result
   TxnPayment(bench_worker *w)
   {
     ANON_REGION("TxnPayment:", &tpcc_txn_cg);
-    return static_cast<tpcc_worker *>(w)->txn_payment();
+    auto &worker = *static_cast<tpcc_worker *>(w);
+    return worker.txn_payment(worker);
   }
 
   txn_result txn_order_status();
@@ -605,16 +604,16 @@ public:
 protected:
 
   queued::Attempt
-  run_queued_attempt(const queued::Request &request) OVERRIDE
+  run_queued_attempt(const queued::Request &request, bench_txn_context &state) OVERRIDE
   {
     // Stock TPC-C draws inputs before opening the transaction. Reset the
     // request-specific RNG on every attempt; other workers never use it.
-    r.set_seed(request.input_seed);
+    state.r.set_seed(request.input_seed);
     switch (request.kind) {
     case queued::Kind::new_order:
-      return txn_new_order(&request).first ? queued::Attempt::committed : queued::Attempt::conflict;
+      return txn_new_order(state, &request).first ? queued::Attempt::committed : queued::Attempt::conflict;
     case queued::Kind::payment:
-      return txn_payment(&request).first ? queued::Attempt::committed : queued::Attempt::conflict;
+      return txn_payment(state, &request).first ? queued::Attempt::committed : queued::Attempt::conflict;
     case queued::Kind::synthetic_low:
       return queued::Attempt::failed;
     }
@@ -632,21 +631,12 @@ protected:
     rcu::s_instance.fault_region();
   }
 
-  inline ALWAYS_INLINE string &
-  str()
-  {
-    return *arena.next();
-  }
-
 private:
   const uint warehouse_id_start;
   const uint warehouse_id_end;
   int32_t last_no_o_ids[10]; // XXX(stephentu): hack
 
-  // some scratch buffer space
-  string obj_key0;
-  string obj_key1;
-  string obj_v;
+  uint32_t stock_timestamp = 0;
 };
 
 class tpcc_warehouse_loader : public bench_loader, public tpcc_worker_mixin {
@@ -1246,8 +1236,10 @@ static event_counter evt_tpcc_cross_partition_new_order_txns("tpcc_cross_partiti
 static event_counter evt_tpcc_cross_partition_payment_txns("tpcc_cross_partition_payment_txns");
 
 tpcc_worker::txn_result
-tpcc_worker::txn_new_order(const queued::Request *request)
+tpcc_worker::txn_new_order(bench_txn_context &state, const queued::Request *request)
 {
+  auto &r = state.r;
+  auto &arena = state.arena;
   const uint warehouse_id = request ? request->home_warehouse :
     PickWarehouseId(r, warehouse_id_start, warehouse_id_end);
   const uint districtID = RandomNumber(r, 1, 10);
@@ -1296,8 +1288,11 @@ tpcc_worker::txn_new_order(const queued::Request *request)
   //   max_read_set_size : 15
   //   max_write_set_size : 15
   //   num_txn_contexts : 9
-  void *txn = db->new_txn(txn_flags, arena, txn_buf(), abstract_db::HINT_TPCC_NEW_ORDER);
   scoped_str_arena s_arena(arena);
+  auto &obj_key0 = state.str();
+  auto &obj_v = state.str();
+  void *txn = db->new_txn(txn_flags, arena, state.txn_buf(), abstract_db::HINT_TPCC_NEW_ORDER);
+  SiloOperationRegion partition_lock_region(g_enable_partition_locks);
   scoped_multilock<spinlock> mlock;
   if (g_enable_partition_locks) {
     if (allLocal) {
@@ -1341,13 +1336,13 @@ tpcc_worker::txn_new_order(const queued::Request *request)
     const new_order::key k_no(warehouse_id, districtID, my_next_o_id);
     const new_order::value v_no;
     const size_t new_order_sz = Size(v_no);
-    tbl_new_order(warehouse_id)->insert(txn, Encode(str(), k_no), Encode(str(), v_no));
+    tbl_new_order(warehouse_id)->insert(txn, Encode(state.str(), k_no), Encode(state.str(), v_no));
     ret += new_order_sz;
 
     if (!g_new_order_fast_id_gen) {
       district::value v_d_new(*v_d);
       v_d_new.d_next_o_id++;
-      tbl_district(warehouse_id)->put(txn, Encode(str(), k_d), Encode(str(), v_d_new));
+      tbl_district(warehouse_id)->put(txn, Encode(state.str(), k_d), Encode(state.str(), v_d_new));
     }
 
     const oorder::key k_oo(warehouse_id, districtID, k_no.no_o_id);
@@ -1358,16 +1353,16 @@ tpcc_worker::txn_new_order(const queued::Request *request)
     v_oo.o_all_local = allLocal;
     // Reserve the high half of the logical date range for queued requests.
     // This keeps dates stable across retries and distinct from loaded rows.
-    v_oo.o_entry_d = request ? (UINT32_C(1) << 31) + request->id : GetCurrentTimeMillis();
+    v_oo.o_entry_d = request ? (UINT32_C(1) << 31) + request->id : stock_timestamp++;
 
     const size_t oorder_sz = Size(v_oo);
-    tbl_oorder(warehouse_id)->insert(txn, Encode(str(), k_oo), Encode(str(), v_oo));
+    tbl_oorder(warehouse_id)->insert(txn, Encode(state.str(), k_oo), Encode(state.str(), v_oo));
     ret += oorder_sz;
 
     const oorder_c_id_idx::key k_oo_idx(warehouse_id, districtID, customerID, k_no.no_o_id);
     const oorder_c_id_idx::value v_oo_idx(0);
 
-    tbl_oorder_c_id_idx(warehouse_id)->insert(txn, Encode(str(), k_oo_idx), Encode(str(), v_oo_idx));
+    tbl_oorder_c_id_idx(warehouse_id)->insert(txn, Encode(state.str(), k_oo_idx), Encode(state.str(), v_oo_idx));
 
     for (uint ol_number = 1; ol_number <= numItems; ol_number++) {
       const uint ol_supply_w_id = supplierWarehouseIDs[ol_number - 1];
@@ -1394,7 +1389,7 @@ tpcc_worker::txn_new_order(const queued::Request *request)
       v_s_new.s_ytd += ol_quantity;
       v_s_new.s_remote_cnt += (ol_supply_w_id == warehouse_id) ? 0 : 1;
 
-      tbl_stock(ol_supply_w_id)->put(txn, Encode(str(), k_s), Encode(str(), v_s_new));
+      tbl_stock(ol_supply_w_id)->put(txn, Encode(state.str(), k_s), Encode(state.str(), v_s_new));
 
       const order_line::key k_ol(warehouse_id, districtID, k_no.no_o_id, ol_number);
       order_line::value v_ol;
@@ -1405,7 +1400,7 @@ tpcc_worker::txn_new_order(const queued::Request *request)
       v_ol.ol_quantity = int8_t(ol_quantity);
 
       const size_t order_line_sz = Size(v_ol);
-      tbl_order_line(warehouse_id)->insert(txn, Encode(str(), k_ol), Encode(str(), v_ol));
+      tbl_order_line(warehouse_id)->insert(txn, Encode(state.str(), k_ol), Encode(state.str(), v_ol));
       ret += order_line_sz;
     }
 
@@ -1456,7 +1451,7 @@ tpcc_worker::txn_delivery()
 {
   const uint warehouse_id = PickWarehouseId(r, warehouse_id_start, warehouse_id_end);
   const uint o_carrier_id = RandomNumber(r, 1, NumDistrictsPerWarehouse());
-  const uint32_t ts = GetCurrentTimeMillis();
+  const uint32_t ts = stock_timestamp++;
 
   // worst case txn profile:
   //   10 times:
@@ -1476,8 +1471,12 @@ tpcc_worker::txn_delivery()
   //   max_read_set_size : 133
   //   max_write_set_size : 133
   //   num_txn_contexts : 4
-  void *txn = db->new_txn(txn_flags, arena, txn_buf(), abstract_db::HINT_TPCC_DELIVERY);
   scoped_str_arena s_arena(arena);
+  auto &obj_key0 = str();
+  auto &obj_key1 = str();
+  auto &obj_v = str();
+  void *txn = db->new_txn(txn_flags, arena, txn_buf(), abstract_db::HINT_TPCC_DELIVERY);
+  SiloOperationRegion partition_lock_region(g_enable_partition_locks);
   scoped_lock_guard<spinlock> slock(
       g_enable_partition_locks ? &LockForPartition(warehouse_id) : nullptr);
   try {
@@ -1566,8 +1565,10 @@ tpcc_worker::txn_delivery()
 static event_avg_counter evt_avg_cust_name_idx_scan_size("avg_cust_name_idx_scan_size");
 
 tpcc_worker::txn_result
-tpcc_worker::txn_payment(const queued::Request *request)
+tpcc_worker::txn_payment(bench_txn_context &state, const queued::Request *request)
 {
+  auto &r = state.r;
+  auto &arena = state.arena;
   const uint warehouse_id = request ? request->home_warehouse :
     PickWarehouseId(r, warehouse_id_start, warehouse_id_end);
   const uint districtID = RandomNumber(r, 1, NumDistrictsPerWarehouse());
@@ -1584,7 +1585,7 @@ tpcc_worker::txn_payment(const queued::Request *request)
     } while (customerWarehouseID == warehouse_id);
   }
   const float paymentAmount = (float) (RandomNumber(r, 100, 500000) / 100.0);
-  const uint32_t ts = request ? (UINT32_C(1) << 31) + request->id : GetCurrentTimeMillis();
+  const uint32_t ts = request ? (UINT32_C(1) << 31) + request->id : stock_timestamp++;
   INVARIANT(!g_disable_xpartition_txn || customerWarehouseID == warehouse_id);
 
   // output from txn counters:
@@ -1594,8 +1595,12 @@ tpcc_worker::txn_payment(const queued::Request *request)
   //   max_read_set_size : 71
   //   max_write_set_size : 1
   //   num_txn_contexts : 5
-  void *txn = db->new_txn(txn_flags, arena, txn_buf(), abstract_db::HINT_TPCC_PAYMENT);
   scoped_str_arena s_arena(arena);
+  auto &obj_key0 = state.str();
+  auto &obj_key1 = state.str();
+  auto &obj_v = state.str();
+  void *txn = db->new_txn(txn_flags, arena, state.txn_buf(), abstract_db::HINT_TPCC_PAYMENT);
+  SiloOperationRegion partition_lock_region(g_enable_partition_locks);
   scoped_multilock<spinlock> mlock;
   if (g_enable_partition_locks) {
     mlock.enq(LockForPartition(warehouse_id));
@@ -1616,7 +1621,7 @@ tpcc_worker::txn_payment(const queued::Request *request)
 
     warehouse::value v_w_new(*v_w);
     v_w_new.w_ytd += paymentAmount;
-    tbl_warehouse(warehouse_id)->put(txn, Encode(str(), k_w), Encode(str(), v_w_new));
+    tbl_warehouse(warehouse_id)->put(txn, Encode(state.str(), k_w), Encode(state.str(), v_w_new));
 
     const district::key k_d(warehouse_id, districtID);
     ALWAYS_ASSERT(tbl_district(warehouse_id)->get(txn, Encode(obj_key0, k_d), obj_v));
@@ -1626,7 +1631,7 @@ tpcc_worker::txn_payment(const queued::Request *request)
 
     district::value v_d_new(*v_d);
     v_d_new.d_ytd += paymentAmount;
-    tbl_district(warehouse_id)->put(txn, Encode(str(), k_d), Encode(str(), v_d_new));
+    tbl_district(warehouse_id)->put(txn, Encode(state.str(), k_d), Encode(state.str(), v_d_new));
 
     customer::key k_c;
     customer::value v_c;
@@ -1700,7 +1705,7 @@ tpcc_worker::txn_payment(const queued::Request *request)
       NDB_MEMCPY((void *) v_c_new.c_data.data(), &buf[0], v_c_new.c_data.size());
     }
 
-    tbl_customer(customerWarehouseID)->put(txn, Encode(str(), k_c), Encode(str(), v_c_new));
+    tbl_customer(customerWarehouseID)->put(txn, Encode(state.str(), k_c), Encode(state.str(), v_c_new));
 
     const history::key k_h(k_c.c_d_id, k_c.c_w_id, k_c.c_id, districtID, warehouse_id, ts);
     history::value v_h;
@@ -1713,7 +1718,7 @@ tpcc_worker::txn_payment(const queued::Request *request)
     v_h.h_data.resize_junk(min(static_cast<size_t>(n), v_h.h_data.max_size()));
 
     const size_t history_sz = Size(v_h);
-    tbl_history(warehouse_id)->insert(txn, Encode(str(), k_h), Encode(str(), v_h));
+    tbl_history(warehouse_id)->insert(txn, Encode(state.str(), k_h), Encode(state.str(), v_h));
     ret += history_sz;
 
     measure_txn_counters(txn, "txn_payment");
@@ -1771,8 +1776,11 @@ tpcc_worker::txn_order_status()
     g_disable_read_only_scans ?
       abstract_db::HINT_TPCC_ORDER_STATUS :
       abstract_db::HINT_TPCC_ORDER_STATUS_READ_ONLY;
-  void *txn = db->new_txn(txn_flags | read_only_mask, arena, txn_buf(), hint);
   scoped_str_arena s_arena(arena);
+  auto &obj_key0 = str();
+  auto &obj_key1 = str();
+  auto &obj_v = str();
+  void *txn = db->new_txn(txn_flags | read_only_mask, arena, txn_buf(), hint);
   // NB: since txn_order_status() is a RO txn, we assume that
   // locking is un-necessary (since we can just read from some old snapshot)
   try {
@@ -1928,8 +1936,11 @@ tpcc_worker::txn_stock_level()
     g_disable_read_only_scans ?
       abstract_db::HINT_TPCC_STOCK_LEVEL :
       abstract_db::HINT_TPCC_STOCK_LEVEL_READ_ONLY;
-  void *txn = db->new_txn(txn_flags | read_only_mask, arena, txn_buf(), hint);
   scoped_str_arena s_arena(arena);
+  auto &obj_key0 = str();
+  auto &obj_key1 = str();
+  auto &obj_v = str();
+  void *txn = db->new_txn(txn_flags | read_only_mask, arena, txn_buf(), hint);
   // NB: since txn_stock_level() is a RO txn, we assume that
   // locking is un-necessary (since we can just read from some old snapshot)
   try {

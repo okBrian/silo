@@ -28,7 +28,7 @@ A `Request` contains immutable `run_id`, monotonic `request_id`, `batch_id` (abs
 
 One producer owns generation, the global high-priority FIFO and admission. Each worker has one low-priority and one high-priority bounded SPSC queue. Producer publication uses release ordering and worker consumption uses acquire ordering, with the reverse ordering for slot reuse. Queue capacities count waiting requests. Dequeue transfers ownership to one worker context and frees the slot immediately. Main and high contexts share one worker consumer role, with dequeue/bookkeeping protected against switching. Requests never migrate after admission. The producer may read an atomic worker status snapshot, but may not mutate transaction state.
 
-The low context owns its current Q2. The high context owns at most one short request. Each context owns its stack, transaction buffer, arena, request RNG, workload scratch objects, scanner state and retry state. Worker identity, queues, interrupt registration and nested protection depth are worker-owned. I08 must establish an epoch/reclamation lifetime covering both contexts and protect shared allocators and locks before allowing mid-transaction switching.
+The low context owns its current Q2. The high context owns at most one short request. Each context owns its stack, transaction buffer, arena, request RNG, workload scratch objects, scanner state and retry state. Worker identity, queues, interrupt registration and nested protection depth are worker-owned. The [I08 integration](../results/i08-silo-context/README.md) keeps the snapshot’s worker epoch pinned across a handoff. It permits voluntary mid-attempt switches only at explicit safe checkpoints in logging-disabled protocol-2 snapshots.
 
 ## Generation, overload and lifecycle
 
@@ -51,7 +51,7 @@ The following operation names define the logical API. Concrete C++ declarations 
 | `choose_next(worker)` | Worker at transaction boundary, high first, then paused low, then queued low. Starvation policy may prefer low. Idle when no work exists |
 | `on_record_read(context)` | Worker after an eligible Q2 supplier/stock/item read and outside unsafe regions. Cooperative checks every configured interval, switching only if high work exists |
 | `request_preemption(worker)` | Handler records pending work, switches only from low to high when protection depth is zero and context state is valid |
-| `enter_protected / leave_protected` | Worker-owned nested guard. Outermost exit reevaluates pending preemption. Assert against underflow, cover exceptions and abort paths |
+| `enter_protected / leave_protected` | Worker-owned nested guard. Scope exit restores depth. The next eligible checkpoint or attempt boundary reevaluates pending work after cleanup |
 | `on_attempt_end(request, result)` | Worker, destroys transaction resources, retries or emits exactly one terminal outcome |
 | `on_high_batch_end(worker)` | High context resumes low on empty queue or starvation limit. Recheck pending work after the transition to prevent lost wakeups |
 | `begin_drain / stop` | Coordinator, halts generation then drains or cancels safely, joins participants before releasing resources |

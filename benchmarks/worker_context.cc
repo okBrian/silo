@@ -1,4 +1,5 @@
 #include "worker_context.h"
+#include "../preemption.h"
 
 #include <cerrno>
 #include <stdexcept>
@@ -54,6 +55,7 @@ bool
 WorkerContext::resume()
 {
   if (std::this_thread::get_id() != owner_ || active_ ||
+      ScopedNonPreemptible::blocked() ||
       (state_ != State::ready && state_ != State::suspended))
     throw std::logic_error("invalid worker context resume");
   active_ = this;
@@ -67,9 +69,29 @@ WorkerContext::resume()
 }
 
 void
-WorkerContext::yield()
+WorkerContext::request_service()
+{
+  if (std::this_thread::get_id() != owner_)
+    throw std::logic_error("worker notification from a different thread");
+  service_pending_ = true;
+}
+
+bool
+WorkerContext::checkpoint()
 {
   if (active_ != this)
+    throw std::logic_error("invalid worker context checkpoint");
+  if (!service_pending_ || ScopedNonPreemptible::blocked())
+    return false;
+  service_pending_ = false;
+  yield();
+  return true;
+}
+
+void
+WorkerContext::yield()
+{
+  if (active_ != this || ScopedNonPreemptible::blocked())
     throw std::logic_error("invalid worker context yield");
   state_ = State::suspended;
   if (swapcontext(&alternate_, &original_) == -1)
@@ -85,5 +107,8 @@ WorkerContext::start() noexcept
   } catch (...) {
     context.failure_ = std::current_exception();
   }
+  // Returning through uc_link also transfers control to the original stack.
+  if (ScopedNonPreemptible::blocked())
+    std::terminate();
   context.state_ = State::finished;
 }

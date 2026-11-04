@@ -8,7 +8,7 @@
 #include <utility>
 #include <string>
 
-#include "abstract_db.h"
+#include "bench_txn_context.h"
 #include "request_driver.h"
 #include "../macros.h"
 #include "../thread.h"
@@ -106,7 +106,7 @@ protected:
   str_arena arena;
 };
 
-class bench_worker : public ndb_thread {
+class bench_worker : public ndb_thread, protected bench_txn_context {
 public:
 
   bench_worker(unsigned int worker_id,
@@ -114,18 +114,16 @@ public:
                unsigned long seed, abstract_db *db,
                const std::map<std::string, abstract_ordered_index *> &open_tables,
                spin_barrier *barrier_a, spin_barrier *barrier_b)
-    : worker_id(worker_id), set_core_id(set_core_id),
-      r(seed), db(db), open_tables(open_tables),
+    : bench_txn_context(seed, *db, txn_flags),
+      worker_id(worker_id), set_core_id(set_core_id),
+      db(db), open_tables(open_tables),
       barrier_a(barrier_a), barrier_b(barrier_b),
       // the ntxn_* numbers are per worker
       ntxn_commits(0), ntxn_aborts(0),
       latency_numer_us(0),
       backoff_shifts(0), // spin between [0, 2^backoff_shifts) times before retry
       size_delta(0)
-  {
-    txn_obj_buf.reserve(str_arena::MinStrReserveLength);
-    txn_obj_buf.resize(db->sizeof_txn_object(txn_flags));
-  }
+  {}
 
   virtual ~bench_worker() {}
 
@@ -179,16 +177,13 @@ public:
 protected:
 
   virtual void on_run_setup() {}
-  virtual queued::Attempt run_queued_attempt(const queued::Request &)
+  virtual queued::Attempt run_queued_attempt(const queued::Request &, bench_txn_context &)
   {
     return queued::Attempt::failed;
   }
 
-  inline void *txn_buf() { return (void *) txn_obj_buf.data(); }
-
   unsigned int worker_id;
   bool set_core_id;
-  util::fast_random r;
   abstract_db *const db;
   std::map<std::string, abstract_ordered_index *> open_tables;
   spin_barrier *const barrier_a;
@@ -215,9 +210,6 @@ protected:
 
   std::vector<size_t> txn_counts; // breakdown of txns
   ssize_t size_delta; // how many logical bytes (of values) did the worker add to the DB
-
-  std::string txn_obj_buf;
-  str_arena arena;
 };
 
 class bench_runner {

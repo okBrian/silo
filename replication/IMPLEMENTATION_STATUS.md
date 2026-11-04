@@ -13,7 +13,7 @@ The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a
 | I05 | Experiment runner and stock baseline | Erica | Complete | [Runner and analysis](experiments/README.md), [regenerated evidence](results/i05-experiments/README.md), and fixture tests. The new batch path has local runner validation and Bash syntax checks |
 | I06 | Independent request driver | Erica | Implemented and locally validated | [Functional evidence and opt-in usage](results/i06-request-driver/README.md). The TPC-C bridge covers New-Order and Payment. The standalone suite uses synthetic low-priority work |
 | I07 | Explicit context switching | Erin | Implemented and locally validated | Standalone glibc context pair passed one million round trips per build on emulated Linux x86-64. [ABI checks, lifecycle and reproduction commands](results/i07-worker-context/README.md) |
-| I08 | Silo context state and protected regions | Brian / Erin | Not started | |
+| I08 | Silo context state and protected regions | Brian / Erin | Implemented and locally validated | [Ownership audit, engine test and regression commands](results/i08-silo-context/README.md) |
 | I09 | Mixed workload and Q2 validation | Erica / Brian | Initial short-transaction bridge available | I06 exercises New-Order and Payment dispatch. Q2, full input materialization and workload correctness checks remain open |
 | I10 | Wait scheduler | Erica / Brian | Not started | |
 | I11 | Cooperative scheduler | Brian | Not started | |
@@ -24,7 +24,7 @@ The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a
 | I16 | Starvation prevention | Brian | Not started | |
 | I17 | Integrated validation | Everyone | Not started | |
 | I18 | Replication experiments | Erica / everyone | Not started | |
-| M01 | Milestone evidence assessment | Everyone | In progress | Archived ten-run baseline, passing adapted stock suite, and I06 and I07 functional evidence are ready to cite. Timeline assessment and hardware decision remain open |
+| M01 | Milestone evidence assessment | Everyone | In progress | Archived ten-run baseline, passing adapted stock suite, and I06–I08 functional evidence are ready to cite. Timeline assessment and hardware decision remain open |
 | M02 | Milestone report | Everyone | Not started | Original LaTeX source not supplied |
 | M03 | Milestone verification/package | Everyone | Not started | |
 | F01 | Final report | Everyone | Not started | Final rubric/date not supplied |
@@ -63,4 +63,10 @@ Implemented November 3, 2026 on Silo source base `70f5c73a9dcd368c2717af52ad0298
 
 Built and ran the [standalone harness](tests/worker_context_test.cc) with GCC 11.4.0 and glibc 2.35 on an emulated Linux x86-64 guest. Debug, optimized and UndefinedBehaviorSanitizer builds each passed 1, 10,000 and 1,000,000 round trips, including independent stack values, SysV nonvolatile GPRs, callback stack alignment, x87 rounding control and MXCSR. Lifecycle, exception cleanup, thread ownership and signal-mask tests also passed. [Commands, results table and raw log](results/i07-worker-context/README.md).
 
-I08 is ready to audit transaction buffers, arenas, RNG and reclamation before allowing a live Silo transaction to yield. Native PACE execution, UINTR delivery and asynchronous register preservation are outside the scope of this local component result.
+I08 uses this voluntary switching primitive. Native PACE execution, UINTR delivery and asynchronous register preservation remain separate validation tasks.
+
+## I08 completion record
+
+Implemented November 3, 2026 on Silo source base `8b6db36123a24958c97589adf63516cdc68bc30c`. Added [context-owned benchmark state](../benchmarks/bench_txn_context.h), [nested worker protection](../preemption.h), and the [two-context engine test](tests/silo_context_test.cc). The Silo adapter protects the transaction and index call boundaries. A live write attempt stays protected through cleanup, and a paused read-only snapshot retains the worker's RCU guard. Deferred service runs at the next explicit safe checkpoint or attempt boundary. A failed commit keeps the object alive for the caller's abort cleanup.
+
+On emulated Linux x86-64, the engine test passed four optimized runs and one debug run with Silo and Masstree invariants enabled. Stock and queued TPC-C passed smoke checks, and the I06 request driver and I07 switching suites passed. The [I08 audit and validation](results/i08-silo-context/README.md) link the raw outputs and commands. I09 supplies Q2. I11 connects safe checkpoints to the Cooperative scheduler after I10's Wait implementation.

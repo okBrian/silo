@@ -10,7 +10,8 @@
 - **I05 is complete.** The [experiment runner and analysis](experiments/README.md) reproduce the ten-run stock table and process the archived I06 smoke results. At two warehouses, throughput averaged 84,254 txn/s with one worker and 148,330 txn/s with two workers over five 30-second runs each.
 - **I06 has local functional evidence.** The independent producer, bounded queues, retry accounting and timing are implemented. The opt-in TPC-C bridge exercises New-Order and Payment. See the [I06 validation and reproduction commands](results/i06-request-driver/README.md).
 - **I07 is locally validated on emulated Linux x86-64.** The standalone worker context pair passed one million round trips with separate stack locals and the tested SysV preserved state. See the [I07 validation](results/i07-worker-context/README.md).
-- **M01 has stock baseline, I06 and I07 component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I08–I18 and F01–F02 remain open.
+- **I08 is locally validated on emulated Linux x86-64.** The [Silo audit and engine test](results/i08-silo-context/README.md) cover voluntary snapshot handoffs, shared epoch protection and deferred work.
+- **M01 has stock baseline and component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I09–I18 and F01–F02 remain open.
 
 The milestone is the immediate deadline and the final date remains to be confirmed. Ownership below is proposed coordination responsibility.
 
@@ -253,6 +254,8 @@ Steps:
 5. Integrate two contexts in a small engine test; exercise commit/abort/error paths and nesting.
 
 Outputs: source audit, Silo integration changes, state-isolation/protection tests, and regression results.
+
+Implemented and locally validated November 3, 2026. The [I08 audit and validation](results/i08-silo-context/README.md) document context-owned transaction storage, nested protection, and the worker epoch shared by a suspended snapshot and a short attempt. `WORKER_CONTEXTS=1` enables the instrumented engine build. I11 owns integration of checkpoint polling with the workload and scheduler. I13–I14 own asynchronous switching.
 
 Complete when: one context cannot overwrite the other's transaction state, shared memory cannot be reclaimed while the paused context needs it, and protected-region nesting remains correct on all tested paths. Merely replacing thread-local variables is insufficient.
 

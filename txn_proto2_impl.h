@@ -728,7 +728,12 @@ public:
 
   transaction_proto2(uint64_t flags,
                      typename Traits::StringAllocator &sa)
-    : transaction<transaction_proto2, Traits>(flags, sa)
+    : transaction<transaction_proto2, Traits>(
+          flags, sa,
+#ifdef PROTO2_CAN_DISABLE_SNAPSHOTS
+          IsSnapshotsEnabled() &&
+#endif
+          !txn_logger::IsPersistenceEnabled())
   {
     if (this->get_flags() & transaction_base::TXN_FLAG_READ_ONLY) {
       const uint64_t global_tick_ex =

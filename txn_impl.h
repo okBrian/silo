@@ -7,8 +7,17 @@
 // base definitions
 
 template <template <typename> class Protocol, typename Traits>
-transaction<Protocol, Traits>::transaction(uint64_t flags, string_allocator_type &sa)
-  : transaction_base(flags), sa(&sa)
+transaction<Protocol, Traits>::transaction(uint64_t flags, string_allocator_type &sa,
+                                          bool allow_snapshot_yield)
+  : transaction_base(flags),
+#ifdef SILO_WORKER_CONTEXTS
+#if defined(BTREE_LOCK_OWNERSHIP_CHECKING) || defined(TUPLE_LOCK_OWNERSHIP_CHECKING)
+    transaction_region_(),
+#else
+    transaction_region_(!(allow_snapshot_yield && (flags & TXN_FLAG_READ_ONLY))),
+#endif
+#endif
+    sa(&sa)
 {
   INVARIANT(rcu::s_instance.in_rcu_region());
 #ifdef BTREE_LOCK_OWNERSHIP_CHECKING

@@ -32,6 +32,7 @@
 #include "static_unordered_map.h"
 #include "static_vector.h"
 #include "prefetch.h"
+#include "preemption.h"
 #include "tuple.h"
 #include "scopedperf.hh"
 #include "marked_ptr.h"
@@ -621,7 +622,8 @@ protected:
 
 public:
 
-  inline transaction(uint64_t flags, string_allocator_type &sa);
+  inline transaction(uint64_t flags, string_allocator_type &sa,
+                     bool allow_snapshot_yield = false);
   inline ~transaction();
 
   // returns TRUE on successful commit, FALSE on abort
@@ -816,6 +818,12 @@ protected:
   inline bool
   handle_last_tuple_in_group(
       dbtuple_write_info &info, bool did_group_insert);
+
+#ifdef SILO_WORKER_CONTEXTS
+  // Write transactions can retain inserted tuple locks between operations.
+  // Keep this guard alive through the destruction of the transaction sets.
+  ScopedNonPreemptible transaction_region_;
+#endif
 
   read_set_map read_set;
   write_set_map write_set;

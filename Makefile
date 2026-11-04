@@ -4,6 +4,7 @@
 
 DEBUG ?= 0
 CHECK_INVARIANTS ?= 0
+WORKER_CONTEXTS ?= 0
 
 # 0 = libc malloc
 # 1 = jemalloc
@@ -94,6 +95,11 @@ ifeq ($(MASSTREE_S),1)
 	O := $(O).masstree
 else
 	O := $(O).silotree
+endif
+
+ifeq ($(strip $(WORKER_CONTEXTS)),1)
+	CXXFLAGS += -DSILO_WORKER_CONTEXTS
+	O := $(O).contexts
 endif
 
 TOP     := $(shell echo $${PWD-`pwd`})
@@ -206,6 +212,14 @@ test: $(O)/test
 
 $(O)/test: $(O)/test.o $(OBJFILES) $(MASSTREE_OBJFILES) third-party/lz4/liblz4.so
 	$(CXX) -o $(O)/test $^ $(LDFLAGS) $(LZ4LDFLAGS)
+
+ifeq ($(strip $(WORKER_CONTEXTS)),1)
+.PHONY: silo_context_test
+silo_context_test: $(O)/replication/tests/silo_context_test
+
+$(O)/replication/tests/silo_context_test: $(O)/replication/tests/silo_context_test.o $(O)/benchmarks/worker_context.o $(OBJFILES) $(MASSTREE_OBJFILES) third-party/lz4/liblz4.so
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LZ4LDFLAGS)
+endif
 
 .PHONY: persist_test
 persist_test: $(O)/persist_test

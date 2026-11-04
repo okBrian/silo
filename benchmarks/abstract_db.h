@@ -90,7 +90,8 @@ public:
    *
    * Flags is only for the ndb protocol for now
    *
-   * [buf, buf + sizeof_txn_object(txn_flags)) is a valid ptr
+   * buf is aligned for placement construction and provides at least
+   * sizeof_txn_object(txn_flags) bytes of storage.
    */
   virtual void *new_txn(
       uint64_t txn_flags,

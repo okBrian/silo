@@ -158,7 +158,7 @@ ndb_wrapper<Transaction>::sizeof_txn_object(uint64_t txn_flags) const
   size_t xmax = 0;
   for (size_t i = 0; i < ARRAY_NELEMS(xs); i++)
     xmax = std::max(xmax, xs[i]);
-  return xmax;
+  return offsetof(ndbtxn, buf) + xmax;
 }
 
 template <template <typename> class Transaction>
@@ -169,7 +169,8 @@ ndb_wrapper<Transaction>::new_txn(
     void *buf,
     TxnProfileHint hint)
 {
-  ndbtxn * const p = reinterpret_cast<ndbtxn *>(buf);
+  SiloOperationRegion protected_operation;
+  ndbtxn * const p = new (buf) ndbtxn;
   p->hint = hint;
 #define MY_OP_X(a, b) \
   case a: \
@@ -197,13 +198,16 @@ template <template <typename> class Transaction>
 bool
 ndb_wrapper<Transaction>::commit_txn(void *txn)
 {
+  SiloOperationRegion protected_operation;
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
+  // Callers abort a failed commit. Leave the object live for that cleanup.
 #define MY_OP_X(a, b) \
   case a: \
     { \
       auto t = cast< b >()(p); \
       const bool ret = t->commit(); \
-      Destroy(t); \
+      if (ret) \
+        Destroy(t); \
       return ret; \
     }
   switch (p->hint) {
@@ -219,6 +223,7 @@ template <template <typename> class Transaction>
 void
 ndb_wrapper<Transaction>::abort_txn(void *txn)
 {
+  SiloOperationRegion protected_operation;
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
 #define MY_OP_X(a, b) \
   case a: \
@@ -240,6 +245,7 @@ template <template <typename> class Transaction>
 void
 ndb_wrapper<Transaction>::print_txn_debug(void *txn) const
 {
+  SiloOperationRegion protected_operation;
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
 #define MY_OP_X(a, b) \
   case a: \
@@ -260,6 +266,7 @@ template <template <typename> class Transaction>
 std::map<std::string, uint64_t>
 ndb_wrapper<Transaction>::get_txn_counters(void *txn) const
 {
+  SiloOperationRegion protected_operation;
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
 #define MY_OP_X(a, b) \
   case a: \
@@ -308,6 +315,7 @@ ndb_ordered_index<Transaction>::get(
     const std::string &key,
     std::string &value, size_t max_bytes_read)
 {
+  SiloOperationRegion protected_operation;
   PERF_DECL(static std::string probe1_name(std::string(__PRETTY_FUNCTION__) + std::string(":total:")));
   ANON_REGION(probe1_name.c_str(), &private_::ndb_get_probe0_cg);
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
@@ -342,6 +350,7 @@ ndb_ordered_index<Transaction>::put(
     const std::string &key,
     const std::string &value)
 {
+  SiloOperationRegion protected_operation;
   PERF_DECL(static std::string probe1_name(std::string(__PRETTY_FUNCTION__) + std::string(":total:")));
   ANON_REGION(probe1_name.c_str(), &private_::ndb_put_probe0_cg);
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
@@ -372,6 +381,7 @@ ndb_ordered_index<Transaction>::put(
     std::string &&key,
     std::string &&value)
 {
+  SiloOperationRegion protected_operation;
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
   try {
 #define MY_OP_X(a, b) \
@@ -400,6 +410,7 @@ ndb_ordered_index<Transaction>::insert(
     const std::string &key,
     const std::string &value)
 {
+  SiloOperationRegion protected_operation;
   PERF_DECL(static std::string probe1_name(std::string(__PRETTY_FUNCTION__) + std::string(":total:")));
   ANON_REGION(probe1_name.c_str(), &private_::ndb_insert_probe0_cg);
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
@@ -430,6 +441,7 @@ ndb_ordered_index<Transaction>::insert(
     std::string &&key,
     std::string &&value)
 {
+  SiloOperationRegion protected_operation;
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
   try {
 #define MY_OP_X(a, b) \
@@ -477,6 +489,7 @@ ndb_ordered_index<Transaction>::scan(
     scan_callback &callback,
     str_arena *arena)
 {
+  SiloOperationRegion protected_operation;
   PERF_DECL(static std::string probe1_name(std::string(__PRETTY_FUNCTION__) + std::string(":total:")));
   ANON_REGION(probe1_name.c_str(), &private_::ndb_scan_probe0_cg);
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
@@ -509,6 +522,7 @@ ndb_ordered_index<Transaction>::rscan(
     scan_callback &callback,
     str_arena *arena)
 {
+  SiloOperationRegion protected_operation;
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
   ndb_wrapper_search_range_callback<Transaction> c(callback);
   try {
@@ -534,6 +548,7 @@ template <template <typename> class Transaction>
 void
 ndb_ordered_index<Transaction>::remove(void *txn, const std::string &key)
 {
+  SiloOperationRegion protected_operation;
   PERF_DECL(static std::string probe1_name(std::string(__PRETTY_FUNCTION__) + std::string(":total:")));
   ANON_REGION(probe1_name.c_str(), &private_::ndb_remove_probe0_cg);
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
@@ -560,6 +575,7 @@ template <template <typename> class Transaction>
 void
 ndb_ordered_index<Transaction>::remove(void *txn, std::string &&key)
 {
+  SiloOperationRegion protected_operation;
   ndbtxn * const p = reinterpret_cast<ndbtxn *>(txn);
   try {
 #define MY_OP_X(a, b) \

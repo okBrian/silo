@@ -1,0 +1,71 @@
+Linux 6.8.0-117-generic x86_64
+g++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+ldd (Ubuntu GLIBC 2.35-0ubuntu3.5) 2.35
+Colima/QEMU on Apple Silicon, Ubuntu 22.04 container
+Silo base 8b6db36123a24958c97589adf63516cdc68bc30c plus I08
+Masstree 1150824e6a10a0384ba4bfed6b916ce62f96315f
+Temporary compatibility changes: GCC pair formatter declaration, BDB omitted, -O1 and warnings enabled.
+
+$ make -j1 -C third-party/lz4 library
+exit 0
+$ make -j1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 masstree/config.h
+exit 0
+$ make -j2 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 silo_context_test dbtest
+exit 0
+$ timeout 35s ./out-perf.masstree.contexts/replication/tests/silo_context_test
+PASS live snapshot and isolated context state across a short commit
+PASS nested scan protection, deferred service, callback unwind and insert abort
+PASS conflict, abort cleanup and balanced worker guards
+PASS deferred reclamation after the snapshot ends
+
+$ for i in 1 2 3; do timeout 35s ./out-perf.masstree.contexts/replication/tests/silo_context_test; done
+PASS live snapshot and isolated context state across a short commit
+PASS nested scan protection, deferred service, callback unwind and insert abort
+PASS conflict, abort cleanup and balanced worker guards
+PASS deferred reclamation after the snapshot ends
+PASS live snapshot and isolated context state across a short commit
+PASS nested scan protection, deferred service, callback unwind and insert abort
+PASS conflict, abort cleanup and balanced worker guards
+PASS deferred reclamation after the snapshot ends
+PASS live snapshot and isolated context state across a short commit
+PASS nested scan protection, deferred service, callback unwind and insert abort
+PASS conflict, abort cleanup and balanced worker guards
+PASS deferred reclamation after the snapshot ends
+
+$ ./out-perf.masstree.contexts/benchmarks/dbtest --bench tpcc --num-threads 1 --scale-factor 1 --runtime 1
+exit 0, stdout in stock.out
+$ ./out-perf.masstree.contexts/benchmarks/dbtest --bench tpcc --num-threads 2 --scale-factor 2 --runtime 1 --queued i08-w2 --queued-warmup 1 --queued-interval-us 100000
+exit 0, request records in queued.tsv, phase summaries in queued.err
+PASS stock TPC-C output has five finite metrics and positive throughput
+PASS warmup: 72 committed with distinct IDs, ordered timestamps and correct routing, {'NewOrder': 43, 'Payment': 29}
+PASS measurement: 72 committed with distinct IDs, ordered timestamps and correct routing, {'Payment': 36, 'NewOrder': 36}
+PASS warm-up finished before measurement started
+PASS queued phase summaries reconcile
+
+$ c++ -std=c++11 -O3 -DNDEBUG -Wall -Wextra -Werror -pedantic -pthread benchmarks/worker_context.cc replication/tests/worker_context_test.cc replication/tests/worker_context_abi.S -o /tmp/i07-regression
+$ timeout 120s /tmp/i07-regression
+PASS lifecycle, thread ownership, invalid transitions and exception cleanup
+PASS glibc signal-mask save/restore
+PASS 1 round trips, original=19 alternate=32
+PASS 10000 round trips, original=100010017 alternate=150015029
+PASS 1000000 round trips, original=1000001000017 alternate=1500001500029
+
+$ c++ -std=c++11 -O2 -Wall -Wextra -Werror -pedantic -pthread benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /tmp/i06-regression
+$ timeout 30s /tmp/i06-regression
+PASS delayed generation and overload: 8 high, 2 low, 5 rejected, 4 cancelled, 1 safe completion after deadline
+phase=measurement cutoff_ns=150 generated=10 completed=1 rejected=5 cancelled=4 dropped=0 cutoff_pending_global=2 cutoff_queued=2 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=1 failed=1
+PASS wake after drain deadline accounts for every pre-cutoff batch
+PASS stable retries, retry exhaustion, user abort, FIFO and duplicate notifications
+PASS fatal adapter error stops new attempts and preserves terminal records
+PASS real-clock slow-worker drain: global_queue_ns=6000 local_queue_ns=80884248 execution_ns=2375978 end_to_end_ns=83266226
+PASS three-worker routing and ID reconciliation: high=2392 generated=2538 committed=581 rejected=1957
+
+$ make -j1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 DEBUG=1 CHECK_INVARIANTS=1 masstree/config.h
+exit 0
+$ make -j2 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 DEBUG=1 CHECK_INVARIANTS=1 silo_context_test
+exit 0
+$ timeout 35s ./out-perf.debug.check.masstree.contexts/replication/tests/silo_context_test
+PASS live snapshot and isolated context state across a short commit
+PASS nested scan protection, deferred service, callback unwind and insert abort
+PASS conflict, abort cleanup and balanced worker guards
+PASS deferred reclamation after the snapshot ends
