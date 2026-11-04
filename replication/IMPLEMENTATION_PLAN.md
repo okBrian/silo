@@ -13,7 +13,8 @@
 - **I08 is locally validated on emulated Linux x86-64.** The [Silo audit and engine test](results/i08-silo-context/README.md) cover voluntary snapshot handoffs, shared epoch protection and deferred work.
 - **I09 is locally validated on emulated Linux x86-64.** The [workload and evidence](results/i09-mixed-workload/README.md) cover prepared short inputs, the corrected Q2 variant and one- and two-worker mixed smokes.
 - **I10 is locally validated on emulated Linux x86-64.** Select Wait explicitly with `--queued-policy wait`. The [I10 evidence](results/i10-wait/README.md) covers dispatch order, short-request waiting and four mixed-workload runs through I05.
-- **M01 has stock baseline and component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I11–I18 and F01–F02 remain open.
+- **I11 is locally validated on emulated Linux x86-64.** Select Cooperative with `--queued-policy cooperative --queued-mixed` in a `WORKER_CONTEXTS=1` build. The [I11 evidence](results/i11-cooperative/README.md) covers live Q2 resumption and four matched Wait/Cooperative pairs.
+- **M01 has stock baseline and component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I12–I18 and F01–F02 remain open.
 
 The milestone is the immediate deadline and the final date remains to be confirmed. Ownership below is proposed coordination responsibility.
 
@@ -313,6 +314,8 @@ Steps:
 5. Run matched Wait/Cooperative comparisons without changing workload inputs or measurement definitions.
 
 Outputs: selectable Cooperative policy, interval configuration, tests, and preliminary comparison.
+
+Locally validated November 4, 2026. See the [I11 implementation and comparison](results/i11-cooperative/README.md) for commands, interval checks, and the paired results.
 
 Complete when: Q2 resumes correctly, transaction correctness checks pass, and the actual yield/switch behavior matches the configured policy. It need not improve latency to pass validation.
 

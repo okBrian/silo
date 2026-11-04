@@ -16,7 +16,7 @@ The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a
 | I08 | Silo context state and protected regions | Brian / Erin | Implemented and locally validated | [Ownership audit, engine test and regression commands](results/i08-silo-context/README.md) |
 | I09 | Mixed workload and Q2 validation | Erica / Brian | Implemented and locally validated | [Mixed profile, deterministic engine tests and smoke records](results/i09-mixed-workload/README.md). The one- and two-worker runs committed all 783 and 1,375 measured requests |
 | I10 | Wait scheduler | Erica / Brian | Implemented and locally validated | [Deterministic scheduling test and four mixed runs](results/i10-wait/README.md). All 4,236 measurement requests committed, including 216 short requests |
-| I11 | Cooperative scheduler | Brian | Not started | |
+| I11 | Cooperative scheduler | Brian | Implemented and locally validated | [Snapshot, interval and matched policy evidence](results/i11-cooperative/README.md). The eight runs committed 7,669 measurement requests. Cooperative recorded 38 mid-Q2 handoffs |
 | I12 | Hardware interrupt delivery | Erin | Not started | Requires qualified host/interface |
 | I13 | Interrupt-driven switching | Erin / Brian | Not started | |
 | I14 | Silo Preemptive scheduler | Brian / Erin | Not started | |
@@ -85,4 +85,12 @@ Implemented November 4, 2026 on Silo source base `1d763ee97838d1593ef80b30e1c48e
 
 The standalone driver, sanitizer checks, ten experiment-tool tests, and Linux TPC-C engine harness passed. The I05 runner completed two repetitions each at one and two workers on emulated Linux x86-64. The four measured phases committed 4,236 requests, including 216 New-Order and Payment requests and 4,020 Q2 requests. The archived traces reconcile every phase and show serial execution per worker. [Commands, manifests, raw traces and analysis](results/i10-wait/README.md)
 
-I11 is ready to add Cooperative and compare it against Wait with matched inputs. Native PACE measurements and cross-policy comparisons remain open.
+I11 uses Wait as the comparator in a fresh paired batch on the same binary.
+
+## I11 completion record
+
+Implemented November 4, 2026 on Silo source base `834a3f8e4421cf605c2a8cbd1b99c83e829930d0`. Added Cooperative and its configurable record interval to [dbtest](../benchmarks/dbtest.cc) and the [request driver](../benchmarks/request_driver.cc). The [Q2 adapter](../benchmarks/tpcc_q2.h) checks completed supplier, stock and item lookups after index protection is released. The benchmark worker uses separate low-priority transaction storage and preserves the active snapshot across high-priority service.
+
+The Linux driver and engine tests verified exact intervals, empty queues, nested deferral, repeated handoffs, retry and abort accounting, and the expected Q2 checksum across nine writes. The I05 runner completed four matched policy pairs at one and two workers. Every measured request committed. Cooperative serviced 152 short requests during 38 Q2 handoffs, and Wait ran all shorts between Q2s. [Commands, raw evidence and comparison](results/i11-cooperative/README.md)
+
+The comparison used emulated Linux x86-64, one-second measurement windows and a 64-read smoke interval. The 10,000-read default exceeded the Q2 size in the separate default-interval smoke. Native PACE comparisons remain open. I12 requires I03 qualification and an approved UINTR interface.

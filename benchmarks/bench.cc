@@ -16,6 +16,7 @@
 #include "../counter.h"
 #include "../scopedperf.hh"
 #include "../allocator.h"
+#include "../txn.h"
 
 #ifdef USE_JEMALLOC
 //cannot include this header b/c conflicts with malloc.h
@@ -126,12 +127,22 @@ bench_worker::run()
   barrier_a->count_down();
   barrier_b->wait_for();
   if (measured_driver) {
-    const queued::Driver::Prepare prepare = [this](const queued::Request &request) -> queued::Driver::Prepared {
-      return prepare_queued_request(request, *this);
+    std::unique_ptr<bench_txn_context> low;
+    if (queued_config.policy == queued::Policy::cooperative)
+      low.reset(new bench_txn_context(0, *db, transaction_base::TXN_FLAG_READ_ONLY));
+    const auto run_phase = [&](queued::Driver &driver) {
+      queued::Driver::ReadCheckpoint checkpoint;
+      if (low)
+        checkpoint = [&] { driver.on_record_read(queue_worker); };
+      driver.run_prepared_worker(queue_worker, [&](const queued::Request &request) {
+        if (low && request.kind == queued::Kind::q2)
+          return prepare_queued_request(request, *low, checkpoint);
+        return prepare_queued_request(request, *this, {});
+      });
     };
     if (warmup_driver)
-      warmup_driver->run_prepared_worker(queue_worker, prepare);
-    measured_driver->run_prepared_worker(queue_worker, prepare);
+      run_phase(*warmup_driver);
+    run_phase(*measured_driver);
     return;
   }
   while (running && (run_mode != RUNMODE_OPS || ntxn_commits < ops_per_worker)) {

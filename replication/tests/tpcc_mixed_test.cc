@@ -1,6 +1,9 @@
 // Exercise the exact benchmark adapters and their private TPC-C fixtures.
 #include "../../benchmarks/tpcc.cc"
 #include "../../benchmarks/ndb_wrapper_impl.h"
+#ifdef SILO_WORKER_CONTEXTS
+#include "../../benchmarks/worker_context.h"
+#endif
 
 namespace {
 
@@ -123,6 +126,35 @@ struct Fixture {
       ALWAYS_ASSERT(q2.run(&db, state, r, checksum) && checksum == expected[r]);
       std::cout << "PASS Q2 region " << r << " checksum " << checksum << '\n';
     }
+#ifdef SILO_WORKER_CONTEXTS
+    struct PausedQ2 {
+      Fixture &fixture;
+      const tpcc_q2::Tables &tables;
+      uint64_t checksum = 0;
+      unsigned reads = 0;
+
+      PausedQ2(Fixture &fixture, const tpcc_q2::Tables &tables)
+        : fixture(fixture), tables(tables) {}
+    } paused(*this, q2);
+    WorkerContext context([](WorkerContext &context, void *arg) {
+      auto &test = *static_cast<PausedQ2 *>(arg);
+      bench_txn_context low(1, test.fixture.db, transaction_base::TXN_FLAG_READ_ONLY);
+      ALWAYS_ASSERT(test.tables.run(&test.fixture.db, low, 0, test.checksum, [&] {
+        ALWAYS_ASSERT(!ScopedNonPreemptible::blocked());
+        if (++test.reads % 2 == 0)
+          context.yield();
+      }));
+    }, &paused);
+    unsigned yields = 0;
+    while (context.resume()) {
+      ++yields;
+      // Execute a write transaction using independent storage while the
+      // snapshot owns its original stack, buffers and epoch guard.
+      write("stock", stock::key(1, 2), stock::value(40, 0, 0, 0));
+    }
+    ALWAYS_ASSERT(paused.reads == 18 && yields == 9 && paused.checksum == expected[0]);
+    std::cout << "PASS Q2 checkpoint count and snapshot checksum across nine write handoffs\n";
+#endif
   }
 
   void short_transactions()

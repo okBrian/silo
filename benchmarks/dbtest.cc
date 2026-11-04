@@ -30,7 +30,7 @@ using namespace util;
 
 enum {
   QUEUED_RUN = 1000, QUEUED_BATCH, QUEUED_INTERVAL, QUEUED_GLOBAL, QUEUED_WORKER,
-  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED, QUEUED_POLICY
+  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED, QUEUED_POLICY, QUEUED_YIELD_INTERVAL
 };
 
 static uint64_t
@@ -100,6 +100,7 @@ main(int argc, char **argv)
   size_t queued_global = 0;
   bool saw_queue_setting = false;
   bool queued_mixed = false;
+  bool saw_yield_interval = false;
   while (1) {
     static struct option long_options[] =
     {
@@ -138,6 +139,7 @@ main(int argc, char **argv)
       {"queued-drain"              , required_argument , 0                          , QUEUED_DRAIN},
       {"queued-mixed"              , no_argument       , 0                          , QUEUED_MIXED},
       {"queued-policy"             , required_argument , 0                          , QUEUED_POLICY},
+      {"queued-yield-interval"     , required_argument , 0                          , QUEUED_YIELD_INTERVAL},
       {0, 0, 0, 0}
     };
     int option_index = 0;
@@ -145,7 +147,7 @@ main(int argc, char **argv)
     if (c == -1)
       break;
 
-    if (c > QUEUED_RUN && c <= QUEUED_POLICY)
+    if (c > QUEUED_RUN && c <= QUEUED_YIELD_INTERVAL)
       saw_queue_setting = true;
     switch (c) {
     case QUEUED_RUN:
@@ -183,10 +185,19 @@ main(int argc, char **argv)
       queued_mixed = true;
       break;
     case QUEUED_POLICY:
-      if (string(optarg) != "wait") {
-        cerr << "[ERROR] --queued-policy supports only wait" << endl;
+      if (string(optarg) == "wait")
+        queued_config.policy = queued::Policy::wait;
+      else if (string(optarg) == "cooperative")
+        queued_config.policy = queued::Policy::cooperative;
+      else {
+        cerr << "[ERROR] --queued-policy must be wait or cooperative" << endl;
         return 1;
       }
+      break;
+    case QUEUED_YIELD_INTERVAL:
+      saw_yield_interval = true;
+      queued_config.yield_interval = queued_number(optarg, long_options[option_index].name,
+                                                   1, UINT32_MAX);
       break;
 
     case 0:
@@ -276,6 +287,19 @@ main(int argc, char **argv)
     return 1;
   }
   if (!queued_run_id.empty()) {
+    if (queued_config.policy == queued::Policy::cooperative) {
+#ifndef SILO_WORKER_CONTEXTS
+      cerr << "[ERROR] Cooperative requires a WORKER_CONTEXTS=1 build" << endl;
+      return 1;
+#endif
+      if (!queued_mixed) {
+        cerr << "[ERROR] Cooperative requires --queued-mixed" << endl;
+        return 1;
+      }
+    } else if (saw_yield_interval) {
+      cerr << "[ERROR] --queued-yield-interval requires --queued-policy cooperative" << endl;
+      return 1;
+    }
     if (bench_type != "tpcc" || db_type != "ndb-proto2" ||
         scale_factor != double(nthreads) || nthreads > UINT32_MAX / 4 ||
         run_mode != RUNMODE_TIME || runtime > 86400 || !logfiles.empty() ||

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "bench_txn_context.h"
 #include "tpcc.h"
 #include "../txn.h"
@@ -67,7 +69,7 @@ public:
   }
 
   bool run(abstract_db *db, bench_txn_context &state, unsigned target_region,
-           uint64_t &checksum) const
+           uint64_t &checksum, const std::function<void()> &checkpoint = {}) const
   {
     scoped_str_arena arena_scope(state.arena);
     auto &key = state.str();
@@ -86,7 +88,11 @@ public:
           if (nation.second != region.first)
             continue;
           for (unsigned s = 0; s < stock_map.size(); ++s) {
+            // The index operation and its protection scope have returned.
+            // Dimension scan callbacks still run inside the index operation.
             ALWAYS_ASSERT(suppliers->get(txn, Encode(key, q2_dimension::key(s)), value));
+            if (checkpoint)
+              checkpoint();
             q2_dimension::value supplier;
             Decode(value, supplier);
             if (supplier.parent != nation.first)
@@ -96,6 +102,8 @@ public:
             int16_t min_qty = 0;
             for (const auto &candidate : stock_map[s]) {
               ALWAYS_ASSERT(stocks[candidate.s_w_id - 1]->get(txn, Encode(key, candidate), value));
+              if (checkpoint)
+                checkpoint();
               stock::value row;
               Decode(value, row);
               if (!best || row.s_quantity < min_qty) {
@@ -106,6 +114,8 @@ public:
             if (!best)
               continue;
             ALWAYS_ASSERT(items->get(txn, Encode(key, item::key(best->s_i_id)), value));
+            if (checkpoint)
+              checkpoint();
             item::value row;
             Decode(value, row);
             if (row.i_data.str().find('b') != std::string::npos)

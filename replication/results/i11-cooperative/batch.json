@@ -1,0 +1,79 @@
+{
+  "contract_version": 1,
+  "batch_id": "queued-cooperative-smoke-zc_mozly",
+  "config": {
+    "name": "queued-cooperative-smoke",
+    "format": "queued",
+    "policy": "wait",
+    "variants": [
+      {
+        "workers": 1,
+        "warehouses": 1,
+        "policy": "wait"
+      },
+      {
+        "workers": 1,
+        "warehouses": 1,
+        "policy": "cooperative"
+      },
+      {
+        "workers": 2,
+        "warehouses": 2,
+        "policy": "wait"
+      },
+      {
+        "workers": 2,
+        "warehouses": 2,
+        "policy": "cooperative"
+      }
+    ],
+    "repeats": 2,
+    "phases_s": {
+      "warmup": 1,
+      "measurement": 1,
+      "drain_limit": 30
+    },
+    "timeout_s": 210,
+    "queue": {
+      "first_seed": 1,
+      "interval_us": 100000,
+      "batch_per_worker": 4,
+      "global_capacity_per_worker": 4,
+      "worker_capacity": 4,
+      "q2_variant": "q2_min_stock_v1"
+    },
+    "yield_interval": 64
+  },
+  "created_at_utc": "2026-11-04T20:51:16+00:00",
+  "hostname": "766f50ba4d20",
+  "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.35",
+  "slurm_job_id": null,
+  "source_checkout": "/source",
+  "revisions": {
+    "masstree": {
+      "head": "1150824e6a10a0384ba4bfed6b916ce62f96315f",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked_paths": []
+    },
+    "silo": {
+      "head": "834a3f8e4421cf605c2a8cbd1b99c83e829930d0",
+      "tracked_diff_sha256": "d4f9fd6d9c609b98241458b1788ceeecb94ccb8749d7e22a9cb54bd384a72117",
+      "untracked_paths": [
+        "replication/tests/check_cooperative_batch.py"
+      ]
+    }
+  },
+  "binary_sha256": "2c99c64c3cd9f25d21f080ade0a556ad7a6632f88453bd1c4c3b62ea476d8717",
+  "build_info": "GCC 11.4; glibc 2.35; MODE=perf MASSTREE=1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1; temporary -O1 and GCC pair formatter patch; x86-64 QEMU/Colima",
+  "tool_sha256": "b8e33a243bcdddc22a98501b815f98a38d6cf3ee3e320f4c16e88acc5180f030",
+  "run_ids": [
+    "queued-cooperative-smoke-zc_mozly-r1-v1",
+    "queued-cooperative-smoke-zc_mozly-r1-v2",
+    "queued-cooperative-smoke-zc_mozly-r1-v3",
+    "queued-cooperative-smoke-zc_mozly-r1-v4",
+    "queued-cooperative-smoke-zc_mozly-r2-v4",
+    "queued-cooperative-smoke-zc_mozly-r2-v3",
+    "queued-cooperative-smoke-zc_mozly-r2-v2",
+    "queued-cooperative-smoke-zc_mozly-r2-v1"
+  ]
+}

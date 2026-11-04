@@ -1,5 +1,10 @@
 #include "request_driver.h"
 
+#ifdef SILO_WORKER_CONTEXTS
+#include "worker_context.h"
+#include "../preemption.h"
+#endif
+
 #include <algorithm>
 #include <atomic>
 #include <chrono>
@@ -10,6 +15,7 @@
 #include <stdexcept>
 #include <thread>
 #include <time.h>
+#include <utility>
 #include <vector>
 
 namespace queued {
@@ -51,6 +57,28 @@ private:
   std::atomic<size_t> tail{0};
 };
 
+#ifdef SILO_WORKER_CONTEXTS
+struct Cooperative {
+  explicit Cooperative(std::function<void(Request &)> execute)
+    : execute(std::move(execute)), context(run, this) {}
+
+  static void run(WorkerContext &context, void *argument) {
+    auto &scheduler = *static_cast<Cooperative *>(argument);
+    while (scheduler.low) {
+      scheduler.execute(*scheduler.low);
+      scheduler.low = nullptr;
+      context.yield();
+    }
+  }
+
+  const std::function<void(Request &)> execute;
+  Request *low = nullptr;
+  uint32_t reads_left = 0;
+  bool pending = false;
+  WorkerContext context;
+};
+#endif
+
 struct Worker {
   explicit Worker(size_t capacity) : high(capacity), low(1) {}
 
@@ -59,6 +87,9 @@ struct Worker {
   std::mutex mutex;
   std::condition_variable wake;
   std::vector<Request> records;
+#ifdef SILO_WORKER_CONTEXTS
+  Cooperative *cooperative = nullptr; // Owned by the worker's original stack.
+#endif
 };
 
 // SplitMix64 finalizer. High input seeds use the high sequence, independently
@@ -136,8 +167,16 @@ Driver::Driver(const Config &config, Clock clock, Wait wait_until)
   : state(new State(config, clock, wait_until)) {
   if (!config.workers || !config.batch_size || !config.interval ||
       !config.global_capacity || !config.high_capacity ||
-      config.high_capacity == SIZE_MAX || !config.attempt_limit)
+      config.high_capacity == SIZE_MAX || !config.attempt_limit || !config.yield_interval)
     throw std::invalid_argument("invalid queued request driver configuration");
+  if (config.policy == Policy::cooperative) {
+#ifdef SILO_WORKER_CONTEXTS
+    if (!config.generate_low || config.low_kind != Kind::q2)
+      throw std::invalid_argument("Cooperative requires a mixed Q2 workload");
+#else
+    throw std::invalid_argument("Cooperative requires a WORKER_CONTEXTS=1 build");
+#endif
+  }
   for (size_t i = 0; i < config.workers; ++i)
     state->workers.emplace_back(new Worker(config.high_capacity));
 }
@@ -276,33 +315,36 @@ void Driver::run_worker(size_t worker, const Execute &execute) {
   });
 }
 
+void Driver::on_record_read(size_t worker) {
+#ifdef SILO_WORKER_CONTEXTS
+  State &s = *state;
+  Worker &w = *s.workers[worker];
+  Cooperative &scheduler = *w.cooperative;
+  Request &request = *scheduler.low;
+  ++request.cooperative_reads;
+  if (--scheduler.reads_left == 0) {
+    scheduler.reads_left = s.config.yield_interval;
+    ++request.cooperative_checks;
+    scheduler.pending = !w.high.empty();
+  }
+  if (scheduler.pending && !ScopedNonPreemptible::blocked()) {
+    scheduler.pending = false;
+    if (!s.fatal.load(std::memory_order_acquire) &&
+        s.clock() < s.drain_deadline.load(std::memory_order_acquire)) {
+      ++request.cooperative_yields;
+      scheduler.context.yield();
+    }
+  }
+#else
+  (void)worker;
+  std::terminate();
+#endif
+}
+
 void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
   State &s = *state;
   Worker &w = *s.workers[worker];
-  {
-    std::lock_guard<std::mutex> lock(s.ready_mutex);
-    ++s.ready_count;
-    s.ready.notify_one();
-  }
-  for (;;) {
-    Request request;
-    {
-      std::unique_lock<std::mutex> lock(w.mutex);
-      w.wake.wait(lock, [&] {
-        return s.closed.load(std::memory_order_acquire) || !w.high.empty() || !w.low.empty();
-      });
-      const bool closed = s.closed.load(std::memory_order_acquire);
-      // Wait chooses high work at the boundary between requests. Only consider
-      // low work already present when we check high, so a concurrent low
-      // publication cannot slip ahead of a high request published before it.
-      const bool low_pending = !w.low.empty();
-      if (!w.high.pop(request) && !(low_pending && w.low.pop(request))) {
-        if (closed)
-          break;
-        continue;
-      }
-    }
-
+  const auto execute_request = [&](Request &request) {
     const Ns deadline = s.drain_deadline.load(std::memory_order_acquire);
     Prepared execute;
     // Run the request on this worker through completion, including retries.
@@ -316,6 +358,12 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
       if (!request.attempts)
         request.first_start = now;
       ++request.attempts;
+#ifdef SILO_WORKER_CONTEXTS
+      if (!request.batch && w.cooperative) {
+        w.cooperative->reads_left = s.config.yield_interval;
+        w.cooperative->pending = false;
+      }
+#endif
       Attempt attempt = Attempt::failed;
       try {
         if (!execute)
@@ -348,7 +396,69 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
       }
     }
     w.records.push_back(request);
+  };
+#ifdef SILO_WORKER_CONTEXTS
+  std::unique_ptr<Cooperative> cooperative;
+  if (s.config.policy == Policy::cooperative) {
+    try {
+      cooperative.reset(new Cooperative(execute_request));
+      w.cooperative = cooperative.get();
+    } catch (const std::exception &) {
+      s.fatal.store(true, std::memory_order_release);
+    }
   }
+#endif
+  {
+    std::lock_guard<std::mutex> lock(s.ready_mutex);
+    ++s.ready_count;
+    s.ready.notify_one();
+  }
+  for (;;) {
+    Request request;
+    {
+      std::unique_lock<std::mutex> lock(w.mutex);
+      w.wake.wait(lock, [&] {
+        return s.closed.load(std::memory_order_acquire) || !w.high.empty() || !w.low.empty();
+      });
+      const bool closed = s.closed.load(std::memory_order_acquire);
+      // Only consider low work already present when we check high, so a
+      // concurrent low publication cannot slip ahead of earlier high work.
+      const bool low_pending = !w.low.empty();
+      if (!w.high.pop(request) && !(low_pending && w.low.pop(request))) {
+        if (closed)
+          break;
+        continue;
+      }
+    }
+
+#ifdef SILO_WORKER_CONTEXTS
+    if (cooperative && !request.batch) {
+      cooperative->low = &request;
+      do {
+        cooperative->context.resume();
+        if (cooperative->low) {
+          // The Q2 is paused at an audited read. Only consume high work
+          // before returning to its live transaction on the alternate stack.
+          Request high;
+          while (!s.fatal.load(std::memory_order_acquire) &&
+                 s.clock() < s.drain_deadline.load(std::memory_order_acquire) &&
+                 w.high.pop(high))
+            execute_request(high);
+        }
+      } while (cooperative->low);
+      continue;
+    }
+#endif
+    execute_request(request);
+  }
+#ifdef SILO_WORKER_CONTEXTS
+  if (cooperative) {
+    // Finish the parked entry before releasing its stack. A worker with no
+    // low requests can enter with a null request and return immediately.
+    cooperative->context.resume();
+    w.cooperative = nullptr;
+  }
+#endif
   std::lock_guard<std::mutex> lock(s.ready_mutex);
   ++s.drained_count;
   s.ready.notify_one();
@@ -376,7 +486,8 @@ bool Driver::failed() const { return state->fatal || state->overrun; }
 void write_header(std::ostream &out) {
   out << "run_id\tphase\trequest_id\tbatch_id\ttype\tpriority\tworker\thome_warehouse"
       "\tinput_seed\tscheduled_ns\tgenerated_ns\tadmitted_ns\tfirst_start_ns"
-      "\tfinished_ns\tattempts\taborts\toutcome\tgeneration_delay_ns\tq2_checksum\n";
+      "\tfinished_ns\tattempts\taborts\toutcome\tgeneration_delay_ns\tq2_checksum"
+      "\tcooperative_reads\tcooperative_checks\tcooperative_yields\n";
 }
 
 void write_results(const Driver &driver, std::ostream &out, std::ostream &summary,
@@ -402,7 +513,8 @@ void write_results(const Driver &driver, std::ostream &out, std::ostream &summar
       out << r.q2_checksum;
     else
       out << "null";
-    out << '\n';
+    out << '\t' << r.cooperative_reads << '\t' << r.cooperative_checks
+        << '\t' << r.cooperative_yields << '\n';
 
     if (r.outcome == Outcome::rejected_queue_full)
       ++rejected;

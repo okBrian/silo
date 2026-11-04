@@ -1,0 +1,8 @@
++ /source/out-perf.masstree.contexts/benchmarks/dbtest --queued-policy cooperative
+[ERROR] --queued-* settings require --queued RUN_ID
++ /source/out-perf.masstree.contexts/benchmarks/dbtest --queued invalid --queued-policy cooperative
+[ERROR] Cooperative requires --queued-mixed
++ /source/out-perf.masstree.contexts/benchmarks/dbtest --queued invalid --queued-yield-interval 2
+[ERROR] --queued-yield-interval requires --queued-policy cooperative
++ /source/out-perf.masstree.contexts/benchmarks/dbtest --queued invalid --queued-policy cooperative --queued-yield-interval 0
+[ERROR] invalid --queued-yield-interval: 0

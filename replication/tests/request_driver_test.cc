@@ -1,4 +1,7 @@
 #include "../../benchmarks/request_driver.h"
+#ifdef SILO_WORKER_CONTEXTS
+#include "../../preemption.h"
+#endif
 
 #include <algorithm>
 #include <atomic>
@@ -305,11 +308,111 @@ static void multiworker_reconciliation() {
             << " rejected=" << rejected << '\n';
 }
 
+#ifdef SILO_WORKER_CONTEXTS
+static void cooperative_policy() {
+  Config config;
+  config.policy = Policy::cooperative;
+  config.low_kind = Kind::q2;
+  config.interval = 10;
+  config.batch_size = 2;
+  config.yield_interval = 2;
+  std::atomic<Ns> time{100};
+  std::promise<void> empty_check, first_published, first_served, second_published, retried;
+  auto empty = empty_check.get_future();
+  auto first_ready = first_published.get_future();
+  auto first_done = first_served.get_future();
+  auto second_ready = second_published.get_future();
+  auto retry_done = retried.get_future();
+  Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
+    if (next == 110)
+      empty.wait();
+    if (next == 120) {
+      first_published.set_value();
+      first_done.wait();
+    }
+    if (next == 130) {
+      second_published.set_value();
+      retry_done.wait();
+    }
+    time = next;
+  });
+  std::vector<uint64_t> served;
+  unsigned low_preparations = 0;
+  std::thread worker([&] {
+    driver.run_prepared_worker(0, [&](const Request &r) -> Driver::Prepared {
+      if (r.batch) {
+        return [&](uint64_t &) {
+          assert(!ScopedNonPreemptible::blocked());
+          served.push_back(r.high_sequence);
+          if (r.high_sequence == 0 && r.attempts == 1)
+            return Attempt::conflict;
+          return r.high_sequence == 1 ? Attempt::user_aborted : Attempt::committed;
+        };
+      }
+      if (r.id != 0)
+        return [](uint64_t &) { return Attempt::committed; };
+      ++low_preparations;
+      return [&](uint64_t &checksum) {
+        const auto read = [&] { driver.on_record_read(0); };
+        if (r.attempts == 2) {
+          assert(r.first_start == 100 && r.aborts == 1);
+          read(); // The partial interval from attempt one was discarded.
+          checksum = 42;
+          retried.set_value();
+          return Attempt::committed;
+        }
+        read();
+        read(); // Empty queue at the first interval.
+        assert(served.empty());
+        empty_check.set_value();
+        first_ready.wait();
+        {
+          ScopedNonPreemptible outer;
+          read(); // Before the next interval, even with work waiting.
+          {
+            ScopedNonPreemptible inner;
+            read(); // Interval reached but both guards are active.
+            assert(served.empty());
+          }
+          assert(served.empty());
+        }
+        assert(served.empty()); // Guard destruction does not switch.
+        read(); // Deferred service at the next safe read.
+        assert((served == std::vector<uint64_t>{0, 0, 1}));
+        first_served.set_value();
+        second_ready.wait();
+        read(); // Next regular interval, with new high work.
+        assert((served == std::vector<uint64_t>{0, 0, 1, 2, 3}));
+        read();
+        return Attempt::conflict;
+      };
+    });
+  });
+  driver.produce(30, second);
+  worker.join();
+  auto records = checked_records(driver);
+  const Request &low = records.front();
+  assert(!driver.failed() && low_preparations == 1 && driver.high_generated() == 4);
+  assert(low.kind == Kind::q2 && low.outcome == Outcome::committed);
+  assert(low.attempts == 2 && low.aborts == 1 && low.q2_checksum == 42);
+  assert(low.cooperative_reads == 8 && low.cooperative_checks == 3 &&
+         low.cooperative_yields == 2);
+  for (const Request &r : records)
+    if (r.batch)
+      assert(r.first_start > low.first_start && r.finished <= low.finished);
+  std::cout << "PASS Cooperative: empty interval, nested deferral, FIFO, repeated yields, "
+               "high aborts and stable low retry\n";
+}
+#endif
+
 int main() {
   late_batches_and_cancellation();
   late_past_cutoff();
   retries_and_duplicate_notifications();
   fatal_attempt();
   wait_policy();
+#ifdef SILO_WORKER_CONTEXTS
+  cooperative_policy();
+#endif
   multiworker_reconciliation();
 }

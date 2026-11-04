@@ -1,0 +1,89 @@
++ cd /source
++ mv /evidence /evidence-initial
++ touch benchmarks/request_driver.cc
++ bash /tmp/validate.sh
++ cd /source
++ export PWD=/source
++ PWD=/source
++ e=/evidence
++ mkdir -p /evidence
++ uname -smr
++ g++ --version
++ sed -n 1p
++ ldd --version
++ sed -n 1p
++ cat /etc/os-release
++ git rev-parse HEAD
++ git -C masstree rev-parse HEAD
++ taskset -pc 5887
++ sed -n '/^model name/{p;q;}' /proc/cpuinfo
++ make -j2 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 dbtest tpcc_mixed_test silo_context_test
+make: Nothing to be done for 'silo_context_test'.
+g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -O1 -funroll-loops -fno-omit-frame-pointer -DNDB_MASSTREE -include masstree/config.h -DSILO_WORKER_CONTEXTS -DNO_MYSQL -c benchmarks/request_driver.cc -o out-perf.masstree.contexts/benchmarks/request_driver.o
+g++ -o out-perf.masstree.contexts/benchmarks/dbtest out-perf.masstree.contexts/benchmarks/dbtest.o out-perf.masstree.contexts/allocator.o out-perf.masstree.contexts/btree.o out-perf.masstree.contexts/core.o out-perf.masstree.contexts/counter.o out-perf.masstree.contexts/memory.o out-perf.masstree.contexts/rcu.o out-perf.masstree.contexts/stats_server.o out-perf.masstree.contexts/thread.o out-perf.masstree.contexts/ticker.o out-perf.masstree.contexts/tuple.o out-perf.masstree.contexts/txn_btree.o out-perf.masstree.contexts/txn.o out-perf.masstree.contexts/txn_proto2_impl.o out-perf.masstree.contexts/varint.o out-perf.masstree.contexts/compiler.o out-perf.masstree.contexts/str.o out-perf.masstree.contexts/string.o out-perf.masstree.contexts/straccum.o out-perf.masstree.contexts/json.o out-perf.masstree.contexts/benchmarks/bdb_wrapper.o out-perf.masstree.contexts/benchmarks/bench.o out-perf.masstree.contexts/benchmarks/request_driver.o out-perf.masstree.contexts/benchmarks/encstress.o out-perf.masstree.contexts/benchmarks/bid.o out-perf.masstree.contexts/benchmarks/masstree/kvrandom.o out-perf.masstree.contexts/benchmarks/queue.o out-perf.masstree.contexts/benchmarks/tpcc.o out-perf.masstree.contexts/benchmarks/ycsb.o out-perf.masstree.contexts/benchmarks/worker_context.o third-party/lz4/liblz4.so -lpthread -lnuma -lrt -ldb_cxx -lz -lrt -lcrypt -laio -ldl -lssl -lcrypto -Lthird-party/lz4 -llz4 -Wl,-rpath,/source/third-party/lz4
+g++ -o out-perf.masstree.contexts/replication/tests/tpcc_mixed_test out-perf.masstree.contexts/replication/tests/tpcc_mixed_test.o out-perf.masstree.contexts/benchmarks/bench.o out-perf.masstree.contexts/benchmarks/request_driver.o out-perf.masstree.contexts/benchmarks/worker_context.o out-perf.masstree.contexts/allocator.o out-perf.masstree.contexts/btree.o out-perf.masstree.contexts/core.o out-perf.masstree.contexts/counter.o out-perf.masstree.contexts/memory.o out-perf.masstree.contexts/rcu.o out-perf.masstree.contexts/stats_server.o out-perf.masstree.contexts/thread.o out-perf.masstree.contexts/ticker.o out-perf.masstree.contexts/tuple.o out-perf.masstree.contexts/txn_btree.o out-perf.masstree.contexts/txn.o out-perf.masstree.contexts/txn_proto2_impl.o out-perf.masstree.contexts/varint.o out-perf.masstree.contexts/compiler.o out-perf.masstree.contexts/str.o out-perf.masstree.contexts/string.o out-perf.masstree.contexts/straccum.o out-perf.masstree.contexts/json.o third-party/lz4/liblz4.so -lpthread -lnuma -lrt -Lthird-party/lz4 -llz4 -Wl,-rpath,/source/third-party/lz4
++ out=out-perf.masstree.contexts
++ dbtest=/source/out-perf.masstree.contexts/benchmarks/dbtest
++ timeout 45s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test
++ tee /evidence/tpcc-mixed-test.log
+wait_an_epoch(): consistent reads happening in e-1, but e=0 so special case
+PASS Q2 region 0 checksum 12860241382490130518
+PASS Q2 region 1 checksum 11649938069444573197
+PASS Q2 region 2 checksum 14695981039346656037
+PASS Q2 checkpoint count and snapshot checksum across nine write handoffs
+PASS queued New-Order rollback, retry, linked rows and remote stock changes
+PASS queued Payment rollback, retry, remote lower median, balances and history
++ timeout 45s ./out-perf.masstree.contexts/replication/tests/silo_context_test
++ tee /evidence/silo-context-test.log
+PASS live snapshot and isolated context state across a short commit
+PASS nested scan protection, deferred service, callback unwind and insert abort
+PASS conflict, abort cleanup and balanced worker guards
+PASS deferred reclamation after the snapshot ends
++ python3 -B -m unittest discover -s replication/tests -p test_i05_experiments.py -v
++ grep -F -- 'settings require --queued RUN_ID' /evidence/cli-checks.log
+[ERROR] --queued-* settings require --queued RUN_ID
++ grep -F -- 'Cooperative requires --queued-mixed' /evidence/cli-checks.log
+[ERROR] Cooperative requires --queued-mixed
++ grep -F -- '--queued-yield-interval requires --queued-policy cooperative' /evidence/cli-checks.log
+[ERROR] --queued-yield-interval requires --queued-policy cooperative
++ grep -F -- 'invalid --queued-yield-interval: 0' /evidence/cli-checks.log
+[ERROR] invalid --queued-yield-interval: 0
++ python3 -B replication/experiments/run.py replication/experiments/configs/queued-cooperative-smoke.json --source /source --dbtest /source/out-perf.masstree.contexts/benchmarks/dbtest --output /evidence/batches --build-info 'GCC 11.4; glibc 2.35; MODE=perf MASSTREE=1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1; temporary -O1 and GCC pair formatter patch; x86-64 QEMU/Colima'
+Experiment directory: /evidence/batches/queued-cooperative-smoke-zc_mozly
+Running queued-cooperative-smoke-zc_mozly-r1-v1
+Running queued-cooperative-smoke-zc_mozly-r1-v2
+Running queued-cooperative-smoke-zc_mozly-r1-v3
+Running queued-cooperative-smoke-zc_mozly-r1-v4
+Running queued-cooperative-smoke-zc_mozly-r2-v4
+Running queued-cooperative-smoke-zc_mozly-r2-v3
+Running queued-cooperative-smoke-zc_mozly-r2-v2
+Running queued-cooperative-smoke-zc_mozly-r2-v1
+++ find /evidence/batches -mindepth 1 -maxdepth 1 -type d
++ batch=/evidence/batches/queued-cooperative-smoke-zc_mozly
++ python3 -B replication/experiments/analyze.py --output /evidence/analysis batch /evidence/batches/queued-cooperative-smoke-zc_mozly
++ python3 -B replication/tests/check_cooperative_batch.py /evidence/batches/queued-cooperative-smoke-zc_mozly
++ tee /evidence/reconciliation.log
+PASS repeat=1 workers=1 policy=wait phase=warmup high=36 Q2=739 checks=0 yields=0 high_during_q2=0
+PASS repeat=1 workers=1 policy=wait phase=measurement high=36 Q2=750 checks=0 yields=0 high_during_q2=0
+PASS repeat=1 workers=1 policy=cooperative phase=warmup high=36 Q2=688 checks=15611 yields=7 high_during_q2=28
+PASS repeat=1 workers=1 policy=cooperative phase=measurement high=36 Q2=698 checks=15670 yields=7 high_during_q2=28
+PASS repeat=1 workers=2 policy=wait phase=warmup high=72 Q2=1180 checks=0 yields=0 high_during_q2=0
+PASS repeat=1 workers=2 policy=wait phase=measurement high=72 Q2=1142 checks=0 yields=0 high_during_q2=0
+PASS repeat=1 workers=2 policy=cooperative phase=warmup high=72 Q2=1157 checks=28857 yields=17 high_during_q2=68
+PASS repeat=1 workers=2 policy=cooperative phase=measurement high=72 Q2=1064 checks=26864 yields=14 high_during_q2=56
+PASS repeat=2 workers=2 policy=cooperative phase=warmup high=72 Q2=1051 checks=26750 yields=12 high_during_q2=48
+PASS repeat=2 workers=2 policy=cooperative phase=measurement high=72 Q2=1056 checks=26660 yields=10 high_during_q2=40
+PASS repeat=2 workers=2 policy=wait phase=warmup high=72 Q2=1135 checks=0 yields=0 high_during_q2=0
+PASS repeat=2 workers=2 policy=wait phase=measurement high=72 Q2=1132 checks=0 yields=0 high_during_q2=0
+PASS repeat=2 workers=1 policy=cooperative phase=warmup high=36 Q2=697 checks=15861 yields=4 high_during_q2=16
+PASS repeat=2 workers=1 policy=cooperative phase=measurement high=36 Q2=700 checks=15644 yields=7 high_during_q2=28
+PASS repeat=2 workers=1 policy=wait phase=warmup high=36 Q2=706 checks=0 yields=0 high_during_q2=0
+PASS repeat=2 workers=1 policy=wait phase=measurement high=36 Q2=695 checks=0 yields=0 high_during_q2=0
+PASS repeat=1 workers=1 matching high arrivals and Q2 input prefixes
+PASS repeat=1 workers=2 matching high arrivals and Q2 input prefixes
+PASS repeat=2 workers=1 matching high arrivals and Q2 input prefixes
+PASS repeat=2 workers=2 matching high arrivals and Q2 input prefixes
++ timeout 120s /source/out-perf.masstree.contexts/benchmarks/dbtest --db-type ndb-proto2 --bench tpcc --scale-factor 1 --num-threads 1 --ops-per-worker 20
++ timeout 120s /source/out-perf.masstree.contexts/benchmarks/dbtest --db-type ndb-proto2 --bench tpcc --scale-factor 1 --num-threads 1 --runtime 1 --queued i11-default --queued-mixed --queued-policy cooperative --queued-warmup 0 --queued-interval-us 100000
++ python3 - /evidence/default-interval.tsv
+PASS default interval: 709 Q2s below 10,000 reads with no checks or yields

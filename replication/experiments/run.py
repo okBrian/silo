@@ -25,6 +25,7 @@ QUEUE = {
     "global_capacity_per_worker", "worker_capacity",
 }
 Q2_VARIANT = "q2_min_stock_v1"
+DEFAULT_YIELD_INTERVAL = 10000
 
 
 def require(condition, message):
@@ -42,7 +43,7 @@ def validate(config, allowed):
     require(mode in ("stock", "queued"), "format must be stock or queued")
     fields = {"name", "format", "variants", "repeats", "phases_s", "timeout_s"}
     required = fields | ({"queue"} if mode == "queued" else set())
-    optional = {"policy"} if mode == "queued" else set()
+    optional = {"policy", "yield_interval"} if mode == "queued" else set()
     require(required <= config.keys() <= required | optional,
             "unexpected or missing config keys")
     require(isinstance(config["name"], str) and re.fullmatch(r"[A-Za-z0-9_-]+", config["name"]),
@@ -59,7 +60,8 @@ def validate(config, allowed):
         require(phases["warmup"] == phases["drain_limit"] == 0,
                 "stock dbtest has no separate warm-up or drain")
     else:
-        require(config.get("policy", "wait") == "wait", "queued policy must be wait")
+        require(config.get("policy", "wait") in ("wait", "cooperative"),
+                "queued policy must be wait or cooperative")
         queue = config["queue"]
         require(isinstance(queue, dict) and QUEUE <= queue.keys() <= QUEUE | {"q2_variant"} and
                 ("q2_variant" not in queue or queue["q2_variant"] == Q2_VARIANT) and
@@ -67,12 +69,17 @@ def validate(config, allowed):
                 integer(queue["first_seed"], 0, 2**64 - config["repeats"]),
                 "queue requires positive integer settings and uint64 seeds across all repeats")
     require(isinstance(config["variants"], list) and config["variants"], "variants must be nonempty")
+    has_cooperative = False
     for variant in config["variants"]:
+        optional_variant = {"cpus", "policy"} if mode == "queued" else {"cpus"}
         require(isinstance(variant, dict) and {"workers", "warehouses"} <= variant.keys()
-                <= {"workers", "warehouses", "cpus"}, "invalid variant keys")
+                <= {"workers", "warehouses"} | optional_variant, "invalid variant keys")
         workers, warehouses = variant["workers"], variant["warehouses"]
         require(integer(workers) and integer(warehouses), "workers and warehouses must be positive integers")
         if mode == "queued":
+            policy = variant.get("policy", config.get("policy", "wait"))
+            require(policy in ("wait", "cooperative"), "queued policy must be wait or cooperative")
+            has_cooperative |= policy == "cooperative"
             require(workers == warehouses, "I06 queued mode requires one warehouse per worker")
             batch = queue["batch_per_worker"] * workers
             require(max(batch, queue["global_capacity_per_worker"] * workers) < 2**32,
@@ -88,6 +95,11 @@ def validate(config, allowed):
                     and len(set(cpus)) == len(cpus), "cpus must be a nonempty list of distinct CPU IDs")
             require(allowed is not None and set(cpus) <= set(allowed),
                     "explicit cpus require Linux and must belong to the inherited allocation")
+    if has_cooperative:
+        require("q2_variant" in queue, "Cooperative requires a mixed Q2 workload")
+    if "yield_interval" in config:
+        require(has_cooperative and integer(config["yield_interval"], 1, 2**32 - 1),
+                "yield_interval requires Cooperative and a positive uint32")
 
 
 def write_json(path, data):
@@ -145,6 +157,8 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
     seeds = {"tpcc_serial_loaders": LOADER_SEEDS, "tpcc_worker_seed_generator": 23984543}
     queue = None
     q2_variant = None
+    policy = "stock"
+    yield_interval = None
     if config["format"] == "queued":
         settings = config["queue"]
         seed = settings["first_seed"] + repeat - 1
@@ -158,8 +172,12 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
             "warmup": phases["warmup"], "drain": phases["drain_limit"], "seed": seed,
         }
         benchmark += ["--queued", run_id]
-        if "policy" in config:
-            benchmark += ["--queued-policy", config["policy"]]
+        policy = variant.get("policy", config.get("policy", "wait"))
+        if "policy" in variant or "policy" in config:
+            benchmark += ["--queued-policy", policy]
+        if policy == "cooperative":
+            yield_interval = config.get("yield_interval", DEFAULT_YIELD_INTERVAL)
+            benchmark += ["--queued-yield-interval", str(yield_interval)]
         q2_variant = settings.get("q2_variant")
         if q2_variant:
             benchmark.append("--queued-mixed")
@@ -187,9 +205,9 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
         "queue": queue, "phases_s": phases, "timeout_s": config["timeout_s"], "command": command,
         "cpu_placement": {"inherited_allowed": allowed, "process_mask": cpus or allowed,
                           "worker_cpu_ids": None, "sender_cpu_id": None},
-        "policy": config.get("policy", "wait") if queue else "stock",
+        "policy": policy,
         "q2_variant": q2_variant, "logging": "disabled", "workload": workload,
-        "yield_interval": None, "starvation_threshold": None,
+        "yield_interval": yield_interval, "starvation_threshold": None,
         "retry_limit": 100 if queue else None, "batch_metadata": "../batch.json",
         "state": "planned", "exit_status": None,
     }

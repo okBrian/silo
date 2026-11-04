@@ -627,7 +627,8 @@ public:
 protected:
 
   queued::Driver::Prepared
-  prepare_queued_request(const queued::Request &request, bench_txn_context &state) OVERRIDE
+  prepare_queued_request(const queued::Request &request, bench_txn_context &state,
+                         const queued::Driver::ReadCheckpoint &checkpoint = {}) OVERRIDE
   {
     fast_random rng(0);
     rng.set_seed(request.input_seed);
@@ -652,8 +653,8 @@ protected:
     }
     case queued::Kind::q2: {
       const uint region = RandomNumber(rng, 0, tpcc_q2::region_count - 1);
-      return [this, &state, region](uint64_t &checksum) {
-        return q2->run(db, state, region, checksum) ?
+      return [this, &state, region, checkpoint](uint64_t &checksum) {
+        return q2->run(db, state, region, checksum, checkpoint) ?
           queued::Attempt::committed : queued::Attempt::conflict;
       };
     }

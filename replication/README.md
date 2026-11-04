@@ -16,6 +16,7 @@ This directory contains the CS 6400 project roadmap, PACE workflow, and evidence
 - [I08 Silo context ownership, protection and engine validation](results/i08-silo-context/README.md)
 - [I09 mixed workload, Q2 variant and validation](results/i09-mixed-workload/README.md)
 - [I10 Wait scheduler and mixed-workload baseline](results/i10-wait/README.md)
+- [I11 Cooperative scheduler and matched Wait comparison](results/i11-cooperative/README.md)
 - [Run the stock Silo baseline on PACE](pace-baseline/README.md)
 - [PACE TPC-C results and summary](results/i04-pace-baseline/SUMMARY.md)
 - [PACE benchmark logs](results/pace-runs/6791465/) and [test rerun logs](results/pace-runs/6791730/)

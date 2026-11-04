@@ -177,7 +177,8 @@ public:
 protected:
 
   virtual void on_run_setup() {}
-  virtual queued::Driver::Prepared prepare_queued_request(const queued::Request &, bench_txn_context &)
+  virtual queued::Driver::Prepared prepare_queued_request(const queued::Request &,
+      bench_txn_context &, const queued::Driver::ReadCheckpoint &)
   {
     return [](uint64_t &) { return queued::Attempt::failed; };
   }

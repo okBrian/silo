@@ -167,6 +167,11 @@ BENCH_SRCFILES = benchmarks/bdb_wrapper.cc \
 	benchmarks/tpcc.cc \
 	benchmarks/ycsb.cc
 
+ifeq ($(strip $(WORKER_CONTEXTS)),1)
+BENCH_SRCFILES += benchmarks/worker_context.cc
+CONTEXT_OBJ := $(O)/benchmarks/worker_context.o
+endif
+
 ifeq ($(MYSQL_S),1)
 BENCH_CXXFLAGS += -DMYSQL_SHARE_DIR=\"$(MYSQL_SHARE_DIR)\"
 BENCH_LDFLAGS := -L/usr/lib/mysql -lmysqld $(BENCH_LDFLAGS)
@@ -224,7 +229,7 @@ endif
 .PHONY: tpcc_mixed_test
 tpcc_mixed_test: $(O)/replication/tests/tpcc_mixed_test
 
-$(O)/replication/tests/tpcc_mixed_test: $(O)/replication/tests/tpcc_mixed_test.o $(O)/benchmarks/bench.o $(O)/benchmarks/request_driver.o $(OBJFILES) $(MASSTREE_OBJFILES) third-party/lz4/liblz4.so
+$(O)/replication/tests/tpcc_mixed_test: $(O)/replication/tests/tpcc_mixed_test.o $(O)/benchmarks/bench.o $(O)/benchmarks/request_driver.o $(CONTEXT_OBJ) $(OBJFILES) $(MASSTREE_OBJFILES) third-party/lz4/liblz4.so
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LZ4LDFLAGS)
 
 .PHONY: persist_test

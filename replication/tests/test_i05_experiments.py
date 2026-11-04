@@ -176,8 +176,31 @@ class RunnerTests(unittest.TestCase):
         option = planned["command"].index("--queued-policy")
         self.assertEqual(planned["command"][option + 1], "wait")
         self.assertEqual(planned["policy"], "wait")
-        config["policy"] = "cooperative"
-        with self.assertRaisesRegex(ValueError, "queued policy must be wait"):
+        config["policy"] = "invalid"
+        with self.assertRaisesRegex(ValueError, "queued policy must be wait or cooperative"):
+            run.validate(config, None)
+
+    def test_paired_policy_configuration_preserves_inputs(self):
+        config = json.loads((EXPERIMENTS / "configs" / "queued-cooperative-smoke.json").read_text())
+        run.validate(config, None)
+        wait, cooperative = [
+            run.plan_run(config, variant, 2, index, Path("/tmp/batch"), Path("/tmp/dbtest"), None)
+            for index, variant in enumerate(config["variants"][:2], 1)
+        ]
+        for key in ("seeds", "queue", "q2_variant", "workload", "phases_s", "cpu_placement"):
+            self.assertEqual(wait[key], cooperative[key])
+        self.assertEqual(wait["policy"], "wait")
+        self.assertIsNone(wait["yield_interval"])
+        self.assertNotIn("--queued-yield-interval", wait["command"])
+        self.assertEqual(cooperative["policy"], "cooperative")
+        self.assertEqual(cooperative["yield_interval"], 64)
+        self.assertIn("--queued-yield-interval", cooperative["command"])
+        config["yield_interval"] = 0
+        with self.assertRaisesRegex(ValueError, "yield_interval"):
+            run.validate(config, None)
+        del config["yield_interval"]
+        del config["queue"]["q2_variant"]
+        with self.assertRaisesRegex(ValueError, "mixed Q2"):
             run.validate(config, None)
 
     def test_timeout_retains_run(self):
