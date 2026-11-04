@@ -1,0 +1,71 @@
+# I02 experiment contract
+
+Version 1, November 3, 2026. These are implementation requirements for I05–I16 and explicit project choices where specified. The source audit is in [source-map.md](source-map.md). The queued driver and scheduler interfaces described here are pending implementation.
+
+## Configuration and evidence
+
+| Setting | Paper target, Sections 6.1–6.3 | Inspected reference | Silo project contract |
+|---|---|---|---|
+| Engine | ERMIA | ERMIA-derived reference | Silo baseline commit in provenance, preserve its concurrency control |
+| Machine | Xeon Gold 6448H, single socket, no SMT, dedicated sender core | README supports patched kernel or driver | I03 must qualify CPU/interface, record topology, CPU mask and placement |
+| Workers / warehouses | 16 / 16 | README example 8 / 8 | Initial queued checks 1 / 1 and 2 / 2, final target 16 / 16 if resources permit |
+| Queue capacities, high / low per worker | 4 / 1 | CLI defaults 1 / 1, README high 8 | 4 / 1 pending requests, running request excluded |
+| High batch / interval | 64 / 1 ms | CLI global queue 1 / interval 1 second, README 64 / 1 ms | Batch `4 * workers`, interval 1 ms, global pending capacity `4 * workers` |
+| Duration | 30 seconds | README 30 seconds | 5-second warm-up, 30-second measured arrivals, five independent repetitions |
+| Workload | Low Q2, high New-Order/Payment | README high 50/50, low 100% Q2 | Same mix, `q2_min_stock_v1` from source map, supplier scan count 100 |
+| Cooperative interval | 10,000 reads | CLI 10, condition `count > threshold`, `YIELD_ALL=1` | Exactly 10,000 eligible completed reads, use `>=`, reset counter on check |
+| Starvation threshold | 100% default | 100%, elapsed-cycle ratio | 100% default, explicit sweeps belong to I16/I18 |
+| Remote access | Describes 15% remote warehouse | Payment 15%, New-Order separate per-item flag | Preserve Silo Payment 15% and New-Order 1% per item, disable remote choice with one warehouse |
+| Latency | p50/p90/p99/p99.9 | Reservoir samples, wall-clock microseconds | Monotonic nanoseconds, all request completions, nearest-rank percentiles |
+
+Paper settings are a comparison target. The fixed arrival deadlines, bounded overload rejection, corrected Q2, exact cooperative interval, warm-up, repetitions and measurement rules below are project choices. Preserve all differences in each run manifest. [Paper](https://www.cs.sfu.ca/~tzwang/preemptdb.pdf) [Pinned reference README](https://github.com/sfu-dis/preemptdb/blob/55823979233ecd833f1f4e10848de5e9bc0af667/README.md)
+
+Each manifest must include contract version, run ID, source revisions and local diff hash, compiler/build flags, seed, policy, Q2 variant, dataset dimensions, input distribution, logging mode, worker/sender CPUs, queue capacities, batch/interval, warm-up/measurement/drain durations, retry limit, yield interval, starvation threshold, command and exit status. Use seed `1 + repetition_index` (zero-based) for the initial five-run series and reuse it across policies. Record loader seeds separately. Initial logging mode is disabled, matching the stock baseline configuration. Each repetition reloads its initial dataset. Any changed setting requires a named configuration and manifest entry.
+
+## Request and ownership contract
+
+A `Request` contains immutable `run_id`, monotonic `request_id`, `batch_id` (absent for low-priority work), transaction type, priority, reproducible input seed and `scheduled_ns`, plus a home warehouse assigned once at generation, an input payload frozen before first execution, and mutable `generated_ns`, optional `admitted_ns`, optional `first_start_ns`, optional `finished_ns`, attempt count, abort count and outcome. Missing timestamps are null. IDs are unique within a run, including rejected requests. Transaction inputs become immutable before first execution and survive retries. A request-specific RNG must reproduce the same inputs independent of context scheduling. For matched comparisons, assign high requests to workers round-robin at generation, using request sequence modulo worker count, and freeze the corresponding home warehouse. Low requests belong to the worker whose queue is being replenished. Explicit input materialization in I09 must cover all random choices and transaction timestamp inputs.
+
+One producer owns generation, the global high-priority FIFO and admission. Each worker has one low-priority and one high-priority bounded SPSC queue. Producer publication uses release ordering and worker consumption uses acquire ordering, with the reverse ordering for slot reuse. Queue capacities count waiting requests. Dequeue transfers ownership to one worker context and frees the slot immediately. Main and high contexts share one worker consumer role, with dequeue/bookkeeping protected against switching. Requests never migrate after admission. The producer may read an atomic worker status snapshot, but may not mutate transaction state.
+
+The low context owns its current Q2. The high context owns at most one short request. Each context owns its stack, transaction buffer, arena, request RNG, workload scratch objects, scanner state and retry state. Worker identity, queues, interrupt registration and nested protection depth are worker-owned. I08 must establish an epoch/reclamation lifetime covering both contexts and protect shared allocators and locks before allowing mid-transaction switching.
+
+## Generation, overload and lifecycle
+
+Start all participants behind a readiness barrier. High-priority batch k has deadline `start_ns + k * interval_ns`, with k starting at 1. All requests in a batch share that scheduled timestamp. Record actual generation separately. Advance deadlines from the previous deadline. If delayed, account for every due batch in order with its original deadline, even if requests are immediately rejected. Stop generating at the phase boundary. This preserves offered-load accounting under overload.
+
+At each producer pass, process due high batches, attempt a bounded round-robin admission pass, and replenish empty low queues with Q2. Never spin waiting for a particular worker. High requests remain in the global FIFO until their assigned worker accepts them. A blocked FIFO head stays pending until the next bounded admission pass. This fixed routing is a project choice that keeps inputs matched across policies and may introduce head-of-line delay. A full global queue rejects newly generated requests with `rejected_queue_full`. Generation does not wait for capacity. Low generation is demand-driven, with at most one pending Q2 per worker. Assign its scheduled time at generation. Admission takes global FIFO requests in order and publishes them to their assigned workers while capacity and starvation eligibility permit. End the pass at the first blocked request. Notify each worker once after a nonempty admitted batch of high work. Publication precedes notification. The initial profile uses a home warehouse equal to worker index + 1, with the transaction-specific remote rules above.
+
+Lifecycle is `generated -> pending_global -> queued -> running -> completed` for high requests and `generated -> queued -> running -> completed` for low requests. Rejection terminates before admission. A running low request may become suspended and resume. A retry stays attached to the same context/request, with a fresh database transaction and the original inputs and timestamps. Outcomes are committed, user_aborted, retry_exhausted, failed, rejected_queue_full or cancelled_shutdown. Retry transaction conflicts up to 100 total attempts by default, immediately and with no backoff. Fatal engine errors fail the run. User aborts terminate immediately. Cancellation requires completing or safely aborting database work at a safe boundary.
+
+At a consistent snapshot, `generated = pending_global + queued + running + suspended + terminal`. Every request occupies exactly one category. Terminal includes every outcome above. Track abort attempts separately from terminal requests. An interrupt or context switch never counts as an abort or completion.
+
+## Shared policy interface
+
+The following operation names define the logical API. Concrete C++ declarations may be introduced by I06–I08 using existing repository types.
+
+| Operation | Caller and required behavior |
+|---|---|
+| `try_admit(request, worker)` | Producer, transfers ownership only on successful publication, otherwise retains it |
+| `notify(worker)` | Producer, after high queue publication. Wait/Cooperative require no hardware signal. Preemptive sends a coalescible notification |
+| `choose_next(worker)` | Worker at transaction boundary, high first, then paused low, then queued low. Starvation policy may prefer low. Idle when no work exists |
+| `on_record_read(context)` | Worker after an eligible Q2 supplier/stock/item read and outside unsafe regions. Cooperative checks every configured interval, switching only if high work exists |
+| `request_preemption(worker)` | Handler records pending work, switches only from low to high when protection depth is zero and context state is valid |
+| `enter_protected / leave_protected` | Worker-owned nested guard. Outermost exit reevaluates pending preemption. Assert against underflow, cover exceptions and abort paths |
+| `on_attempt_end(request, result)` | Worker, destroys transaction resources, retries or emits exactly one terminal outcome |
+| `on_high_batch_end(worker)` | High context resumes low on empty queue or starvation limit. Recheck pending work after the transition to prevent lost wakeups |
+| `begin_drain / stop` | Coordinator, halts generation then drains or cancels safely, joins participants before releasing resources |
+
+Wait runs each transaction to its attempt boundary without mid-attempt switching and serves high requests before starting another low request. Cooperative permits low-to-high switching only at audited record-read checkpoints. Preemptive uses hardware delivery and the same high-service loop. Nested high-to-high preemption is disabled. Empty/spurious notifications are harmless. A notification deferred in a protected region must remain pending until serviced. I13 must verify full asynchronous register/flags/extended-state preservation independently of I07 voluntary switching.
+
+Starvation accounting uses a worker-published consistent snapshot of low-request start cycles and high-service cycles. The ratio is `100 * high_cycles / elapsed_cycles`, with zero elapsed treated as zero. Reset at the start of a new low request, retain across its retries, and include high retries in high service. Compare strictly greater than the threshold. Check before admission and after each high request, allowing the current high transaction to finish. A starved worker resumes low while the producer continues visiting other workers. Use serialized cycle reads on pinned cores and record the method. Cross-thread snapshots must avoid torn or data-racing reads. End-to-end timing uses the monotonic clock independently.
+
+## Timing, shutdown and results
+
+Use `CLOCK_MONOTONIC` in nanoseconds for all Linux participants. Define generation delay as `generated - scheduled`, global queue time as `admitted - generated`, local queue time as `first_start - admitted`, and end-to-end latency as `finished - generated`. Also report scheduled latency `finished - scheduled`. Execution elapsed `finished - first_start` includes suspension, retry and backoff. Active service time, if collected, sums running segments separately. All applicable differences must be nonnegative.
+
+Warm-up is a separate arrival phase. Stop and drain warm-up before the measured readiness barrier, then reset measurement counters. At the end of 30 seconds stop all generation and continue admission/execution for up to 30 seconds of drain time. Capture outstanding counts at the measurement cutoff. During drain, service accepted requests under the same policy. At the drain deadline cancel pending queues and request cooperative cancellation of active work at safe boundaries. If an active context cannot exit safely, report a failed/incomplete run and retain outstanding evidence. Never free live stacks or abandon a transaction by switching away permanently. Stop sender activity, unregister interrupt channels, join workers and only then release context/queue storage.
+
+Save one terminal record per generated request plus attempt/switch counters and the manifest. For the arrival cohort, report committed end-to-end latency including completions during drain, with completion/cancellation counts alongside it. Throughput is commits within the 30-second measurement window divided by 30 seconds, by transaction type. Report drain completions separately. Compute nearest-rank percentiles from sorted committed samples using index `ceil(p * n) - 1`. Empty samples yield null. Report sample count and flag p99.9 with fewer than 1,000 samples. Keep per-repetition results before aggregation.
+
+I06 tests must reconcile IDs and outcomes under queue-full rejection, delayed generation, retries, duplicate notifications, drain and cancellation. I07 validates voluntary switching. I08 validates state/RCU isolation. I09 compares corrected Q2 results against a tiny deterministic oracle. I10/I11 test policy order and read intervals. I12/I13 establish hardware delivery and asynchronous preservation before I14 integration. These remain acceptance criteria for later tasks.

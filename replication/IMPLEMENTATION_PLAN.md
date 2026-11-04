@@ -4,7 +4,7 @@
 
 **Current state as of November 3, 2026**
 
-- **I01 is complete for the current workspace.** This directory contains the shared documentation, provenance, reproducible PACE job, and evidence layout. The original LaTeX project remains an input for M02. **I02 is in progress.** The Silo/Masstree sources are pinned and the Silo entry points are mapped. The PreemptDB audit and mixed-workload experiment contract remain open.
+- **I01 is complete for the current workspace.** This directory contains the shared documentation, provenance, reproducible PACE job, and evidence layout. The original LaTeX project remains an input for M02. **I02 is complete as a source and contract audit.** The pinned reference, mechanism map, Q2 discrepancies and shared interfaces are recorded in [source map](docs/source-map.md) and [experiment contract](docs/experiment-contract.md). Runtime implementation remains in I06–I16.
 - **I03 is queued for a hardware probe.** The stock baseline ran on AMD EPYC 7513. Job `6791940` identified the unlabeled Intel CPU node as Xeon Gold 6226. The one-GPU request `6792039` on `ice-gpu` targets Xeon Platinum 8462Y+ and passed submission. Use `squeue -j 6792039` to check the pending reason. CPUID and interface access remain unverified.
 - **I04 is validated on PACE.** Job `6791465` produced all ten stock TPC-C measurements. Job `6791730` passed the invariant suite in 5:26 after the pinning test was adapted to use CPUs assigned by Slurm. The original test run selected CPUs starting at CPU 0, outside the benchmark job's allowed range of 54–57. The test-only retry selected CPUs 60–63 from its own allocation.
 - **I05 has a complete stock baseline.** At two warehouses, throughput averaged 84,254 txn/s with one worker and 148,330 txn/s with two workers over five 30-second runs each. The generic experiment runner and queued workload analysis remain open.
@@ -16,7 +16,7 @@ The milestone is the immediate deadline and the final date remains to be confirm
 
 - The supplied checkout is clean on local `master` at `cc11ca1ea949ef266ee12a9b1c310392519d9e3b`, with `origin` pointing to Brian's `okBrian/silo` fork. Use this revision as the starting baseline and do development on a separate branch. I01 can skip obtaining a new Silo checkout. Keep the shared experiment and report files in the project workspace.
 - The checkout records Masstree at `1150824e6a10a0384ba4bfed6b916ce62f96315f`, but the submodule is uninitialized. Its configured URL uses `git://`. Initialize the pinned commit explicitly on the build copy, using an HTTPS override if necessary, and verify its SHA before building. The Makefile can invoke Git during parsing, including a checkout and pull in its Masstree update path. Inspect it without invoking Make on the original checkout and control submodule setup before running the build on Linux x86-64.
-- The existing entry point is `benchmarks/dbtest.cc` with `--bench tpcc`. `benchmarks/tpcc.cc` already implements New-Order, Payment, loading, and warehouse handling. `benchmarks/bench.cc` owns the benchmark loop and results. The inspected checkout has no identified Q2 variant or project scheduler. Silo-side source mapping is started. The PreemptDB reference code and exact Q2 workload still need the I02 audit.
+- The existing entry point is `benchmarks/dbtest.cc` with `--bench tpcc`. `benchmarks/tpcc.cc` already implements New-Order, Payment, loading, and warehouse handling. `benchmarks/bench.cc` owns the benchmark loop and results. The inspected checkout has no identified Q2 variant or project scheduler. The completed I02 [source map](docs/source-map.md) covers the reference Q2 variant and its minimum-selection defect. The contract selects the documented `q2_min_stock_v1` correction for I09.
 - The stock worker picks its next transaction in `bench_worker::run()` and starts its timer immediately before invoking the transaction. Its summary has aggregate throughput, latency, and abort fields. Use that output for the stock baseline. The new queued driver needs its own per-request timing from arrival through completion, with a stable identity across retries.
 - `benchmarks/bench.h` stores the transaction object buffer, string arena, and RNG on the worker. `benchmarks/tpcc.cc` passes the buffer and arena to `new_txn()`. Before running two transactions on one worker, audit all live state and lifetimes, including per-core RCU guards and reclamation in `rcu.h` and `rcu.cc`. A second stack alone leaves these shared objects in place.
 
@@ -73,6 +73,8 @@ Steps:
 5. Create a paper-versus-implementation configuration table, including known deviations and unknowns. Correct the proposal's 88–96% comparator to Wait.
 
 Outputs: `docs/source-map.md`, `docs/experiment-contract.md`, and pinned source provenance.
+
+Completed November 3, 2026. See the [audit evidence](results/i02-source-audit/README.md) for inspected revisions, verification and remaining runtime gates.
 
 Complete when: later components have compatible interfaces and every important configuration value has a source or is explicitly a project choice. No uninspected internal filename is treated as fact.
 

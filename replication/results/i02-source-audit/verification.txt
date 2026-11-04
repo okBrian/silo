@@ -1,0 +1,4 @@
+PASS: SHA-256 matches for all 21 inspected reference files
+PASS: 37 local Markdown link targets exist
+PASS: all 10 inspected Silo source files match the recorded baseline
+PASS: git diff --check
