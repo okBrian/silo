@@ -5,7 +5,9 @@
 #include <utility>
 #include <string>
 #include <set>
+#include <stdexcept>
 
+#include <errno.h>
 #include <getopt.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -25,6 +27,24 @@
 
 using namespace std;
 using namespace util;
+
+enum {
+  QUEUED_RUN = 1000, QUEUED_BATCH, QUEUED_INTERVAL, QUEUED_GLOBAL, QUEUED_WORKER,
+  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN
+};
+
+static uint64_t
+queued_number(const char *arg, const char *option, uint64_t min, uint64_t max)
+{
+  char *end;
+  errno = 0;
+  const uint64_t value = strtoull(arg, &end, 10);
+  if (*arg < '0' || *arg > '9' || *end || errno || value < min || value > max) {
+    cerr << "[ERROR] invalid --" << option << ": " << arg << endl;
+    exit(1);
+  }
+  return value;
+}
 
 static vector<string>
 split_ws(const string &s)
@@ -76,6 +96,9 @@ main(int argc, char **argv)
   vector<string> logfiles;
   vector<vector<unsigned>> assignments;
   string stats_server_sockfile;
+  size_t queued_batch = 0;
+  size_t queued_global = 0;
+  bool saw_queue_setting = false;
   while (1) {
     static struct option long_options[] =
     {
@@ -104,6 +127,14 @@ main(int argc, char **argv)
       {"disable-snapshots"          , no_argument       , &disable_snapshots         , 1}   ,
       {"stats-server-sockfile"      , required_argument , 0                          , 'x'} ,
       {"no-reset-counters"          , no_argument       , &no_reset_counters         , 1}   ,
+      {"queued"                    , required_argument , 0                          , QUEUED_RUN},
+      {"queued-batch-size"         , required_argument , 0                          , QUEUED_BATCH},
+      {"queued-interval-us"        , required_argument , 0                          , QUEUED_INTERVAL},
+      {"queued-global-capacity"    , required_argument , 0                          , QUEUED_GLOBAL},
+      {"queued-worker-capacity"    , required_argument , 0                          , QUEUED_WORKER},
+      {"queued-seed"               , required_argument , 0                          , QUEUED_SEED},
+      {"queued-warmup"             , required_argument , 0                          , QUEUED_WARMUP},
+      {"queued-drain"              , required_argument , 0                          , QUEUED_DRAIN},
       {0, 0, 0, 0}
     };
     int option_index = 0;
@@ -111,7 +142,41 @@ main(int argc, char **argv)
     if (c == -1)
       break;
 
+    if (c > QUEUED_RUN && c <= QUEUED_DRAIN)
+      saw_queue_setting = true;
     switch (c) {
+    case QUEUED_RUN:
+      queued_run_id = optarg;
+      if (queued_run_id.empty() || queued_run_id.find_first_of("\t\r\n") != string::npos) {
+        cerr << "[ERROR] --queued requires a nonempty TSV-safe run ID" << endl;
+        return 1;
+      }
+      break;
+
+    case QUEUED_BATCH:
+      queued_batch = queued_number(optarg, long_options[option_index].name, 1, UINT32_MAX);
+      break;
+    case QUEUED_INTERVAL:
+      queued_config.interval = queued_number(optarg, long_options[option_index].name,
+                                             1, UINT32_MAX) * 1000;
+      break;
+    case QUEUED_GLOBAL:
+      queued_global = queued_number(optarg, long_options[option_index].name, 1, UINT32_MAX);
+      break;
+    case QUEUED_WORKER:
+      queued_config.high_capacity = queued_number(optarg, long_options[option_index].name,
+                                                  1, UINT32_MAX);
+      break;
+    case QUEUED_SEED:
+      queued_config.seed = queued_number(optarg, long_options[option_index].name, 0, UINT64_MAX);
+      break;
+    case QUEUED_WARMUP:
+      queued_warmup_seconds = queued_number(optarg, long_options[option_index].name, 0, 86400);
+      break;
+    case QUEUED_DRAIN:
+      queued_drain_seconds = queued_number(optarg, long_options[option_index].name, 0, 86400);
+      break;
+
     case 0:
       if (long_options[option_index].flag != 0)
         break;
@@ -191,6 +256,35 @@ main(int argc, char **argv)
 
     default:
       abort();
+    }
+  }
+
+  if (queued_run_id.empty() && saw_queue_setting) {
+    cerr << "[ERROR] --queued-* settings require --queued RUN_ID" << endl;
+    return 1;
+  }
+  if (!queued_run_id.empty()) {
+    if (bench_type != "tpcc" || db_type != "ndb-proto2" ||
+        scale_factor != double(nthreads) || nthreads > UINT32_MAX / 4 ||
+        run_mode != RUNMODE_TIME || runtime > 86400 || !logfiles.empty() ||
+        retry_aborted_transaction || backoff_aborted_transaction || slow_exit) {
+      cerr << "[ERROR] --queued requires time-based TPC-C on ndb-proto2 with one "
+              "warehouse per worker, logging disabled, and no stock retry/backoff or slow-exit flags"
+           << endl;
+      return 1;
+    }
+    queued_config.workers = nthreads;
+    queued_config.batch_size = queued_batch ? queued_batch : 4 * nthreads;
+    queued_config.global_capacity = queued_global ? queued_global : 4 * nthreads;
+    queued_config.generate_low = false;
+    const auto batches = [](uint64_t seconds) {
+      return seconds ? (seconds * queued::second - 1) / queued_config.interval : 0;
+    };
+    if (batches(runtime) == 0 || batches(runtime) + batches(queued_warmup_seconds) >
+        (UINT64_C(1) << 31) / queued_config.batch_size) {
+      cerr << "[ERROR] --queued requires at least one measured batch and at most "
+              "2^31 total requests" << endl;
+      return 1;
     }
   }
 
@@ -401,7 +495,15 @@ main(int argc, char **argv)
   argv[0] = (char *) bench_type.c_str();
   for (size_t i = 1; i <= bench_toks.size(); i++)
     argv[i] = (char *) bench_toks[i - 1].c_str();
-  test_fn(db, argc, argv);
+  try {
+    test_fn(db, argc, argv);
+  } catch (const std::exception &error) {
+    if (queued_run_id.empty())
+      throw;
+    cerr << "[ERROR] " << error.what() << endl;
+    delete db;
+    return 1;
+  }
   delete db;
   return 0;
 }

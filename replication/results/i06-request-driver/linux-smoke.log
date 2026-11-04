@@ -1,0 +1,17 @@
+Linux 6.8.0-117-generic x86_64
+g++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+1150824e6a10a0384ba4bfed6b916ce62f96315f
+stock, both queued smokes, standalone, and opt-in validation passed
+container_exit=0
+Build: make -j1 -C third-party/lz4 library; make -j1 MYSQL=0 USE_MALLOC_MODE=0 masstree/config.h; make -j2 MYSQL=0 USE_MALLOC_MODE=0 dbtest
+Build copy: -O1 without -Werror, BDB omitted, pair formatter declaration added
+Smoke: --bench tpcc --num-threads 1 --scale-factor 1 --runtime 1
+Smoke: --bench tpcc --num-threads 1 --scale-factor 1 --runtime 1 --queued i06-w1 --queued-warmup 1 --queued-interval-us 100000
+Smoke: --bench tpcc --num-threads 2 --scale-factor 2 --runtime 1 --queued i06-w2 --queued-warmup 0 --queued-interval-us 100000
+[ERROR] --queued requires time-based TPC-C on ndb-proto2 with one warehouse per worker, logging disabled, and no stock retry/backoff or slow-exit flags
+[ERROR] --queued-* settings require --queued RUN_ID
+PASS stock output contains five finite columns and positive throughput
+PASS 1 worker(s) warmup: 36 IDs, types {'NewOrder': 24, 'Payment': 12}, all committed
+PASS 1 worker(s) measurement: 36 IDs, types {'Payment': 16, 'NewOrder': 20}, all committed
+PASS warm-up finished before measurement started
+PASS 2 worker(s) measurement: 72 IDs, types {'Payment': 36, 'NewOrder': 36}, all committed

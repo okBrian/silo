@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 #include <vector>
 #include <utility>
 #include <string>
@@ -43,6 +44,10 @@ int slow_exit = 0;
 int retry_aborted_transaction = 0;
 int no_reset_counters = 0;
 int backoff_aborted_transaction = 0;
+string queued_run_id;
+queued::Config queued_config;
+uint64_t queued_warmup_seconds = 5;
+uint64_t queued_drain_seconds = 30;
 
 template <typename T>
 static void
@@ -120,6 +125,15 @@ bench_worker::run()
   txn_counts.resize(workload.size());
   barrier_a->count_down();
   barrier_b->wait_for();
+  if (measured_driver) {
+    const auto execute = [this](const queued::Request &request) {
+      return run_queued_attempt(request);
+    };
+    if (warmup_driver)
+      warmup_driver->run_worker(queue_worker, execute);
+    measured_driver->run_worker(queue_worker, execute);
+    return;
+  }
   while (running && (run_mode != RUNMODE_OPS || ntxn_commits < ops_per_worker)) {
     double d = r.next_uniform();
     for (size_t i = 0; i < workload.size(); i++) {
@@ -228,6 +242,43 @@ bench_runner::run()
 
   const vector<bench_worker *> workers = make_workers();
   ALWAYS_ASSERT(!workers.empty());
+  if (!queued_run_id.empty()) {
+    ALWAYS_ASSERT(workers.size() == queued_config.workers);
+    queued::Config warmup_config = queued_config;
+    warmup_config.seed ^= UINT64_C(0x9e3779b97f4a7c15);
+    queued::Driver warmup(warmup_config);
+    queued::Driver measured(queued_config);
+    const queued::Ns drain = queued_drain_seconds * queued::second;
+    for (size_t i = 0; i < workers.size(); ++i) {
+      workers[i]->queue_worker = i;
+      workers[i]->warmup_driver = queued_warmup_seconds ? &warmup : nullptr;
+      workers[i]->measured_driver = &measured;
+      workers[i]->start();
+    }
+    barrier_a.wait_for();
+    barrier_b.count_down();
+    if (queued_warmup_seconds) {
+      warmup.produce(queued_warmup_seconds * queued::second, drain);
+      warmup.wait_for_drain();
+    }
+    // An empty phase releases the workers if warm-up failed.
+    const queued::Ns duration = warmup.failed() ? 0 : runtime * queued::second;
+    measured.produce(duration, drain, warmup.generated());
+    for (auto *worker : workers)
+      worker->join();
+    db->do_txn_finish();
+    queued::write_header(cout);
+    if (queued_warmup_seconds)
+      queued::write_results(warmup, cout, cerr, queued_run_id, "warmup");
+    if (duration)
+      queued::write_results(measured, cout, cerr, queued_run_id, "measurement");
+    cout.flush();
+    delete_pointers(workers);
+    delete_pointers(loaders);
+    if (warmup.failed() || measured.failed() || !cout)
+      throw std::runtime_error("queued benchmark failed or exceeded its drain deadline");
+    return;
+  }
   for (vector<bench_worker *>::const_iterator it = workers.begin();
        it != workers.end(); ++it)
     (*it)->start();

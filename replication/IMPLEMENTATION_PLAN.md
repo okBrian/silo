@@ -8,7 +8,8 @@
 - **I03 is queued for a hardware probe.** The stock baseline ran on AMD EPYC 7513. Job `6791940` identified the unlabeled Intel CPU node as Xeon Gold 6226. The one-GPU request `6792039` on `ice-gpu` targets Xeon Platinum 8462Y+ and passed submission. Use `squeue -j 6792039` to check the pending reason. CPUID and interface access remain unverified.
 - **I04 is validated on PACE.** Job `6791465` produced all ten stock TPC-C measurements. Job `6791730` passed the invariant suite in 5:26 after the pinning test was adapted to use CPUs assigned by Slurm. The original test run selected CPUs starting at CPU 0, outside the benchmark job's allowed range of 54–57. The test-only retry selected CPUs 60–63 from its own allocation.
 - **I05 has a complete stock baseline.** At two warehouses, throughput averaged 84,254 txn/s with one worker and 148,330 txn/s with two workers over five 30-second runs each. The generic experiment runner and queued workload analysis remain open.
-- **M01 has baseline evidence.** Logs and environment records for both jobs are in [results/pace-runs](results/pace-runs/). The benchmark CSV and analysis are in `results/i04-pace-baseline/`. Component evidence and the milestone report remain open. I06–I18 and F01–F02 have no recorded implementation progress.
+- **I06 has local functional evidence.** The independent producer, bounded queues, retry accounting and timing are implemented. The opt-in TPC-C bridge exercises New-Order and Payment. See the [I06 validation and reproduction commands](results/i06-request-driver/README.md).
+- **M01 has stock baseline and I06 component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I07–I18 and F01–F02 remain open.
 
 The milestone is the immediate deadline and the final date remains to be confirmed. Ownership below is proposed coordination responsibility.
 
@@ -211,6 +212,8 @@ Steps:
 5. Run a controlled slow-worker experiment showing that a queued short request's end-to-end latency includes waiting.
 
 Outputs: reusable driver component, tests, and saved functional-test output.
+
+Implemented in `benchmarks/request_driver.{h,cc}` and wired into `bench_worker::run()` behind `dbtest --queued RUN_ID`. The standalone suite exercises low-priority traffic with a synthetic callback. The TPC-C bridge currently runs New-Order and Payment with one warehouse per worker. I09 supplies the Q2 workload and explicit input materialization. See the [I06 evidence](results/i06-request-driver/README.md).
 
 Complete when: generated requests reconcile with completed, outstanding, rejected, and dropped requests; timestamps are valid; retries retain the original logical request identity. Report generation delay separately if the generator misses its intended arrival schedule.
 

@@ -1,0 +1,19 @@
+Darwin 27.0.0 arm64
+Apple clang version 21.0.0 (clang-2100.3.34.2)
+05d1c2e4b1050465353efd68d1abc6c57d649b17
+PASS delayed generation and overload: 8 high, 2 low, 5 rejected, 4 cancelled, 1 safe completion after deadline
+phase=measurement cutoff_ns=150 generated=10 completed=1 rejected=5 cancelled=4 dropped=0 cutoff_pending_global=2 cutoff_queued=2 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=1 failed=1
+PASS wake after drain deadline accounts for every pre-cutoff batch
+PASS stable retries, retry exhaustion, user abort, FIFO and duplicate notifications
+PASS fatal adapter error stops new attempts and preserves terminal records
+PASS real-clock slow-worker drain: global_queue_ns=3000 local_queue_ns=81103000 execution_ns=1260000 end_to_end_ns=82366000
+PASS three-worker routing and ID reconciliation: high=2392 generated=3292 committed=3292 rejected=0
+PASS 25 additional runs
+PASS delayed generation and overload: 8 high, 2 low, 5 rejected, 4 cancelled, 1 safe completion after deadline
+phase=measurement cutoff_ns=150 generated=10 completed=1 rejected=5 cancelled=4 dropped=0 cutoff_pending_global=2 cutoff_queued=2 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=1 failed=1
+PASS wake after drain deadline accounts for every pre-cutoff batch
+PASS stable retries, retry exhaustion, user abort, FIFO and duplicate notifications
+PASS fatal adapter error stops new attempts and preserves terminal records
+PASS real-clock slow-worker drain: global_queue_ns=15000 local_queue_ns=85024000 execution_ns=1132000 end_to_end_ns=86171000
+PASS three-worker routing and ID reconciliation: high=2392 generated=3292 committed=3292 rejected=0
+PASS AddressSanitizer and UndefinedBehaviorSanitizer

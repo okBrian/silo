@@ -9,6 +9,7 @@ This directory contains the CS 6400 project roadmap, PACE workflow, and evidence
 - [I02 source map and Q2 audit](docs/source-map.md)
 - [Shared experiment and implementation contract](docs/experiment-contract.md)
 - [I02 audit evidence](results/i02-source-audit/README.md)
+- [I06 queued driver usage and functional validation](results/i06-request-driver/README.md)
 - [Run the stock Silo baseline on PACE](pace-baseline/README.md)
 - [PACE TPC-C results and summary](results/i04-pace-baseline/SUMMARY.md)
 - [PACE benchmark logs](results/pace-runs/6791465/) and [test rerun logs](results/pace-runs/6791730/)

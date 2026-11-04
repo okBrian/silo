@@ -9,6 +9,7 @@
 #include <string>
 
 #include "abstract_db.h"
+#include "request_driver.h"
 #include "../macros.h"
 #include "../thread.h"
 #include "../util.h"
@@ -41,6 +42,10 @@ extern int slow_exit;
 extern int retry_aborted_transaction;
 extern int no_reset_counters;
 extern int backoff_aborted_transaction;
+extern std::string queued_run_id;
+extern queued::Config queued_config;
+extern uint64_t queued_warmup_seconds;
+extern uint64_t queued_drain_seconds;
 
 class scoped_db_thread_ctx {
 public:
@@ -174,6 +179,10 @@ public:
 protected:
 
   virtual void on_run_setup() {}
+  virtual queued::Attempt run_queued_attempt(const queued::Request &)
+  {
+    return queued::Attempt::failed;
+  }
 
   inline void *txn_buf() { return (void *) txn_obj_buf.data(); }
 
@@ -186,6 +195,10 @@ protected:
   spin_barrier *const barrier_b;
 
 private:
+  friend class bench_runner;
+  queued::Driver *warmup_driver = nullptr;
+  queued::Driver *measured_driver = nullptr;
+  size_t queue_worker = 0;
   size_t ntxn_commits;
   size_t ntxn_aborts;
   uint64_t latency_numer_us;

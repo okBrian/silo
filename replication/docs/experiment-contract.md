@@ -1,6 +1,6 @@
 # I02 experiment contract
 
-Version 1, November 3, 2026. These are implementation requirements for I05–I16 and explicit project choices where specified. The source audit is in [source-map.md](source-map.md). The queued driver and scheduler interfaces described here are pending implementation.
+Version 1, November 3, 2026. These are implementation requirements for I05–I16 and explicit project choices where specified. The source audit is in [source-map.md](source-map.md). I06 implements request generation, bounded admission, terminal records and a synchronous execution adapter. The [I06 evidence](../results/i06-request-driver/README.md) documents the initial profile and remaining integration work.
 
 ## Configuration and evidence
 
