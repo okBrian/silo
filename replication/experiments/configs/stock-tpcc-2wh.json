@@ -1,0 +1,11 @@
+{
+  "name": "stock-tpcc-2wh",
+  "format": "stock",
+  "variants": [
+    {"workers": 1, "warehouses": 2},
+    {"workers": 2, "warehouses": 2}
+  ],
+  "repeats": 5,
+  "phases_s": {"warmup": 0, "measurement": 30, "drain_limit": 0},
+  "timeout_s": 210
+}

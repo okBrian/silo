@@ -43,3 +43,17 @@ The benchmark uses the allocation's affinity and omits Silo's explicit `--pin-cp
 - In `results/silo-stock-<job-id>.*`, `exit-status` records the job script result, `environment.txt` records revisions and compute settings, and `test.log` records upstream test output. `test-passed.txt` appears after a successful test exit.
 - Inspect `stock-tpcc.csv` and the per-run `.stdout` and `.stderr` logs. A complete default run has ten measurement rows and a zero exit status. Preserve partial rows and the failure logs if a run stops early.
 - The CSV keeps the five metrics from stock `dbtest`. Use throughput, the reported average successful-attempt latency, and abort rate for the milestone. The persistence fields are raw stock fields, and the run passes no durability log. Queuing delay and end-to-end percentiles will come from I06 and later integration.
+
+## Submit the I05 stock configuration
+
+Use the same staged stock source and build job. Supply the runner and configuration as two additional arguments. From the Silo checkout root on the login node:
+
+```bash
+repo_root=$(git rev-parse --show-toplevel)
+sbatch -A coc -p coc-cpu --qos=coc-ice \
+  "$repo_root/replication/pace-baseline/stock-silo.sbatch" "$source_dir" \
+  "$repo_root/replication/experiments/run.py" \
+  "$repo_root/replication/experiments/configs/stock-tpcc-2wh.json"
+```
+
+Set `source_dir` to the staged `silo-input` path from the setup above. This mode uses the JSON settings for the benchmark phase and writes `experiments/<batch-id>/` inside the job's results directory. The original one-argument workflow still accepts the `SILO_REPEATS` and `SILO_RUNTIME` environment overrides. The upstream suite runs after the I05 benchmark matrix. Use the [I05 analyzer](../experiments/README.md#read-the-tables) on the inner batch directory.

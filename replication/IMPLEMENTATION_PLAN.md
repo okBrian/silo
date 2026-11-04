@@ -7,7 +7,7 @@
 - **I01 is complete for the current workspace.** This directory contains the shared documentation, provenance, reproducible PACE job, and evidence layout. The original LaTeX project remains an input for M02. **I02 is complete as a source and contract audit.** The pinned reference, mechanism map, Q2 discrepancies and shared interfaces are recorded in [source map](docs/source-map.md) and [experiment contract](docs/experiment-contract.md). Runtime implementation remains in I06–I16.
 - **I03 is queued for a hardware probe.** The stock baseline ran on AMD EPYC 7513. Job `6791940` identified the unlabeled Intel CPU node as Xeon Gold 6226. The one-GPU request `6792039` on `ice-gpu` targets Xeon Platinum 8462Y+ and passed submission. Use `squeue -j 6792039` to check the pending reason. CPUID and interface access remain unverified.
 - **I04 is validated on PACE.** Job `6791465` produced all ten stock TPC-C measurements. Job `6791730` passed the invariant suite in 5:26 after the pinning test was adapted to use CPUs assigned by Slurm. The original test run selected CPUs starting at CPU 0, outside the benchmark job's allowed range of 54–57. The test-only retry selected CPUs 60–63 from its own allocation.
-- **I05 has a complete stock baseline.** At two warehouses, throughput averaged 84,254 txn/s with one worker and 148,330 txn/s with two workers over five 30-second runs each. The generic experiment runner and queued workload analysis remain open.
+- **I05 is complete.** The [experiment runner and analysis](experiments/README.md) reproduce the ten-run stock table and process the archived I06 smoke results. At two warehouses, throughput averaged 84,254 txn/s with one worker and 148,330 txn/s with two workers over five 30-second runs each.
 - **I06 has local functional evidence.** The independent producer, bounded queues, retry accounting and timing are implemented. The opt-in TPC-C bridge exercises New-Order and Payment. See the [I06 validation and reproduction commands](results/i06-request-driver/README.md).
 - **M01 has stock baseline and I06 component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I07–I18 and F01–F02 remain open.
 
@@ -195,6 +195,8 @@ Steps:
 5. Record failures and missing metrics rather than silently dropping runs or replacing missing values with zero.
 
 Outputs: runner, parser, configuration files, analysis scripts, baseline result table, and reproducible plot commands.
+
+Completed November 3, 2026. See the [regenerated evidence](results/i05-experiments/README.md) and [commands](experiments/README.md).
 
 Complete when: raw logs reproduce the summary, fixture calculations agree with known values, and any reported baseline numbers come from real completed runs.
 

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="780" height="375" preserveAspectRatio="xMinYMin meet" viewBox="0 0 780 375" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="Stock TPC-C throughput. stock-tpcc-2wh · 30 s per run · n is the number of runs">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="780" height="375"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-375)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="0" width="780" height="375" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(100%,100%,100%); fill-rule: evenodd;"/>
+			<text x="28" y="345" style="font-family: Helvetica-Bold; font-size: 17px;fill: rgb(14%,20%,27%); stroke:none;" transform="translate(0,690) scale(1,-1)">Stock TPC-C throughput</text>
+			<text x="28" y="323" style="font-family: Times-Roman; font-size: 10px;fill: rgb(14%,20%,27%); stroke:none;" transform="translate(0,646) scale(1,-1)">stock-tpcc-2wh · 30 s per run · n is the number of runs</text>
+			<text x="28" y="291" style="font-family: Times-Roman; font-size: 11px;fill: rgb(14%,20%,27%); stroke:none;" transform="translate(0,582) scale(1,-1)">Committed transactions/s</text>
+			<g transform="">
+				<path d="M 88,76 L 748,76 Z" style="stroke: rgb(86%,89%,91%); stroke-linecap: butt; stroke-width: 0.25;"/>
+				<path d="M 88,134.689199 L 748,134.689199 Z" style="stroke: rgb(86%,89%,91%); stroke-linecap: butt; stroke-width: 0.25;"/>
+				<path d="M 88,193.378398 L 748,193.378398 Z" style="stroke: rgb(86%,89%,91%); stroke-linecap: butt; stroke-width: 0.25;"/>
+				<path d="M 88,252.067597 L 748,252.067597 Z" style="stroke: rgb(86%,89%,91%); stroke-linecap: butt; stroke-width: 0.25;"/>
+				<g transform="">
+					<rect x="143.0" y="76.0" width="220.0" height="98.89547890675277" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(13%,34%,53%); fill-rule: evenodd;"/>
+					<rect x="473.0" y="76.0" width="220.0" height="174.10714285714283" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(13%,34%,53%); fill-rule: evenodd;"/>
+					<g transform=""/>
+				</g>
+				<g transform="">
+					<g transform="">
+						<path d="M 88,76 L 748,76 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+					</g>
+					<g transform="">
+						<path d="M 88,76 L 88,71 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+						<path d="M 418,76 L 418,71 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+						<path d="M 748,76 L 748,71 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+					</g>
+					<g transform="">
+						<g transform=" matrix(1,0,0,1,253,68)">
+							<text x="-31.430000000000003" y="-10.0" style="font-family: Times-Roman; font-size: 10px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,-20) scale(1,-1)">v1 1w/2wh n=5</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,583,68)">
+							<text x="-31.430000000000003" y="-10.0" style="font-family: Times-Roman; font-size: 10px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,-20) scale(1,-1)">v2 2w/2wh n=5</text>
+						</g>
+					</g>
+				</g>
+				<g transform="">
+					<g transform="">
+						<path d="M 88,76 L 88,271 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+					</g>
+					<g transform="">
+						<path d="M 88,76 L 83,76 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+						<path d="M 88,134.689199 L 83,134.689199 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+						<path d="M 88,193.378398 L 83,193.378398 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+						<path d="M 88,252.067597 L 83,252.067597 Z" style="stroke: rgb(0%,0%,0%); stroke-linecap: butt; stroke-width: 1;"/>
+					</g>
+					<g transform="">
+						<g transform=" matrix(1,0,0,1,84,76)">
+							<text x="-5.0" y="-4.0" style="font-family: Times-Roman; font-size: 10px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,-8) scale(1,-1)">0</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,84,134.689199)">
+							<text x="-27.5" y="-4.0" style="font-family: Times-Roman; font-size: 10px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,-8) scale(1,-1)">50,000</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,84,193.378398)">
+							<text x="-32.5" y="-4.0" style="font-family: Times-Roman; font-size: 10px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,-8) scale(1,-1)">100,000</text>
+						</g>
+						<g transform=" matrix(1,0,0,1,84,252.067597)">
+							<text x="-32.5" y="-4.0" style="font-family: Times-Roman; font-size: 10px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,-8) scale(1,-1)">150,000</text>
+						</g>
+					</g>
+				</g>
+			</g>
+			<rect x="88" y="24" width="12" height="12" style="stroke: none; stroke-linecap: butt; stroke-width: 1; fill: rgb(13%,34%,53%); fill-rule: evenodd;"/>
+			<text x="106" y="25" style="font-family: Times-Roman; font-size: 10px;fill: rgb(14%,20%,27%); stroke:none;" transform="translate(0,50) scale(1,-1)">Mean throughput</text>
+		</g>
+	</g>
+</svg>

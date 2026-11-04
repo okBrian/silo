@@ -1,0 +1,1 @@
+phase=measurement cutoff_ns=20000 generated=5 completed=3 rejected=1 cancelled=1 dropped=0 cutoff_pending_global=0 cutoff_queued=1 cutoff_running=2 cutoff_due_ungenerated=0 commits_in_window=1 drain_commits=1 failed=0

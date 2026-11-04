@@ -18,12 +18,19 @@ if [[ -z ${SLURM_JOB_ID:-} && ${SILO_LOCAL_VALIDATION:-0} != 1 ]]; then
   exit 2
 fi
 job_id=${SLURM_JOB_ID:-local-validation}
-if [[ $# != 1 || ! -d $1 ]]; then
-  echo 'Usage: sbatch stock-silo.sbatch /absolute/path/to/silo-input' >&2
+if [[ ( $# != 1 && $# != 3 ) || ! -d $1 ]]; then
+  echo 'Usage: sbatch stock-silo.sbatch /path/to/silo-input [/path/to/run.py /path/to/stock-config.json]' >&2
   exit 2
 fi
 
 source_dir=$(cd "$1" && pwd -P)
+experiment_runner=''
+if [[ $# == 3 ]]; then
+  experiment_runner=$(realpath -- "$2")
+  experiment_config=$(realpath -- "$3")
+  [[ -r $experiment_runner && -r $experiment_config ]]
+  command -v python3
+fi
 silo_rev=cc11ca1ea949ef266ee12a9b1c310392519d9e3b
 masstree_rev=1150824e6a10a0384ba4bfed6b916ce62f96315f
 repeats=${SILO_REPEATS:-5}
@@ -79,8 +86,13 @@ git -C masstree rev-parse --verify "$masstree_rev^"
   awk '/^MemTotal:/' /proc/meminfo
   g++ --version
   make --version
-  printf 'job=%s cpus_per_task=%s repeats=%s runtime_s=%s scale_factor=2\n' \
-    "$job_id" "${SLURM_CPUS_PER_TASK:-4}" "$repeats" "$runtime"
+  if [[ -n $experiment_runner ]]; then
+    printf 'job=%s cpus_per_task=%s experiment_config=%s\n' \
+      "$job_id" "${SLURM_CPUS_PER_TASK:-4}" "$experiment_config"
+  else
+    printf 'job=%s cpus_per_task=%s repeats=%s runtime_s=%s scale_factor=2\n' \
+      "$job_id" "${SLURM_CPUS_PER_TASK:-4}" "$repeats" "$runtime"
+  fi
   git rev-parse HEAD
   git submodule status
 } > "$run_dir/environment.txt"
@@ -227,6 +239,16 @@ fi
 
 make -j1 "${common[@]}" masstree/config.h 2>&1 | tee "$run_dir/configure-dbtest.log"
 make -j"$jobs" "${common[@]}" dbtest 2>&1 | tee "$run_dir/build-dbtest.log"
+
+if [[ -n $experiment_runner ]]; then
+  benchmark_status=0
+  python3 "$experiment_runner" "$experiment_config" \
+    --source "$PWD" --dbtest "$PWD/out-perf.masstree/benchmarks/dbtest" \
+    --output "$run_dir/experiments" --build-info "GCC $(g++ -dumpfullversion); ${common[*]}; see build-dbtest.log and build-compatibility.diff" \
+    || benchmark_status=$?
+  run_upstream_tests
+  exit "$benchmark_status"
+fi
 
 run_tpcc() {
   local workers=$1 duration=$2 name=$3

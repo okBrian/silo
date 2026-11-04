@@ -1,0 +1,6 @@
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns
+fixture	measurement	0	1	NewOrder	high	0	1	1	1000	2000	3000	5000	10000	1	0	committed	1000
+fixture	measurement	1	1	NewOrder	high	0	1	2	1000	2000	6000	9000	20000	2	1	committed	1000
+fixture	measurement	2	1	Payment	high	0	1	3	1000	2000	null	null	2000	0	0	rejected_queue_full	1000
+fixture	measurement	3	1	Payment	high	0	1	4	1000	2000	12000	null	22000	0	0	cancelled_shutdown	1000
+fixture	measurement	4	1	Payment	high	0	1	5	1000	2000	13000	18000	21000	1	0	user_aborted	1000
