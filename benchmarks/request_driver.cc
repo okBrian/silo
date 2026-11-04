@@ -74,6 +74,7 @@ const char *name(Kind kind) {
   case Kind::new_order: return "NewOrder";
   case Kind::payment: return "Payment";
   case Kind::synthetic_low: return "SyntheticLow";
+  case Kind::q2: return "Q2";
   }
   std::terminate();
 }
@@ -127,6 +128,7 @@ struct Driver::State {
   std::atomic<bool> overrun{false};
   std::atomic<Ns> drain_deadline{0};
   uint64_t count = 0;
+  uint64_t high_count = 0;
   Ns cutoff = 0;
 };
 
@@ -150,7 +152,7 @@ void Driver::notify(size_t worker) {
   w.wake.notify_one();
 }
 
-void Driver::produce(Ns duration, Ns drain, uint64_t first_id) {
+void Driver::produce(Ns duration, Ns drain, uint64_t first_id, uint64_t first_high) {
   State &s = *state;
   const Config &config = s.config;
   {
@@ -176,7 +178,6 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id) {
     return request;
   };
 
-  uint64_t high_sequence = 0;
   uint64_t batch = 1;
   Ns next = start + std::min(config.interval, duration);
   std::vector<bool> published(config.workers);
@@ -186,11 +187,13 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id) {
       break;
     // Snapshot the due set so a slow catch-up pass still gives admission a turn.
     for (; next < s.cutoff && next <= now; ++batch) {
-      for (size_t i = 0; i < config.batch_size; ++i, ++high_sequence) {
+      for (size_t i = 0; i < config.batch_size; ++i) {
+        const uint64_t high_sequence = s.high_count++;
         const uint64_t seed = mix(config.seed + high_sequence);
         const Kind kind = seed >> 63 ? Kind::new_order : Kind::payment;
         Request request = make_request(high_sequence % config.workers, seed,
                                        kind, batch, next, s.clock());
+        request.high_sequence = first_high + high_sequence;
         if (s.global.size() == config.global_capacity) {
           request.outcome = Outcome::rejected_queue_full;
           request.finished = request.generated;
@@ -228,7 +231,7 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id) {
         if (generated >= s.cutoff)
           break;
         const uint64_t seed = mix(~config.seed ^ mix(i) ^ mix(++s.low_sequence[i]));
-        Request request = make_request(i, seed, Kind::synthetic_low, 0, generated, generated);
+        Request request = make_request(i, seed, config.low_kind, 0, generated, generated);
         request.admitted = generated;
         // Only this producer can fill the slot after observing an empty queue.
         if (!s.workers[i]->low.push(request))
@@ -268,6 +271,12 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id) {
 }
 
 void Driver::run_worker(size_t worker, const Execute &execute) {
+  run_prepared_worker(worker, [&](const Request &request) {
+    return [&](uint64_t &) { return execute(request); };
+  });
+}
+
+void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
   State &s = *state;
   Worker &w = *s.workers[worker];
   {
@@ -289,6 +298,7 @@ void Driver::run_worker(size_t worker, const Execute &execute) {
     }
 
     const Ns deadline = s.drain_deadline.load(std::memory_order_acquire);
+    Prepared execute;
     while (request.outcome == Outcome::pending) {
       const Ns now = s.clock();
       if (now >= deadline || s.fatal.load(std::memory_order_acquire)) {
@@ -301,7 +311,9 @@ void Driver::run_worker(size_t worker, const Execute &execute) {
       ++request.attempts;
       Attempt attempt = Attempt::failed;
       try {
-        attempt = execute(request);
+        if (!execute)
+          execute = prepare(request);
+        attempt = execute(request.q2_checksum);
       } catch (...) {
         // The adapter must unwind any live transaction before propagating.
       }
@@ -350,13 +362,14 @@ void Driver::visit_records(const Visit &visit) const {
 }
 
 uint64_t Driver::generated() const { return state->count; }
+uint64_t Driver::high_generated() const { return state->high_count; }
 Ns Driver::cutoff() const { return state->cutoff; }
 bool Driver::failed() const { return state->fatal || state->overrun; }
 
 void write_header(std::ostream &out) {
   out << "run_id\tphase\trequest_id\tbatch_id\ttype\tpriority\tworker\thome_warehouse"
       "\tinput_seed\tscheduled_ns\tgenerated_ns\tadmitted_ns\tfirst_start_ns"
-      "\tfinished_ns\tattempts\taborts\toutcome\tgeneration_delay_ns\n";
+      "\tfinished_ns\tattempts\taborts\toutcome\tgeneration_delay_ns\tq2_checksum\n";
 }
 
 void write_results(const Driver &driver, std::ostream &out, std::ostream &summary,
@@ -377,7 +390,12 @@ void write_results(const Driver &driver, std::ostream &out, std::ostream &summar
     out << '\t';
     optional_ns(out, r.first_start);
     out << '\t' << r.finished << '\t' << r.attempts << '\t' << r.aborts
-        << '\t' << name(r.outcome) << '\t' << (r.generated - r.scheduled) << '\n';
+        << '\t' << name(r.outcome) << '\t' << (r.generated - r.scheduled) << '\t';
+    if (r.kind == Kind::q2 && r.outcome == Outcome::committed)
+      out << r.q2_checksum;
+    else
+      out << "null";
+    out << '\n';
 
     if (r.outcome == Outcome::rejected_queue_full)
       ++rejected;

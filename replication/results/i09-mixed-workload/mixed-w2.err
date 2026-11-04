@@ -1,0 +1,78 @@
+Database Benchmark:
+  pid: 2123
+settings:
+  par-loading : 0
+  pin-cpus    : 0
+  slow-exit   : 0
+  retry-txns  : 0
+  backoff-txns: 0
+  bench       : tpcc
+  scale       : 2
+  num-cpus    : 2
+  num-threads : 2
+  db-type     : ndb-proto2
+  basedir     : /silo-i09
+  txn-flags   : 0
+  runtime     : 1
+  var-encode  : yes
+  allocator   : libc
+  numa-memory : disabled
+  logfiles : []
+  assignments : []
+  disable-gc : 0
+  disable-snapshots : 0
+  stats-server-sockfile: 
+system properties:
+  btree_internal_node_size: 264
+  btree_leaf_node_size    : 312
+  tuple_prefetch          : no
+  btree_node_prefetch     : yes
+tpcc settings:
+  cross_partition_transactions : 1
+  read_only_snapshots          : 1
+  partition_locks              : 0
+  separate_tree_per_partition  : 0
+  new_order_remote_item_pct    : 1
+  new_order_fast_id_gen        : 0
+  uniform_item_dist            : 0
+  order_status_scan_hack       : 0
+  workload_mix                 : [45, 43, 4, 4, 4]
+num batches: 30
+[INFO] finished loading warehouse
+[INFO]   * average warehouse record length: 97 bytes
+[INFO] finished loading district
+[INFO]   * average district record length: 99 bytes
+[INFO] finished loading item
+[INFO]   * average item record length: 84.1739 bytes
+[INFO] finished loading order
+[INFO]   * average order_line record length: 11.1187 bytes
+[INFO]   * average oorder record length: 7.7038 bytes
+[INFO]   * average new_order record length: 12 bytes
+[INFO] finished loading customer
+[INFO]   * average customer record length: 656.862 bytes 
+[INFO] finished loading stock
+[INFO]   * average stock record length: 8 bytes
+timed region dataloading took 12045.2 ms
+DB size: 211.469 MB
+wait_an_epoch(): consistent reads happening in e-1: 6
+[0, 0, 0] txns persisted in loading phase
+table customer_0 size 60000
+table customer_name_idx_0 size 60000
+table district_0 size 20
+table history_0 size 60000
+table item_0 size 100000
+table new_order_0 size 18000
+table oorder_0 size 60000
+table oorder_c_id_idx_0 size 60000
+table order_line_0 size 599589
+table q2_nation size 62
+table q2_region size 5
+table q2_supplier size 10000
+table stock_0 size 200000
+table stock_data_0 size 200000
+table warehouse_0 size 2
+starting benchmark...
+tpcc: worker id 8 => warehouses [1, 2)
+tpcc: worker id 9 => warehouses [2, 3)
+phase=warmup cutoff_ns=804918895596 generated=1322 completed=1322 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=2 cutoff_due_ungenerated=0 commits_in_window=1320 drain_commits=2 failed=0
+phase=measurement cutoff_ns=805919648247 generated=1375 completed=1375 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=1 cutoff_running=2 cutoff_due_ungenerated=0 commits_in_window=1372 drain_commits=3 failed=0

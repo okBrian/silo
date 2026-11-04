@@ -1,0 +1,47 @@
++ cd /silo-i09
++ out=out-perf.masstree.contexts
++ dbtest=./out-perf.masstree.contexts/benchmarks/dbtest
++ mkdir -p /tmp/i09-evidence
++ e=/tmp/i09-evidence
++ uname -smr
+Linux 6.8.0-117-generic x86_64
++ g++ --version
++ sed -n 1p
+g++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
++ ldd --version
++ sed -n 1p
+ldd (Ubuntu GLIBC 2.35-0ubuntu3.5) 2.35
++ make -j3 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 tpcc_mixed_test dbtest
++ timeout 30s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test
++ tee /tmp/i09-evidence/tpcc-mixed-test.log
+wait_an_epoch(): consistent reads happening in e-1, but e=0 so special case
+PASS Q2 region 0 checksum 12860241382490130518
+PASS Q2 region 1 checksum 11649938069444573197
+PASS Q2 region 2 checksum 14695981039346656037
+PASS queued New-Order rollback, retry, linked rows and remote stock changes
+PASS queued Payment rollback, retry, remote lower median, balances and history
++ ./out-perf.masstree.contexts/benchmarks/dbtest --bench tpcc --queued-mixed
++ grep -F 'settings require --queued RUN_ID' /tmp/i09-evidence/invalid.err
+[ERROR] --queued-* settings require --queued RUN_ID
++ ./out-perf.masstree.contexts/benchmarks/dbtest --bench tpcc --queued invalid --queued-mixed --disable-snapshots
++ grep -F 'requires protocol-2 snapshots' /tmp/i09-evidence/invalid.err
+[ERROR] --queued-mixed requires protocol-2 snapshots and default transaction flags
++ timeout 120s ./out-perf.masstree.contexts/benchmarks/dbtest --bench tpcc --num-threads 1 --scale-factor 1 --runtime 1
++ timeout 120s ./out-perf.masstree.contexts/benchmarks/dbtest --bench tpcc --num-threads 1 --scale-factor 1 --runtime 1 --queued i09-short-w1 --queued-warmup 0 --queued-interval-us 100000
++ for workers in 1 2
++ timeout 180s ./out-perf.masstree.contexts/benchmarks/dbtest --bench tpcc --num-threads 1 --scale-factor 1 --runtime 1 --queued i09-mixed-w1 --queued-mixed --queued-warmup 1 --queued-interval-us 100000 --verbose
++ for workers in 1 2
++ timeout 180s ./out-perf.masstree.contexts/benchmarks/dbtest --bench tpcc --num-threads 2 --scale-factor 2 --runtime 1 --queued i09-mixed-w2 --queued-mixed --queued-warmup 1 --queued-interval-us 100000 --verbose
++ cat /tmp/i09-evidence/stock.out
+9126.9 9126.9 0.107597 0 0
++ grep '^phase=' /tmp/i09-evidence/invalid.err /tmp/i09-evidence/mixed-w1.err /tmp/i09-evidence/mixed-w2.err /tmp/i09-evidence/short-w1.err /tmp/i09-evidence/stock.err
+/tmp/i09-evidence/mixed-w1.err:phase=warmup cutoff_ns=790627435878 generated=771 completed=771 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=770 drain_commits=1 failed=0
+/tmp/i09-evidence/mixed-w1.err:phase=measurement cutoff_ns=791628295804 generated=783 completed=783 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=1 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=781 drain_commits=2 failed=0
+/tmp/i09-evidence/mixed-w2.err:phase=warmup cutoff_ns=804918895596 generated=1322 completed=1322 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=2 cutoff_due_ungenerated=0 commits_in_window=1320 drain_commits=2 failed=0
+/tmp/i09-evidence/mixed-w2.err:phase=measurement cutoff_ns=805919648247 generated=1375 completed=1375 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=1 cutoff_running=2 cutoff_due_ungenerated=0 commits_in_window=1372 drain_commits=3 failed=0
+/tmp/i09-evidence/short-w1.err:phase=measurement cutoff_ns=782453477533 generated=36 completed=36 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=0 cutoff_due_ungenerated=0 commits_in_window=36 drain_commits=0 failed=0
++ wc -l /tmp/i09-evidence/mixed-w1.tsv /tmp/i09-evidence/mixed-w2.tsv /tmp/i09-evidence/short-w1.tsv
+  1555 /tmp/i09-evidence/mixed-w1.tsv
+  2698 /tmp/i09-evidence/mixed-w2.tsv
+    37 /tmp/i09-evidence/short-w1.tsv
+  4290 total

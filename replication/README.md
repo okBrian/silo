@@ -14,6 +14,7 @@ This directory contains the CS 6400 project roadmap, PACE workflow, and evidence
 - [I06 queued driver usage and functional validation](results/i06-request-driver/README.md)
 - [I07 voluntary context switching and ABI validation](results/i07-worker-context/README.md)
 - [I08 Silo context ownership, protection and engine validation](results/i08-silo-context/README.md)
+- [I09 mixed workload, Q2 variant and validation](results/i09-mixed-workload/README.md)
 - [Run the stock Silo baseline on PACE](pace-baseline/README.md)
 - [PACE TPC-C results and summary](results/i04-pace-baseline/SUMMARY.md)
 - [PACE benchmark logs](results/pace-runs/6791465/) and [test rerun logs](results/pace-runs/6791730/)

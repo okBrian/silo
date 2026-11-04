@@ -23,6 +23,7 @@
 
 #include "bench.h"
 #include "tpcc.h"
+#include "tpcc_q2.h"
 using namespace std;
 using namespace util;
 
@@ -496,6 +497,26 @@ string tpcc_worker_mixin::NameTokens[] =
 
 STATIC_COUNTER_DECL(scopedperf::tsc_ctr, tpcc_txn, tpcc_txn_cg)
 
+struct NewOrderInput {
+  uint warehouse_id, district, customer, num_items;
+  uint item_ids[15], supplier_warehouses[15], quantities[15];
+  bool all_local;
+  uint32_t date; // Zero is a placeholder for the stock worker's counter.
+};
+
+struct PaymentInput {
+  uint warehouse_id, district, customer_warehouse, customer_district;
+  float amount;
+  uint32_t date;
+  bool by_name;
+  uint customer;
+  char lastname[tpcc_worker_mixin::CustomerLastNameMaxSize + 1];
+};
+
+static NewOrderInput make_new_order_input(fast_random &r, uint warehouse_id, uint32_t date);
+static PaymentInput make_payment_input(fast_random &r, uint warehouse_id, uint32_t date);
+static void choose_payment_customer(fast_random &r, PaymentInput &input);
+
 class tpcc_worker : public bench_worker, public tpcc_worker_mixin {
 public:
   // resp for [warehouse_id_start, warehouse_id_end)
@@ -504,12 +525,12 @@ public:
               const map<string, abstract_ordered_index *> &open_tables,
               const map<string, vector<abstract_ordered_index *>> &partitions,
               spin_barrier *barrier_a, spin_barrier *barrier_b,
-              uint warehouse_id_start, uint warehouse_id_end)
+              uint warehouse_id_start, uint warehouse_id_end, const tpcc_q2::Tables *q2)
     : bench_worker(worker_id, true, seed, db,
                    open_tables, barrier_a, barrier_b),
       tpcc_worker_mixin(partitions),
       warehouse_id_start(warehouse_id_start),
-      warehouse_id_end(warehouse_id_end)
+      warehouse_id_end(warehouse_id_end), q2(q2)
   {
     INVARIANT(warehouse_id_start >= 1);
     INVARIANT(warehouse_id_start <= NumWarehouses());
@@ -527,14 +548,15 @@ public:
   // XXX(stephentu): tune this
   static const size_t NMaxCustomerIdxScanElems = 512;
 
-  txn_result txn_new_order(bench_txn_context &state, const queued::Request *request = nullptr);
+  txn_result txn_new_order(bench_txn_context &state, const NewOrderInput &input, bool queued);
 
   static txn_result
   TxnNewOrder(bench_worker *w)
   {
     ANON_REGION("TxnNewOrder:", &tpcc_txn_cg);
     auto &worker = *static_cast<tpcc_worker *>(w);
-    return worker.txn_new_order(worker);
+    const uint home = PickWarehouseId(worker.r, worker.warehouse_id_start, worker.warehouse_id_end);
+    return worker.txn_new_order(worker, make_new_order_input(worker.r, home, 0), false);
   }
 
   txn_result txn_delivery();
@@ -546,14 +568,15 @@ public:
     return static_cast<tpcc_worker *>(w)->txn_delivery();
   }
 
-  txn_result txn_payment(bench_txn_context &state, const queued::Request *request = nullptr);
+  txn_result txn_payment(bench_txn_context &state, PaymentInput input, bool queued);
 
   static txn_result
   TxnPayment(bench_worker *w)
   {
     ANON_REGION("TxnPayment:", &tpcc_txn_cg);
     auto &worker = *static_cast<tpcc_worker *>(w);
-    return worker.txn_payment(worker);
+    const uint home = PickWarehouseId(worker.r, worker.warehouse_id_start, worker.warehouse_id_end);
+    return worker.txn_payment(worker, make_payment_input(worker.r, home, worker.stock_timestamp++), false);
   }
 
   txn_result txn_order_status();
@@ -603,21 +626,41 @@ public:
 
 protected:
 
-  queued::Attempt
-  run_queued_attempt(const queued::Request &request, bench_txn_context &state) OVERRIDE
+  queued::Driver::Prepared
+  prepare_queued_request(const queued::Request &request, bench_txn_context &state) OVERRIDE
   {
-    // Stock TPC-C draws inputs before opening the transaction. Reset the
-    // request-specific RNG on every attempt; other workers never use it.
-    state.r.set_seed(request.input_seed);
+    fast_random rng(0);
+    rng.set_seed(request.input_seed);
+    // Only high requests consume dates, so demand-driven Q2 arrivals cannot
+    // change a short request's date or exhaust the reserved range.
+    const uint32_t date = (UINT32_C(1) << 31) + request.high_sequence;
     switch (request.kind) {
-    case queued::Kind::new_order:
-      return txn_new_order(state, &request).first ? queued::Attempt::committed : queued::Attempt::conflict;
-    case queued::Kind::payment:
-      return txn_payment(state, &request).first ? queued::Attempt::committed : queued::Attempt::conflict;
-    case queued::Kind::synthetic_low:
-      return queued::Attempt::failed;
+    case queued::Kind::new_order: {
+      const auto input = make_new_order_input(rng, request.home_warehouse, date);
+      return [this, &state, input](uint64_t &) {
+        return txn_new_order(state, input, true).first ?
+          queued::Attempt::committed : queued::Attempt::conflict;
+      };
     }
-    return queued::Attempt::failed;
+    case queued::Kind::payment: {
+      auto input = make_payment_input(rng, request.home_warehouse, date);
+      choose_payment_customer(rng, input);
+      return [this, &state, input](uint64_t &) {
+        return txn_payment(state, input, true).first ?
+          queued::Attempt::committed : queued::Attempt::conflict;
+      };
+    }
+    case queued::Kind::q2: {
+      const uint region = RandomNumber(rng, 0, tpcc_q2::region_count - 1);
+      return [this, &state, region](uint64_t &checksum) {
+        return q2->run(db, state, region, checksum) ?
+          queued::Attempt::committed : queued::Attempt::conflict;
+      };
+    }
+    case queued::Kind::synthetic_low:
+      return [](uint64_t &) { return queued::Attempt::failed; };
+    }
+    ALWAYS_ASSERT(false);
   }
 
   virtual void
@@ -634,9 +677,23 @@ protected:
 private:
   const uint warehouse_id_start;
   const uint warehouse_id_end;
+  const tpcc_q2::Tables *const q2;
   int32_t last_no_o_ids[10]; // XXX(stephentu): hack
 
   uint32_t stock_timestamp = 0;
+};
+
+class tpcc_q2_loader : public bench_loader {
+public:
+  tpcc_q2_loader(abstract_db *db, const map<string, abstract_ordered_index *> &open_tables,
+                 const tpcc_q2::Tables &q2)
+    : bench_loader(tpcc_q2::supplier_seed, db, open_tables), q2(q2) {}
+
+protected:
+  void load() OVERRIDE { q2.load(db, arena, txn_buf(), r); }
+
+private:
+  const tpcc_q2::Tables &q2;
 };
 
 class tpcc_warehouse_loader : public bench_loader, public tpcc_worker_mixin {
@@ -1235,32 +1292,41 @@ private:
 static event_counter evt_tpcc_cross_partition_new_order_txns("tpcc_cross_partition_new_order_txns");
 static event_counter evt_tpcc_cross_partition_payment_txns("tpcc_cross_partition_payment_txns");
 
-tpcc_worker::txn_result
-tpcc_worker::txn_new_order(bench_txn_context &state, const queued::Request *request)
+static NewOrderInput
+make_new_order_input(fast_random &r, uint warehouse_id, uint32_t date)
 {
-  auto &r = state.r;
-  auto &arena = state.arena;
-  const uint warehouse_id = request ? request->home_warehouse :
-    PickWarehouseId(r, warehouse_id_start, warehouse_id_end);
-  const uint districtID = RandomNumber(r, 1, 10);
-  const uint customerID = GetCustomerId(r);
-  const uint numItems = RandomNumber(r, 5, 15);
-  uint itemIDs[15], supplierWarehouseIDs[15], orderQuantities[15];
-  bool allLocal = true;
-  for (uint i = 0; i < numItems; i++) {
-    itemIDs[i] = GetItemId(r);
-    if (likely(g_disable_xpartition_txn ||
-               NumWarehouses() == 1 ||
-               RandomNumber(r, 1, 100) > g_new_order_remote_item_pct)) {
-      supplierWarehouseIDs[i] = warehouse_id;
-    } else {
+  NewOrderInput input{};
+  input.warehouse_id = warehouse_id;
+  input.district = tpcc_worker_mixin::RandomNumber(r, 1, NumDistrictsPerWarehouse());
+  input.customer = tpcc_worker_mixin::GetCustomerId(r);
+  input.num_items = tpcc_worker_mixin::RandomNumber(r, 5, 15);
+  input.all_local = true;
+  input.date = date;
+  for (uint i = 0; i < input.num_items; ++i) {
+    input.item_ids[i] = tpcc_worker_mixin::GetItemId(r);
+    auto &supplier = input.supplier_warehouses[i];
+    supplier = warehouse_id;
+    if (!g_disable_xpartition_txn && NumWarehouses() > 1 &&
+        tpcc_worker_mixin::RandomNumber(r, 1, 100) <= g_new_order_remote_item_pct) {
       do {
-       supplierWarehouseIDs[i] = RandomNumber(r, 1, NumWarehouses());
-      } while (supplierWarehouseIDs[i] == warehouse_id);
-      allLocal = false;
+        supplier = tpcc_worker_mixin::RandomNumber(r, 1, NumWarehouses());
+      } while (supplier == warehouse_id);
+      input.all_local = false;
     }
-    orderQuantities[i] = RandomNumber(r, 1, 10);
+    input.quantities[i] = tpcc_worker_mixin::RandomNumber(r, 1, 10);
   }
+  return input;
+}
+
+tpcc_worker::txn_result
+tpcc_worker::txn_new_order(bench_txn_context &state, const NewOrderInput &input, bool queued)
+{
+  auto &arena = state.arena;
+  const uint warehouse_id = input.warehouse_id;
+  const uint districtID = input.district;
+  const uint customerID = input.customer;
+  const uint numItems = input.num_items;
+  const bool allLocal = input.all_local;
   INVARIANT(!g_disable_xpartition_txn || allLocal);
   if (!allLocal)
     ++evt_tpcc_cross_partition_new_order_txns;
@@ -1302,9 +1368,9 @@ tpcc_worker::txn_new_order(bench_txn_context &state, const queued::Request *requ
       mlock.enq(LockForPartition(warehouse_id));
       lockset[PartitionId(warehouse_id)] = 1;
       for (uint i = 0; i < numItems; i++) {
-        if (lockset.find(PartitionId(supplierWarehouseIDs[i])) == lockset.end()) {
-          mlock.enq(LockForPartition(supplierWarehouseIDs[i]));
-          lockset[PartitionId(supplierWarehouseIDs[i])] = 1;
+        if (lockset.find(PartitionId(input.supplier_warehouses[i])) == lockset.end()) {
+          mlock.enq(LockForPartition(input.supplier_warehouses[i]));
+          lockset[PartitionId(input.supplier_warehouses[i])] = 1;
         }
       }
     }
@@ -1351,9 +1417,7 @@ tpcc_worker::txn_new_order(bench_txn_context &state, const queued::Request *requ
     v_oo.o_carrier_id = 0; // seems to be ignored
     v_oo.o_ol_cnt = int8_t(numItems);
     v_oo.o_all_local = allLocal;
-    // Reserve the high half of the logical date range for queued requests.
-    // This keeps dates stable across retries and distinct from loaded rows.
-    v_oo.o_entry_d = request ? (UINT32_C(1) << 31) + request->id : stock_timestamp++;
+    v_oo.o_entry_d = queued ? input.date : stock_timestamp++;
 
     const size_t oorder_sz = Size(v_oo);
     tbl_oorder(warehouse_id)->insert(txn, Encode(state.str(), k_oo), Encode(state.str(), v_oo));
@@ -1365,9 +1429,9 @@ tpcc_worker::txn_new_order(bench_txn_context &state, const queued::Request *requ
     tbl_oorder_c_id_idx(warehouse_id)->insert(txn, Encode(state.str(), k_oo_idx), Encode(state.str(), v_oo_idx));
 
     for (uint ol_number = 1; ol_number <= numItems; ol_number++) {
-      const uint ol_supply_w_id = supplierWarehouseIDs[ol_number - 1];
-      const uint ol_i_id = itemIDs[ol_number - 1];
-      const uint ol_quantity = orderQuantities[ol_number - 1];
+      const uint ol_supply_w_id = input.supplier_warehouses[ol_number - 1];
+      const uint ol_i_id = input.item_ids[ol_number - 1];
+      const uint ol_quantity = input.quantities[ol_number - 1];
 
       const item::key k_i(ol_i_id);
       ALWAYS_ASSERT(tbl_item(1)->get(txn, Encode(obj_key0, k_i), obj_v));
@@ -1407,10 +1471,12 @@ tpcc_worker::txn_new_order(bench_txn_context &state, const queued::Request *requ
     measure_txn_counters(txn, "txn_new_order");
     if (likely(db->commit_txn(txn)))
       return txn_result(true, ret);
+    if (queued)
+      db->abort_txn(txn);
   } catch (abstract_db::abstract_abort_exception &ex) {
     db->abort_txn(txn);
   } catch (...) {
-    if (request)
+    if (queued)
       db->abort_txn(txn);
     throw;
   }
@@ -1564,28 +1630,45 @@ tpcc_worker::txn_delivery()
 
 static event_avg_counter evt_avg_cust_name_idx_scan_size("avg_cust_name_idx_scan_size");
 
-tpcc_worker::txn_result
-tpcc_worker::txn_payment(bench_txn_context &state, const queued::Request *request)
+static PaymentInput
+make_payment_input(fast_random &r, uint warehouse_id, uint32_t date)
 {
-  auto &r = state.r;
-  auto &arena = state.arena;
-  const uint warehouse_id = request ? request->home_warehouse :
-    PickWarehouseId(r, warehouse_id_start, warehouse_id_end);
-  const uint districtID = RandomNumber(r, 1, NumDistrictsPerWarehouse());
-  uint customerDistrictID, customerWarehouseID;
-  if (likely(g_disable_xpartition_txn ||
-             NumWarehouses() == 1 ||
-             RandomNumber(r, 1, 100) <= 85)) {
-    customerDistrictID = districtID;
-    customerWarehouseID = warehouse_id;
-  } else {
-    customerDistrictID = RandomNumber(r, 1, NumDistrictsPerWarehouse());
+  PaymentInput input{};
+  input.warehouse_id = warehouse_id;
+  input.district = tpcc_worker_mixin::RandomNumber(r, 1, NumDistrictsPerWarehouse());
+  input.customer_district = input.district;
+  input.customer_warehouse = warehouse_id;
+  if (!g_disable_xpartition_txn && NumWarehouses() > 1 &&
+      tpcc_worker_mixin::RandomNumber(r, 1, 100) > 85) {
+    input.customer_district = tpcc_worker_mixin::RandomNumber(r, 1, NumDistrictsPerWarehouse());
     do {
-      customerWarehouseID = RandomNumber(r, 1, NumWarehouses());
-    } while (customerWarehouseID == warehouse_id);
+      input.customer_warehouse = tpcc_worker_mixin::RandomNumber(r, 1, NumWarehouses());
+    } while (input.customer_warehouse == warehouse_id);
   }
-  const float paymentAmount = (float) (RandomNumber(r, 100, 500000) / 100.0);
-  const uint32_t ts = request ? (UINT32_C(1) << 31) + request->id : stock_timestamp++;
+  input.amount = float(tpcc_worker_mixin::RandomNumber(r, 100, 500000) / 100.0);
+  input.date = date;
+  return input;
+}
+
+static void
+choose_payment_customer(fast_random &r, PaymentInput &input)
+{
+  input.by_name = tpcc_worker_mixin::RandomNumber(r, 1, 100) <= 60;
+  if (input.by_name)
+    tpcc_worker_mixin::GetNonUniformCustomerLastNameRun(input.lastname, r);
+  else
+    input.customer = tpcc_worker_mixin::GetCustomerId(r);
+}
+
+tpcc_worker::txn_result
+tpcc_worker::txn_payment(bench_txn_context &state, PaymentInput input, bool queued)
+{
+  auto &arena = state.arena;
+  const uint warehouse_id = input.warehouse_id;
+  const uint districtID = input.district;
+  const uint customerDistrictID = input.customer_district;
+  const uint customerWarehouseID = input.customer_warehouse;
+  const float paymentAmount = input.amount;
   INVARIANT(!g_disable_xpartition_txn || customerWarehouseID == warehouse_id);
 
   // output from txn counters:
@@ -1635,26 +1718,22 @@ tpcc_worker::txn_payment(bench_txn_context &state, const queued::Request *reques
 
     customer::key k_c;
     customer::value v_c;
-    if (RandomNumber(r, 1, 100) <= 60) {
-      // cust by name
-      uint8_t lastname_buf[CustomerLastNameMaxSize + 1];
-      static_assert(sizeof(lastname_buf) == 16, "xx");
-      NDB_MEMSET(lastname_buf, 0, sizeof(lastname_buf));
-      GetNonUniformCustomerLastNameRun(lastname_buf, r);
-
+    if (!queued)
+      choose_payment_customer(state.r, input);
+    if (input.by_name) {
       static const string zeros(16, 0);
       static const string ones(16, 255);
 
       customer_name_idx::key k_c_idx_0;
       k_c_idx_0.c_w_id = customerWarehouseID;
       k_c_idx_0.c_d_id = customerDistrictID;
-      k_c_idx_0.c_last.assign((const char *) lastname_buf, 16);
+      k_c_idx_0.c_last.assign(input.lastname, sizeof(input.lastname));
       k_c_idx_0.c_first.assign(zeros);
 
       customer_name_idx::key k_c_idx_1;
       k_c_idx_1.c_w_id = customerWarehouseID;
       k_c_idx_1.c_d_id = customerDistrictID;
-      k_c_idx_1.c_last.assign((const char *) lastname_buf, 16);
+      k_c_idx_1.c_last.assign(input.lastname, sizeof(input.lastname));
       k_c_idx_1.c_first.assign(ones);
 
       static_limit_callback<NMaxCustomerIdxScanElems> c(s_arena.get(), true); // probably a safe bet for now
@@ -1677,10 +1756,9 @@ tpcc_worker::txn_payment(bench_txn_context &state, const queued::Request *reques
 
     } else {
       // cust by ID
-      const uint customerID = GetCustomerId(r);
       k_c.c_w_id = customerWarehouseID;
       k_c.c_d_id = customerDistrictID;
-      k_c.c_id = customerID;
+      k_c.c_id = input.customer;
       ALWAYS_ASSERT(tbl_customer(customerWarehouseID)->get(txn, Encode(obj_key0, k_c), obj_v));
       Decode(obj_v, v_c);
     }
@@ -1707,7 +1785,10 @@ tpcc_worker::txn_payment(bench_txn_context &state, const queued::Request *reques
 
     tbl_customer(customerWarehouseID)->put(txn, Encode(state.str(), k_c), Encode(state.str(), v_c_new));
 
-    const history::key k_h(k_c.c_d_id, k_c.c_w_id, k_c.c_id, districtID, warehouse_id, ts);
+    // Match the loader's named customer columns for queued history.
+    const history::key k_h = queued ?
+      history::key(k_c.c_id, k_c.c_d_id, k_c.c_w_id, districtID, warehouse_id, input.date) :
+      history::key(k_c.c_d_id, k_c.c_w_id, k_c.c_id, districtID, warehouse_id, input.date);
     history::value v_h;
     v_h.h_amount = paymentAmount;
     v_h.h_data.resize_junk(v_h.h_data.max_size());
@@ -1724,10 +1805,12 @@ tpcc_worker::txn_payment(bench_txn_context &state, const queued::Request *reques
     measure_txn_counters(txn, "txn_payment");
     if (likely(db->commit_txn(txn)))
       return txn_result(true, ret);
+    if (queued)
+      db->abort_txn(txn);
   } catch (abstract_db::abstract_abort_exception &ex) {
     db->abort_txn(txn);
   } catch (...) {
-    if (request)
+    if (queued)
       db->abort_txn(txn);
     throw;
   }
@@ -2074,6 +2157,12 @@ public:
         open_tables[t.first + "_" + to_string(i)] = v[i];
     }
 
+    if (queued_config.generate_low && !queued_run_id.empty()) {
+      q2.reset(new tpcc_q2::Tables(db, partitions.at("stock"), partitions.at("item").front(),
+                                  NumItems()));
+      q2->register_indexes(open_tables);
+    }
+
     if (g_enable_partition_locks) {
       static_assert(sizeof(aligned_padded_elem<spinlock>) == CACHELINE_SIZE, "xx");
       void * const px = memalign(CACHELINE_SIZE, sizeof(aligned_padded_elem<spinlock>) * nthreads);
@@ -2105,6 +2194,8 @@ protected:
     vector<bench_loader *> ret;
     ret.push_back(new tpcc_warehouse_loader(9324, db, open_tables, partitions));
     ret.push_back(new tpcc_item_loader(235443, db, open_tables, partitions));
+    if (q2)
+      ret.push_back(new tpcc_q2_loader(db, open_tables, *q2));
     if (enable_parallel_loading) {
       fast_random r(89785943);
       for (uint i = 1; i <= NumWarehouses(); i++)
@@ -2147,7 +2238,7 @@ protected:
             blockstart + i,
             r.next(), db, open_tables, partitions,
             &barrier_a, &barrier_b,
-            (i % NumWarehouses()) + 1, (i % NumWarehouses()) + 2));
+            (i % NumWarehouses()) + 1, (i % NumWarehouses()) + 2, q2.get()));
     } else {
       const unsigned nwhse_per_partition = NumWarehouses() / nthreads;
       for (size_t i = 0; i < nthreads; i++) {
@@ -2158,7 +2249,7 @@ protected:
           new tpcc_worker(
             blockstart + i,
             r.next(), db, open_tables, partitions,
-            &barrier_a, &barrier_b, wstart+1, wend+1));
+            &barrier_a, &barrier_b, wstart+1, wend+1, q2.get()));
       }
     }
     return ret;
@@ -2166,6 +2257,7 @@ protected:
 
 private:
   map<string, vector<abstract_ordered_index *>> partitions;
+  unique_ptr<tpcc_q2::Tables> q2;
 };
 
 void
@@ -2235,6 +2327,11 @@ tpcc_do_test(abstract_db *db, int argc, char **argv)
 
   if (!queued_run_id.empty() && g_new_order_fast_id_gen) {
     cerr << "[ERROR] --queued requires transactional New-Order ID allocation" << endl;
+    exit(1);
+  }
+
+  if (!queued_run_id.empty() && queued_config.generate_low && g_disable_read_only_scans) {
+    cerr << "[ERROR] --queued-mixed requires read-only snapshots" << endl;
     exit(1);
   }
 

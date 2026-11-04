@@ -1,0 +1,6 @@
+PASS stock five-column summary
+PASS short-w1 measurement committed={'NewOrder': 20, 'Payment': 16} outcomes={'committed': 36} drain_commits=0
+PASS mixed-w1 warmup committed={'NewOrder': 24, 'Payment': 12, 'Q2': 735} outcomes={'committed': 771} drain_commits=1
+PASS mixed-w1 measurement committed={'NewOrder': 20, 'Payment': 16, 'Q2': 747} outcomes={'committed': 783} drain_commits=2
+PASS mixed-w2 warmup committed={'NewOrder': 43, 'Payment': 29, 'Q2': 1250} outcomes={'committed': 1322} drain_commits=2
+PASS mixed-w2 measurement committed={'NewOrder': 36, 'Payment': 36, 'Q2': 1303} outcomes={'committed': 1375} drain_commits=3

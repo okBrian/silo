@@ -89,6 +89,12 @@ def queued_records(stdout, expected_id):
         phase, outcome, kind = row["phase"], row["outcome"], row["type"]
         if phase not in {"measurement", "warmup"} or outcome not in OUTCOMES or not kind:
             raise ValueError(f"invalid phase, outcome or transaction type at line {reader.line_num}")
+        checksum = row.get("q2_checksum")
+        if kind == "Q2" and outcome == "committed":
+            if checksum is None or not checksum.isdecimal() or not 0 <= int(checksum) < 2**64:
+                raise ValueError(f"invalid Q2 checksum at line {reader.line_num}")
+        elif "q2_checksum" in row and checksum != "null":
+            raise ValueError(f"unexpected Q2 checksum at line {reader.line_num}")
         request_id = int(row["request_id"])
         if request_id < 0 or request_id in seen:
             raise ValueError(f"invalid or duplicate request ID {request_id}")

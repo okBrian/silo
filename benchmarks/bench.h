@@ -177,9 +177,9 @@ public:
 protected:
 
   virtual void on_run_setup() {}
-  virtual queued::Attempt run_queued_attempt(const queued::Request &, bench_txn_context &)
+  virtual queued::Driver::Prepared prepare_queued_request(const queued::Request &, bench_txn_context &)
   {
-    return queued::Attempt::failed;
+    return [](uint64_t &) { return queued::Attempt::failed; };
   }
 
   unsigned int worker_id;

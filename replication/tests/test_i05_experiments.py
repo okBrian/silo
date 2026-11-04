@@ -153,6 +153,20 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(planned["queue"]["seed"], 2)
         self.assertEqual(planned["seeds"]["queued_warmup"], 2 ^ 0x9E3779B97F4A7C15)
         self.assertEqual(planned["phases_s"], {"warmup": 1, "measurement": 1, "drain_limit": 30})
+        self.assertNotIn("--queued-mixed", planned["command"])
+
+    def test_mixed_configuration_records_q2_dataset_and_profile(self):
+        config = json.loads((EXPERIMENTS / "configs" / "queued-mixed-smoke.json").read_text())
+        run.validate(config, None)
+        planned = run.plan_run(config, config["variants"][1], 1, 2,
+                               Path("/tmp/batch"), Path("/tmp/dbtest"), None)
+        self.assertIn("--queued-mixed", planned["command"])
+        self.assertEqual(planned["q2_variant"], "q2_min_stock_v1")
+        self.assertEqual(planned["workload"]["q2_supplier_scan_count"], 100)
+        self.assertEqual(planned["seeds"]["q2_supplier_loader"], 51271928)
+        config["queue"]["q2_variant"] = "SyntheticLow"
+        with self.assertRaises(ValueError):
+            run.validate(config, None)
 
     def test_timeout_retains_run(self):
         with tempfile.TemporaryDirectory() as temp:

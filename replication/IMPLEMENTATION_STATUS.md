@@ -1,6 +1,6 @@
 # Implementation status
 
-Last updated: November 3, 2026.
+Last updated: November 4, 2026.
 
 The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a9b1c310392519d9e3b`. The PACE job and staging instructions are in [pace-baseline](pace-baseline/README.md). Stock TPC-C built and completed all ten benchmark measurements in PACE job `6791465`. The upstream suite passed in separate PACE job `6791730` with CPU selection adapted for the Slurm allocation. The CSV matches the archived raw output, and the test exit status and pass marker were verified in [results/pace-runs](results/pace-runs/). Ownership is proposed.
 
@@ -14,7 +14,7 @@ The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a
 | I06 | Independent request driver | Erica | Implemented and locally validated | [Functional evidence and opt-in usage](results/i06-request-driver/README.md). The TPC-C bridge covers New-Order and Payment. The standalone suite uses synthetic low-priority work |
 | I07 | Explicit context switching | Erin | Implemented and locally validated | Standalone glibc context pair passed one million round trips per build on emulated Linux x86-64. [ABI checks, lifecycle and reproduction commands](results/i07-worker-context/README.md) |
 | I08 | Silo context state and protected regions | Brian / Erin | Implemented and locally validated | [Ownership audit, engine test and regression commands](results/i08-silo-context/README.md) |
-| I09 | Mixed workload and Q2 validation | Erica / Brian | Initial short-transaction bridge available | I06 exercises New-Order and Payment dispatch. Q2, full input materialization and workload correctness checks remain open |
+| I09 | Mixed workload and Q2 validation | Erica / Brian | Implemented and locally validated | [Mixed profile, deterministic engine tests and smoke records](results/i09-mixed-workload/README.md). The one- and two-worker runs committed all 783 and 1,375 measured requests |
 | I10 | Wait scheduler | Erica / Brian | Not started | |
 | I11 | Cooperative scheduler | Brian | Not started | |
 | I12 | Hardware interrupt delivery | Erin | Not started | Requires qualified host/interface |
@@ -70,3 +70,11 @@ I08 uses this voluntary switching primitive. Native PACE execution, UINTR delive
 Implemented November 3, 2026 on Silo source base `8b6db36123a24958c97589adf63516cdc68bc30c`. Added [context-owned benchmark state](../benchmarks/bench_txn_context.h), [nested worker protection](../preemption.h), and the [two-context engine test](tests/silo_context_test.cc). The Silo adapter protects the transaction and index call boundaries. A live write attempt stays protected through cleanup, and a paused read-only snapshot retains the worker's RCU guard. Deferred service runs at the next explicit safe checkpoint or attempt boundary. A failed commit keeps the object alive for the caller's abort cleanup.
 
 On emulated Linux x86-64, the engine test passed four optimized runs and one debug run with Silo and Masstree invariants enabled. Stock and queued TPC-C passed smoke checks, and the I06 request driver and I07 switching suites passed. The [I08 audit and validation](results/i08-silo-context/README.md) link the raw outputs and commands. I09 supplies Q2. I11 connects safe checkpoints to the Cooperative scheduler after I10's Wait implementation.
+
+## I09 completion record
+
+Implemented November 4, 2026 on Silo source base `642e51553f870f56ec6f22126874a10c273a12d6`. Updated the request driver, benchmark dispatch and [TPC-C adapters](../benchmarks/tpcc.cc) to materialize queued input once and retain it across retries. Added [Q2](../benchmarks/tpcc_q2.h) as a read-only snapshot over Silo's stock and item indexes, the [mixed configuration](experiments/configs/queued-mixed-smoke.json), checksum handling in the result writer and analyzer, and the [engine harness](tests/tpcc_mixed_test.cc). Queued Payment history uses the customer column order declared by the schema and loader.
+
+The emulated Linux x86-64 build passed the deterministic Q2 and short-transaction checks, the stock and short-only smokes, and both mixed smokes. The measurement phases committed 783 requests with one worker and 1,375 with two workers, including 747 and 1,303 Q2s. The I06 driver test and nine experiment-tool tests passed. [Commands, environment, raw records and reconciliation](results/i09-mixed-workload/README.md)
+
+I10 is ready to use this workload for the Wait baseline. Native PACE execution and policy comparisons remain open.

@@ -30,7 +30,7 @@ using namespace util;
 
 enum {
   QUEUED_RUN = 1000, QUEUED_BATCH, QUEUED_INTERVAL, QUEUED_GLOBAL, QUEUED_WORKER,
-  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN
+  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED
 };
 
 static uint64_t
@@ -99,6 +99,7 @@ main(int argc, char **argv)
   size_t queued_batch = 0;
   size_t queued_global = 0;
   bool saw_queue_setting = false;
+  bool queued_mixed = false;
   while (1) {
     static struct option long_options[] =
     {
@@ -135,6 +136,7 @@ main(int argc, char **argv)
       {"queued-seed"               , required_argument , 0                          , QUEUED_SEED},
       {"queued-warmup"             , required_argument , 0                          , QUEUED_WARMUP},
       {"queued-drain"              , required_argument , 0                          , QUEUED_DRAIN},
+      {"queued-mixed"              , no_argument       , 0                          , QUEUED_MIXED},
       {0, 0, 0, 0}
     };
     int option_index = 0;
@@ -142,7 +144,7 @@ main(int argc, char **argv)
     if (c == -1)
       break;
 
-    if (c > QUEUED_RUN && c <= QUEUED_DRAIN)
+    if (c > QUEUED_RUN && c <= QUEUED_MIXED)
       saw_queue_setting = true;
     switch (c) {
     case QUEUED_RUN:
@@ -175,6 +177,9 @@ main(int argc, char **argv)
       break;
     case QUEUED_DRAIN:
       queued_drain_seconds = queued_number(optarg, long_options[option_index].name, 0, 86400);
+      break;
+    case QUEUED_MIXED:
+      queued_mixed = true;
       break;
 
     case 0:
@@ -276,14 +281,19 @@ main(int argc, char **argv)
     queued_config.workers = nthreads;
     queued_config.batch_size = queued_batch ? queued_batch : 4 * nthreads;
     queued_config.global_capacity = queued_global ? queued_global : 4 * nthreads;
-    queued_config.generate_low = false;
+    if (queued_mixed && (disable_snapshots || txn_flags != 0)) {
+      cerr << "[ERROR] --queued-mixed requires protocol-2 snapshots and default transaction flags" << endl;
+      return 1;
+    }
+    queued_config.generate_low = queued_mixed;
+    queued_config.low_kind = queued::Kind::q2;
     const auto batches = [](uint64_t seconds) {
       return seconds ? (seconds * queued::second - 1) / queued_config.interval : 0;
     };
     if (batches(runtime) == 0 || batches(runtime) + batches(queued_warmup_seconds) >
         (UINT64_C(1) << 31) / queued_config.batch_size) {
       cerr << "[ERROR] --queued requires at least one measured batch and at most "
-              "2^31 total requests" << endl;
+              "2^31 total high-priority requests" << endl;
       return 1;
     }
   }

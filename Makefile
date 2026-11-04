@@ -221,6 +221,12 @@ $(O)/replication/tests/silo_context_test: $(O)/replication/tests/silo_context_te
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LZ4LDFLAGS)
 endif
 
+.PHONY: tpcc_mixed_test
+tpcc_mixed_test: $(O)/replication/tests/tpcc_mixed_test
+
+$(O)/replication/tests/tpcc_mixed_test: $(O)/replication/tests/tpcc_mixed_test.o $(O)/benchmarks/bench.o $(O)/benchmarks/request_driver.o $(OBJFILES) $(MASSTREE_OBJFILES) third-party/lz4/liblz4.so
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LZ4LDFLAGS)
+
 .PHONY: persist_test
 persist_test: $(O)/persist_test
 

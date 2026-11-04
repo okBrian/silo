@@ -119,27 +119,32 @@ static void retries_and_duplicate_notifications() {
   });
   std::map<uint64_t, Request> inputs;
   std::thread worker([&] {
-    driver.run_worker(0, [&](const Request &r) {
+    driver.run_prepared_worker(0, [&](const Request &r) {
       const auto saved = inputs.emplace(r.id, r);
-      const Request &first = saved.first->second;
-      assert(r.kind == first.kind && r.input_seed == first.input_seed);
-      assert(r.scheduled == first.scheduled && r.generated == first.generated);
-      assert(r.admitted == first.admitted && r.first_start == first.first_start);
-      assert(r.worker == first.worker && r.home_warehouse == first.home_warehouse);
-      assert(r.aborts + 1 == r.attempts && !r.finished);
-      switch (r.id) {
-      case 20: return r.attempts < 3 ? Attempt::conflict : Attempt::committed;
-      case 21: return Attempt::conflict;
-      case 22: return Attempt::user_aborted;
-      case 23:
-        assert(r.attempts == 1);
-        all_started.set_value();
-        return Attempt::committed;
-      }
-      std::abort();
+      assert(saved.second && r.attempts == 1);
+      assert(r.high_sequence == 8 + r.id - 20);
+      const Request first = saved.first->second;
+      return [&, first](uint64_t &) {
+        assert(r.kind == first.kind && r.input_seed == first.input_seed);
+        assert(r.scheduled == first.scheduled && r.generated == first.generated);
+        assert(r.admitted == first.admitted && r.first_start == first.first_start);
+        assert(r.worker == first.worker && r.home_warehouse == first.home_warehouse);
+        assert(r.high_sequence == first.high_sequence);
+        assert(r.aborts + 1 == r.attempts && !r.finished);
+        switch (r.id) {
+        case 20: return r.attempts < 3 ? Attempt::conflict : Attempt::committed;
+        case 21: return Attempt::conflict;
+        case 22: return Attempt::user_aborted;
+        case 23:
+          assert(r.attempts == 1);
+          all_started.set_value();
+          return Attempt::committed;
+        }
+        std::abort();
+      };
     });
   });
-  driver.produce(20, 100, 20);
+  driver.produce(20, 100, 20, 8);
   driver.wait_for_drain();
   worker.join();
 

@@ -126,12 +126,12 @@ bench_worker::run()
   barrier_a->count_down();
   barrier_b->wait_for();
   if (measured_driver) {
-    const auto execute = [this](const queued::Request &request) {
-      return run_queued_attempt(request, *this);
+    const queued::Driver::Prepare prepare = [this](const queued::Request &request) -> queued::Driver::Prepared {
+      return prepare_queued_request(request, *this);
     };
     if (warmup_driver)
-      warmup_driver->run_worker(queue_worker, execute);
-    measured_driver->run_worker(queue_worker, execute);
+      warmup_driver->run_prepared_worker(queue_worker, prepare);
+    measured_driver->run_prepared_worker(queue_worker, prepare);
     return;
   }
   while (running && (run_mode != RUNMODE_OPS || ntxn_commits < ops_per_worker)) {
@@ -263,7 +263,7 @@ bench_runner::run()
     }
     // An empty phase releases the workers if warm-up failed.
     const queued::Ns duration = warmup.failed() ? 0 : runtime * queued::second;
-    measured.produce(duration, drain, warmup.generated());
+    measured.produce(duration, drain, warmup.generated(), warmup.high_generated());
     for (auto *worker : workers)
       worker->join();
     db->do_txn_finish();

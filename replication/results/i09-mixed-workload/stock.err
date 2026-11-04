@@ -1,0 +1,2 @@
+num batches: 30
+wait_an_epoch(): consistent reads happening in e-1: 2

@@ -2,7 +2,7 @@
 
 **Purpose:** a sequence of independently requestable implementation tasks for Erin Tan, Brian Ok, and Erica Tay. Use the task IDs below when asking Codex to implement something later. This covers preparation, components, integration, experiments, the milestone report, and the final report.
 
-**Current state as of November 3, 2026**
+**Current state as of November 4, 2026**
 
 - **I01 is complete for the current workspace.** This directory contains the shared documentation, provenance, reproducible PACE job, and evidence layout. The original LaTeX project remains an input for M02. **I02 is complete as a source and contract audit.** The pinned reference, mechanism map, Q2 discrepancies and shared interfaces are recorded in [source map](docs/source-map.md) and [experiment contract](docs/experiment-contract.md). Runtime implementation remains in I06–I16.
 - **I03 is queued for a hardware probe.** The stock baseline ran on AMD EPYC 7513. Job `6791940` identified the unlabeled Intel CPU node as Xeon Gold 6226. The one-GPU request `6792039` on `ice-gpu` targets Xeon Platinum 8462Y+ and passed submission. Use `squeue -j 6792039` to check the pending reason. CPUID and interface access remain unverified.
@@ -11,7 +11,8 @@
 - **I06 has local functional evidence.** The independent producer, bounded queues, retry accounting and timing are implemented. The opt-in TPC-C bridge exercises New-Order and Payment. See the [I06 validation and reproduction commands](results/i06-request-driver/README.md).
 - **I07 is locally validated on emulated Linux x86-64.** The standalone worker context pair passed one million round trips with separate stack locals and the tested SysV preserved state. See the [I07 validation](results/i07-worker-context/README.md).
 - **I08 is locally validated on emulated Linux x86-64.** The [Silo audit and engine test](results/i08-silo-context/README.md) cover voluntary snapshot handoffs, shared epoch protection and deferred work.
-- **M01 has stock baseline and component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I09–I18 and F01–F02 remain open.
+- **I09 is locally validated on emulated Linux x86-64.** The [workload and evidence](results/i09-mixed-workload/README.md) cover prepared short inputs, the corrected Q2 variant and one- and two-worker mixed smokes.
+- **M01 has stock baseline and component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I10–I18 and F01–F02 remain open.
 
 The milestone is the immediate deadline and the final date remains to be confirmed. Ownership below is proposed coordination responsibility.
 
@@ -273,6 +274,8 @@ Steps:
 5. Define warehouse selection, remote-access probabilities, workload mix, and retries from the inspected sources; label any differences.
 
 Outputs: workload adapters, Q2 implementation, deterministic correctness tests, and workload configuration.
+
+Implemented in the queued TPC-C path with `--queued-mixed`. The [I09 record](results/i09-mixed-workload/README.md) documents the schema projection, input distributions, checksum, tests and commands. I10 uses the same workload for the Wait baseline.
 
 Complete when: workload outputs and relevant consistency checks pass. A synthetic delay is retained only as a driver-test workload and never labeled Q2.
 

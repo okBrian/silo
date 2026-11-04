@@ -1,0 +1,3 @@
+num batches: 30
+wait_an_epoch(): consistent reads happening in e-1: 2
+phase=measurement cutoff_ns=782453477533 generated=36 completed=36 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=0 cutoff_due_ungenerated=0 commits_in_window=36 drain_commits=0 failed=0

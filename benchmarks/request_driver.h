@@ -14,7 +14,7 @@ using Ns = uint64_t;
 constexpr Ns ms = 1000000;
 constexpr Ns second = 1000 * ms;
 
-enum class Kind { new_order, payment, synthetic_low };
+enum class Kind { new_order, payment, synthetic_low, q2 };
 enum class Attempt { committed, conflict, user_aborted, failed };
 enum class Outcome { pending, committed, user_aborted, retry_exhausted, failed,
                      rejected_queue_full, cancelled_shutdown };
@@ -26,6 +26,7 @@ struct Request {
   size_t worker = 0;
   size_t home_warehouse = 0;
   uint64_t input_seed = 0;
+  uint64_t high_sequence = 0; // Run-wide, independent of low request generation.
   Ns scheduled = 0;
   Ns generated = 0;
   Ns admitted = 0;
@@ -34,6 +35,7 @@ struct Request {
   unsigned attempts = 0;
   unsigned aborts = 0;
   Outcome outcome = Outcome::pending;
+  uint64_t q2_checksum = 0;
 };
 
 struct Config {
@@ -43,6 +45,7 @@ struct Config {
   size_t global_capacity = 4;
   size_t high_capacity = 4;
   bool generate_low = true; // One pending low request per worker.
+  Kind low_kind = Kind::synthetic_low;
   unsigned attempt_limit = 100;
   uint64_t seed = 1;
 };
@@ -55,6 +58,8 @@ Ns monotonic_now();
 class Driver {
 public:
   using Execute = std::function<Attempt(const Request &)>;
+  using Prepared = std::function<Attempt(uint64_t &checksum)>;
+  using Prepare = std::function<Prepared(const Request &)>;
   using Clock = std::function<Ns()>;
   using Wait = std::function<void(Ns)>;
   using Visit = std::function<void(const Request &)>;
@@ -63,13 +68,15 @@ public:
                   Wait wait_until = {});
   ~Driver();
 
-  void produce(Ns duration, Ns drain, uint64_t first_id = 0);
+  void produce(Ns duration, Ns drain, uint64_t first_id = 0, uint64_t first_high = 0);
   void run_worker(size_t worker, const Execute &execute);
+  void run_prepared_worker(size_t worker, const Prepare &prepare);
   void wait_for_drain();
   void notify(size_t worker);
   void visit_records(const Visit &visit) const;
 
   uint64_t generated() const;
+  uint64_t high_generated() const;
   Ns cutoff() const;
   bool failed() const;
 

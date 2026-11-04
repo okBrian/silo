@@ -24,6 +24,7 @@ QUEUE = {
     "first_seed", "interval_us", "batch_per_worker",
     "global_capacity_per_worker", "worker_capacity",
 }
+Q2_VARIANT = "q2_min_stock_v1"
 
 
 def require(condition, message):
@@ -57,7 +58,8 @@ def validate(config, allowed):
                 "stock dbtest has no separate warm-up or drain")
     else:
         queue = config["queue"]
-        require(isinstance(queue, dict) and queue.keys() == QUEUE and
+        require(isinstance(queue, dict) and QUEUE <= queue.keys() <= QUEUE | {"q2_variant"} and
+                ("q2_variant" not in queue or queue["q2_variant"] == Q2_VARIANT) and
                 all(integer(queue[key], 1, 2**32 - 1) for key in QUEUE - {"first_seed"}) and
                 integer(queue["first_seed"], 0, 2**64 - config["repeats"]),
                 "queue requires positive integer settings and uint64 seeds across all repeats")
@@ -76,7 +78,7 @@ def validate(config, allowed):
             batches = [(phases[phase] * 10**9 - 1) // interval_ns if phases[phase] else 0
                        for phase in ("warmup", "measurement")]
             require(batches[1] > 0 and sum(batches) * batch <= 2**31,
-                    "queued run must produce a measured batch and fit within the I06 ID range")
+                    "queued run must produce a measured batch and fit within the high-priority date range")
         if "cpus" in variant:
             cpus = variant["cpus"]
             require(isinstance(cpus, list) and cpus and all(integer(cpu, 0) for cpu in cpus)
@@ -139,6 +141,7 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
     ]
     seeds = {"tpcc_serial_loaders": LOADER_SEEDS, "tpcc_worker_seed_generator": 23984543}
     queue = None
+    q2_variant = None
     if config["format"] == "queued":
         settings = config["queue"]
         seed = settings["first_seed"] + repeat - 1
@@ -152,10 +155,26 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
             "warmup": phases["warmup"], "drain": phases["drain_limit"], "seed": seed,
         }
         benchmark += ["--queued", run_id]
+        q2_variant = settings.get("q2_variant")
+        if q2_variant:
+            benchmark.append("--queued-mixed")
+            seeds["q2_supplier_loader"] = 51271928
         for setting, value in queue.items():
             benchmark += [f"--queued-{setting}", str(value)]
     cpus = variant.get("cpus")
     command = (["taskset", "--cpu-list", ",".join(map(str, cpus))] if cpus else []) + benchmark
+    workload = "TPC-C New-Order/Payment (I06)" if queue else "stock TPC-C mix"
+    if q2_variant:
+        workload = {
+            "high": {"NewOrder": 0.5, "Payment": 0.5},
+            "low": {"Q2": 1.0, "pending_capacity_per_worker": 1},
+            "rows": {"regions": 5, "nations": 62, "suppliers": 10000, "items": 100000,
+                     "stock_per_warehouse": 100000},
+            "q2_supplier_scan_count": 100, "q2_region_selection": "uniform",
+            "remote_payment_probability": 0.15 if warehouses > 1 else 0,
+            "remote_new_order_item_probability": 0.01 if warehouses > 1 else 0,
+            "new_order_item_distribution": "Silo NURand",
+        }
     return {
         "contract_version": 1, "run_id": run_id, "config": config["name"],
         "format": config["format"], "repeat": repeat,
@@ -163,8 +182,8 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
         "queue": queue, "phases_s": phases, "timeout_s": config["timeout_s"], "command": command,
         "cpu_placement": {"inherited_allowed": allowed, "process_mask": cpus or allowed,
                           "worker_cpu_ids": None, "sender_cpu_id": None},
-        "policy": "i06-queued" if queue else "stock", "q2_variant": None, "logging": "disabled",
-        "workload": "TPC-C New-Order/Payment (I06)" if queue else "stock TPC-C mix",
+        "policy": "i09-serial" if q2_variant else "i06-queued" if queue else "stock",
+        "q2_variant": q2_variant, "logging": "disabled", "workload": workload,
         "yield_interval": None, "starvation_threshold": None,
         "retry_limit": 100 if queue else None, "batch_metadata": "../batch.json",
         "state": "planned", "exit_status": None,
