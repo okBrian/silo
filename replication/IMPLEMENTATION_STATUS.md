@@ -12,7 +12,7 @@ The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a
 | I04 | Stock Silo build/tests | Brian | Validated on PACE | Job 6791465 produced all ten TPC-C measurements, then aborted at `rcu.cc:292` during test pinning. Job 6791730 completed the upstream suite with exit `0:0` after adapting the pinning test to the allocation's CPU mask. Jobs 6791273 and 6791405 exposed the Berkeley DB and GCC formatter build issues |
 | I05 | Experiment runner and stock baseline | Erica | Complete | [Runner and analysis](experiments/README.md), [regenerated evidence](results/i05-experiments/README.md), and fixture tests. The new batch path has local runner validation and Bash syntax checks |
 | I06 | Independent request driver | Erica | Implemented and locally validated | [Functional evidence and opt-in usage](results/i06-request-driver/README.md). The TPC-C bridge covers New-Order and Payment. The standalone suite uses synthetic low-priority work |
-| I07 | Explicit context switching | Erin | Not started | |
+| I07 | Explicit context switching | Erin | Implemented and locally validated | Standalone glibc context pair passed one million round trips per build on emulated Linux x86-64. [ABI checks, lifecycle and reproduction commands](results/i07-worker-context/README.md) |
 | I08 | Silo context state and protected regions | Brian / Erin | Not started | |
 | I09 | Mixed workload and Q2 validation | Erica / Brian | Initial short-transaction bridge available | I06 exercises New-Order and Payment dispatch. Q2, full input materialization and workload correctness checks remain open |
 | I10 | Wait scheduler | Erica / Brian | Not started | |
@@ -24,7 +24,7 @@ The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a
 | I16 | Starvation prevention | Brian | Not started | |
 | I17 | Integrated validation | Everyone | Not started | |
 | I18 | Replication experiments | Erica / everyone | Not started | |
-| M01 | Milestone evidence assessment | Everyone | In progress | Archived ten-run baseline, passing adapted stock suite, and I06 functional evidence are ready to cite. Timeline assessment and hardware decision remain open |
+| M01 | Milestone evidence assessment | Everyone | In progress | Archived ten-run baseline, passing adapted stock suite, and I06 and I07 functional evidence are ready to cite. Timeline assessment and hardware decision remain open |
 | M02 | Milestone report | Everyone | Not started | Original LaTeX source not supplied |
 | M03 | Milestone verification/package | Everyone | Not started | |
 | F01 | Final report | Everyone | Not started | Final rubric/date not supplied |
@@ -55,4 +55,12 @@ Implemented November 3, 2026 on Silo source base `05d1c2e4b1050465353efd68d1abc6
 
 The [I06 evidence](results/i06-request-driver/README.md) records commands, environment, and logs. The standalone suite passed on macOS and emulated Linux, with AddressSanitizer, UndefinedBehaviorSanitizer and ThreadSanitizer checks on macOS. It covers missed arrivals, rejection, cancellation, duplicate wakeups, retries, fatal errors, and request reconciliation across three workers. In the Linux slow-worker test, the short request spent 80.42 ms in the local queue and 82.73 ms end to end. The emulated Linux build passed the stock five-column smoke and committed all 36 and 72 measured requests in the one- and two-worker queued smokes. The one-worker run also drained 36 warm-up requests before measurement. These are functional checks.
 
-Next ready work is I07 or the independent I09 workload work. Real Q2, full input materialization, mid-transaction switching, policy comparisons and native queued PACE measurements remain later work.
+I07 and I09 became ready after I06. Real Q2, full input materialization, mid-transaction switching, policy comparisons and native queued PACE measurements remain later work.
+
+## I07 completion record
+
+Implemented November 3, 2026 on Silo source base `70f5c73a9dcd368c2717af52ad0298ff2b8f007e`. Added [WorkerContext](../benchmarks/worker_context.h) and its glibc-backed implementation in [worker_context.cc](../benchmarks/worker_context.cc). A worker resumes an entry function on a guarded alternate stack. The entry can yield back to the original stack and resume at the same call site. Returning or unwinding the entry transfers control to the original stack for cleanup. The pair shares pthread identity and TLS.
+
+Built and ran the [standalone harness](tests/worker_context_test.cc) with GCC 11.4.0 and glibc 2.35 on an emulated Linux x86-64 guest. Debug, optimized and UndefinedBehaviorSanitizer builds each passed 1, 10,000 and 1,000,000 round trips, including independent stack values, SysV nonvolatile GPRs, callback stack alignment, x87 rounding control and MXCSR. Lifecycle, exception cleanup, thread ownership and signal-mask tests also passed. [Commands, results table and raw log](results/i07-worker-context/README.md).
+
+I08 is ready to audit transaction buffers, arenas, RNG and reclamation before allowing a live Silo transaction to yield. Native PACE execution, UINTR delivery and asynchronous register preservation are outside the scope of this local component result.

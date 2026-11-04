@@ -1,0 +1,26 @@
+Linux 6.8.0-117-generic x86_64 GNU/Linux
+glibc 2.35
+c++ (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+
+C++11 flags: -O0 -g
+PASS lifecycle, thread ownership, invalid transitions and exception cleanup
+PASS glibc signal-mask save/restore
+PASS 1 round trips, original=19 alternate=32
+PASS 10000 round trips, original=100010017 alternate=150015029
+PASS 1000000 round trips, original=1000001000017 alternate=1500001500029
+
+C++11 flags: -O3 -DNDEBUG
+PASS lifecycle, thread ownership, invalid transitions and exception cleanup
+PASS glibc signal-mask save/restore
+PASS 1 round trips, original=19 alternate=32
+PASS 10000 round trips, original=100010017 alternate=150015029
+PASS 1000000 round trips, original=1000001000017 alternate=1500001500029
+
+C++11 flags: -O2 -g -fsanitize=undefined -fno-sanitize-recover=all
+PASS lifecycle, thread ownership, invalid transitions and exception cleanup
+PASS glibc signal-mask save/restore
+PASS 1 round trips, original=19 alternate=32
+PASS 10000 round trips, original=100010017 alternate=150015029
+PASS 1000000 round trips, original=1000001000017 alternate=1500001500029
+
+Container exit status: 0

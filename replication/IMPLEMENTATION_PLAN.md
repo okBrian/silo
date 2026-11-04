@@ -9,7 +9,8 @@
 - **I04 is validated on PACE.** Job `6791465` produced all ten stock TPC-C measurements. Job `6791730` passed the invariant suite in 5:26 after the pinning test was adapted to use CPUs assigned by Slurm. The original test run selected CPUs starting at CPU 0, outside the benchmark job's allowed range of 54–57. The test-only retry selected CPUs 60–63 from its own allocation.
 - **I05 is complete.** The [experiment runner and analysis](experiments/README.md) reproduce the ten-run stock table and process the archived I06 smoke results. At two warehouses, throughput averaged 84,254 txn/s with one worker and 148,330 txn/s with two workers over five 30-second runs each.
 - **I06 has local functional evidence.** The independent producer, bounded queues, retry accounting and timing are implemented. The opt-in TPC-C bridge exercises New-Order and Payment. See the [I06 validation and reproduction commands](results/i06-request-driver/README.md).
-- **M01 has stock baseline and I06 component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I07–I18 and F01–F02 remain open.
+- **I07 is locally validated on emulated Linux x86-64.** The standalone worker context pair passed one million round trips with separate stack locals and the tested SysV preserved state. See the [I07 validation](results/i07-worker-context/README.md).
+- **M01 has stock baseline, I06 and I07 component evidence.** PACE logs and environment records are in [results/pace-runs](results/pace-runs/), and the benchmark CSV and analysis are in `results/i04-pace-baseline/`. The milestone report, I08–I18 and F01–F02 remain open.
 
 The milestone is the immediate deadline and the final date remains to be confirmed. Ownership below is proposed coordination responsibility.
 
@@ -233,6 +234,8 @@ Steps:
 5. Document what voluntary-switch validation does not establish about asynchronous interrupt-time state preservation.
 
 Outputs: context module, focused test harness, and a context-validation table.
+
+Completed November 3, 2026 for voluntary switching on emulated Linux x86-64 with glibc. The worker's original stack and one guarded alternate stack exchange control through `resume()` and `yield()`. The [validation record](results/i07-worker-context/README.md) covers the lifecycle, ABI checks and reproduction commands. I08 owns transaction-state and reclamation integration. I13 owns interrupt-time register preservation.
 
 Complete when: recorded tests preserve expected values and context isolation over repeated round trips. Supported architectural/compiler assumptions are explicit.
 
