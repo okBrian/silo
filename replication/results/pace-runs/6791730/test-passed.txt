@@ -1,0 +1,1 @@
+Upstream test command exited successfully.

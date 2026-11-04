@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 682b4cb..dbe3f9c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -80,7 +80,7 @@ CXXFLAGS += -MD -Ithird-party/lz4 -DCONFIG_H=\"$(CONFIG_H)\"
+ ifeq ($(DEBUG_S),1)
+         CXXFLAGS += -fno-omit-frame-pointer -DDEBUG
+ else
+-        CXXFLAGS += -Werror -O2 -funroll-loops -fno-omit-frame-pointer
++        CXXFLAGS += -O2 -funroll-loops -fno-omit-frame-pointer
+ endif
+ ifeq ($(CHECK_INVARIANTS_S),1)
+ 	CXXFLAGS += -DCHECK_INVARIANTS

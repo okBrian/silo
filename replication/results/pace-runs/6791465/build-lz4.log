@@ -1,0 +1,5 @@
+make: Entering directory '/tmp/silo-build.3js5C5/silo/third-party/lz4'
+gcc -fPIC -O3 -I. -std=c99 -Wall -W -Wundef -Wno-implicit-function-declaration -c lz4.c -o lz4.o
+gcc -fPIC -O3 -I. -std=c99 -Wall -W -Wundef -Wno-implicit-function-declaration -c xxhash.c -o xxhash.o
+gcc -shared -Wl,-soname,liblz4.so -o liblz4.so lz4.o xxhash.o
+make: Leaving directory '/tmp/silo-build.3js5C5/silo/third-party/lz4'

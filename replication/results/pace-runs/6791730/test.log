@@ -1,0 +1,155 @@
+PID: 838662
+circbuf test passed
+allocator::Initialize()
+  hugepgsize: 2097152
+  use MADV_WILLNEED: 1
+  mmap() region [0x15534fe00000, 0x155550000000)
+cpu0 owns [0x15534fe00000, 0x155357e00000)
+cpu1 owns [0x155357e00000, 0x15535fe00000)
+cpu2 owns [0x15535fe00000, 0x155367e00000)
+cpu3 owns [0x155367e00000, 0x15536fe00000)
+cpu4 owns [0x15536fe00000, 0x155377e00000)
+cpu5 owns [0x155377e00000, 0x15537fe00000)
+cpu6 owns [0x15537fe00000, 0x155387e00000)
+cpu7 owns [0x155387e00000, 0x15538fe00000)
+cpu8 owns [0x15538fe00000, 0x155397e00000)
+cpu9 owns [0x155397e00000, 0x15539fe00000)
+cpu10 owns [0x15539fe00000, 0x1553a7e00000)
+cpu11 owns [0x1553a7e00000, 0x1553afe00000)
+cpu12 owns [0x1553afe00000, 0x1553b7e00000)
+cpu13 owns [0x1553b7e00000, 0x1553bfe00000)
+cpu14 owns [0x1553bfe00000, 0x1553c7e00000)
+cpu15 owns [0x1553c7e00000, 0x1553cfe00000)
+cpu16 owns [0x1553cfe00000, 0x1553d7e00000)
+cpu17 owns [0x1553d7e00000, 0x1553dfe00000)
+cpu18 owns [0x1553dfe00000, 0x1553e7e00000)
+cpu19 owns [0x1553e7e00000, 0x1553efe00000)
+cpu20 owns [0x1553efe00000, 0x1553f7e00000)
+cpu21 owns [0x1553f7e00000, 0x1553ffe00000)
+cpu22 owns [0x1553ffe00000, 0x155407e00000)
+cpu23 owns [0x155407e00000, 0x15540fe00000)
+cpu24 owns [0x15540fe00000, 0x155417e00000)
+cpu25 owns [0x155417e00000, 0x15541fe00000)
+cpu26 owns [0x15541fe00000, 0x155427e00000)
+cpu27 owns [0x155427e00000, 0x15542fe00000)
+cpu28 owns [0x15542fe00000, 0x155437e00000)
+cpu29 owns [0x155437e00000, 0x15543fe00000)
+cpu30 owns [0x15543fe00000, 0x155447e00000)
+cpu31 owns [0x155447e00000, 0x15544fe00000)
+cpu32 owns [0x15544fe00000, 0x155457e00000)
+cpu33 owns [0x155457e00000, 0x15545fe00000)
+cpu34 owns [0x15545fe00000, 0x155467e00000)
+cpu35 owns [0x155467e00000, 0x15546fe00000)
+cpu36 owns [0x15546fe00000, 0x155477e00000)
+cpu37 owns [0x155477e00000, 0x15547fe00000)
+cpu38 owns [0x15547fe00000, 0x155487e00000)
+cpu39 owns [0x155487e00000, 0x15548fe00000)
+cpu40 owns [0x15548fe00000, 0x155497e00000)
+cpu41 owns [0x155497e00000, 0x15549fe00000)
+cpu42 owns [0x15549fe00000, 0x1554a7e00000)
+cpu43 owns [0x1554a7e00000, 0x1554afe00000)
+cpu44 owns [0x1554afe00000, 0x1554b7e00000)
+cpu45 owns [0x1554b7e00000, 0x1554bfe00000)
+cpu46 owns [0x1554bfe00000, 0x1554c7e00000)
+cpu47 owns [0x1554c7e00000, 0x1554cfe00000)
+cpu48 owns [0x1554cfe00000, 0x1554d7e00000)
+cpu49 owns [0x1554d7e00000, 0x1554dfe00000)
+cpu50 owns [0x1554dfe00000, 0x1554e7e00000)
+cpu51 owns [0x1554e7e00000, 0x1554efe00000)
+cpu52 owns [0x1554efe00000, 0x1554f7e00000)
+cpu53 owns [0x1554f7e00000, 0x1554ffe00000)
+cpu54 owns [0x1554ffe00000, 0x155507e00000)
+cpu55 owns [0x155507e00000, 0x15550fe00000)
+cpu56 owns [0x15550fe00000, 0x155517e00000)
+cpu57 owns [0x155517e00000, 0x15551fe00000)
+cpu58 owns [0x15551fe00000, 0x155527e00000)
+cpu59 owns [0x155527e00000, 0x15552fe00000)
+cpu60 owns [0x15552fe00000, 0x155537e00000)
+cpu61 owns [0x155537e00000, 0x15553fe00000)
+cpu62 owns [0x15553fe00000, 0x155547e00000)
+cpu63 owns [0x155547e00000, 0x15554fe00000)
+mp_test_pinning worker 0 selects allowed CPU 60
+mp_test_pinning worker 1 selects allowed CPU 61
+mp_test_pinning worker 2 selects allowed CPU 62
+mp_test_pinning worker 3 selects allowed CPU 63
+testing_concurrent_btree::TestFast passed
+num_inserts: 45
+num_removes: 45
+btr size: 37
+testing_concurrent_btree::TestSlow passed
+Test proto2
+wait_an_epoch(): consistent reads happening in e-1: 9055
+test_typed_btree() passed
+wait_an_epoch(): consistent reads happening in e-1: 9056
+wait_an_epoch(): consistent reads happening in e-1: 9057
+wait_an_epoch(): consistent reads happening in e-1: 9058
+wait_an_epoch(): consistent reads happening in e-1: 9059
+wait_an_epoch(): consistent reads happening in e-1: 9060
+wait_an_epoch(): consistent reads happening in e-1: 9061
+wait_an_epoch(): consistent reads happening in e-1: 9120
+wait_an_epoch(): consistent reads happening in e-1: 9179
+wait_an_epoch(): consistent reads happening in e-1: 9182
+wait_an_epoch(): consistent reads happening in e-1: 9183
+wait_an_epoch(): consistent reads happening in e-1: 9184
+wait_an_epoch(): consistent reads happening in e-1: 9185
+wait_an_epoch(): consistent reads happening in e-1: 9186
+wait_an_epoch(): consistent reads happening in e-1: 9187
+wait_an_epoch(): consistent reads happening in e-1: 9188
+wait_an_epoch(): consistent reads happening in e-1: 9189
+test_long_keys passed
+wait_an_epoch(): consistent reads happening in e-1: 9190
+wait_an_epoch(): consistent reads happening in e-1: 9191
+wait_an_epoch(): consistent reads happening in e-1: 9192
+wait_an_epoch(): consistent reads happening in e-1: 9193
+wait_an_epoch(): consistent reads happening in e-1: 9260
+wait_an_epoch(): consistent reads happening in e-1: 9261
+wait_an_epoch(): consistent reads happening in e-1: 9262
+mutate naborts: 3
+read-only reader 1 naborts: 0
+read-only reader 1 validations: 11168
+read-only reader 2 naborts: 0
+read-only reader 2 validations: 5495
+read-only reader 3 naborts: 0
+read-only reader 3 validations: 10905
+wait_an_epoch(): consistent reads happening in e-1: 9264
+wait_an_epoch(): consistent reads happening in e-1: 9265
+mutate naborts: 3
+read-only reader 1 naborts: 0
+read-only reader 1 validations: 9068
+read-only reader 2 naborts: 0
+read-only reader 2 validations: 4382
+read-only reader 3 naborts: 0
+read-only reader 3 validations: 8451
+wait_an_epoch(): consistent reads happening in e-1: 9266
+wait_an_epoch(): consistent reads happening in e-1: 9267
+scan validations: 54190, scan aborts: 88350
+1by1 validations: 25549, 1by1 aborts: 147266
+scan-readonly validations: 355320, scan-readonly aborts: 0
+1by1-readonly validations: 314892, 1by1-readonly aborts: 0
+wait_an_epoch(): consistent reads happening in e-1: 9302
+wait_an_epoch(): consistent reads happening in e-1: 9303
+scan validations: 65324, scan aborts: 70571
+1by1 validations: 60381, 1by1 aborts: 183315
+scan-readonly validations: 364640, scan-readonly aborts: 0
+1by1-readonly validations: 346501, 1by1-readonly aborts: 0
+wait_an_epoch(): consistent reads happening in e-1: 9333
+wait_an_epoch(): consistent reads happening in e-1: 9334
+get_worker  txns: 2177428
+scan_worker txns: 1032865
+wait_an_epoch(): consistent reads happening in e-1: 9340
+wait_an_epoch(): consistent reads happening in e-1: 9341
+get_worker  txns: 2150027
+scan_worker txns: 1004062
+wait_an_epoch(): consistent reads happening in e-1: 9348
+wait_an_epoch(): consistent reads happening in e-1: 9349
+report_worker      txns       : 285546
+report_worker      validations: 155549
+new_receipt_worker txns       : 2032174
+incr_worker        txns       : 173995
+wait_an_epoch(): consistent reads happening in e-1: 10297
+wait_an_epoch(): consistent reads happening in e-1: 10298
+report_worker      txns       : 284479
+report_worker      validations: 154131
+new_receipt_worker txns       : 2040016
+incr_worker        txns       : 173683
+wait_an_epoch(): consistent reads happening in e-1: 11246

@@ -1,0 +1,1478 @@
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c test.cc -o out-perf.debug.check.masstree/test.o
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c allocator.cc -o out-perf.debug.check.masstree/allocator.o
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c btree.cc -o out-perf.debug.check.masstree/btree.o
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c core.cc -o out-perf.debug.check.masstree/core.o
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c counter.cc -o out-perf.debug.check.masstree/counter.o
+In file included from masstree/str.hh:18,
+                 from masstree/string_slice.hh:18,
+                 from varkey.h:20,
+                 from btree.h:19,
+                 from btree.cc:14:
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:163:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  163 | LCDF_MAKE_STRING_HASH(lcdf::Str)
+      | ^~~~~~~~~~~~~~~~~~~~~
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/string:48,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/locale_classes.h:40,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/ios_base.h:41,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/ios:42,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/ostream:38,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/iostream:39,
+                 from btree.cc:4:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:164:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  164 | LCDF_MAKE_STRING_HASH(lcdf::inline_string)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+In file included from masstree/str.hh:18,
+                 from masstree/string_slice.hh:18,
+                 from varkey.h:20,
+                 from masstree_btree.h:19,
+                 from btree_choice.h:4,
+                 from txn.h:22,
+                 from test.cc:12:
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:163:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  163 | LCDF_MAKE_STRING_HASH(lcdf::Str)
+      | ^~~~~~~~~~~~~~~~~~~~~
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/string:48,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/locale_classes.h:40,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/ios_base.h:41,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/ios:42,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/ostream:38,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/iostream:39,
+                 from test.cc:1:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:164:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  164 | LCDF_MAKE_STRING_HASH(lcdf::inline_string)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/string.hh:879:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  879 | LCDF_MAKE_STRING_HASH(lcdf::String)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/string.hh:879:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  879 | LCDF_MAKE_STRING_HASH(lcdf::String)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+In file included from test.cc:20:
+test.cc: In member function 'void encoder<myrec::key>::encode_read(const uint8_t*, myrec::key*) const':
+record/encoder.h:121:50: warning: taking address of packed member of 'myrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:179:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  179 |   SERIALIZE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+test.cc:29:3: note: in expansion of macro 'SERIALIZE_READ_KEY_FIELD_X'
+   29 |   x(int32_t,k0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:520:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  520 |     APPLY_X_AND_Y(keyfields, SERIALIZE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:121:50: warning: taking address of packed member of 'myrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:179:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  179 |   SERIALIZE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+test.cc:30:3: note: in expansion of macro 'SERIALIZE_READ_KEY_FIELD_X'
+   30 |   y(int32_t,k1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:520:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  520 |     APPLY_X_AND_Y(keyfields, SERIALIZE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'void encoder<myrec::key>::encode_prefix_read(const uint8_t*, myrec::key*, size_t) const':
+record/encoder.h:127:50: warning: taking address of packed member of 'myrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:184:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  184 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:29:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_KEY_FIELD_X'
+   29 |   x(int32_t,k0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:526:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  526 |     APPLY_X_AND_Y(keyfields, SERIALIZE_PREFIX_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:127:50: warning: taking address of packed member of 'myrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:184:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  184 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:30:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_KEY_FIELD_X'
+   30 |   y(int32_t,k1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:526:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  526 |     APPLY_X_AND_Y(keyfields, SERIALIZE_PREFIX_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'bool encoder<myrec::key>::encode_failsafe_read(const uint8_t*, size_t, myrec::key*) const':
+record/encoder.h:136:63: warning: taking address of packed member of 'myrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:189:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  189 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:29:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_KEY_FIELD_X'
+   29 |   x(int32_t,k0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:531:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  531 |     APPLY_X_AND_Y(keyfields, SERIALIZE_FAILSAFE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:136:63: warning: taking address of packed member of 'myrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:189:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  189 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:30:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_KEY_FIELD_X'
+   30 |   y(int32_t,k1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:531:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  531 |     APPLY_X_AND_Y(keyfields, SERIALIZE_FAILSAFE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'void encoder<myrec::value>::encode_read(const uint8_t*, myrec::value*) const':
+record/encoder.h:121:50: warning: taking address of packed member of 'myrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:181:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  181 |   SERIALIZE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+test.cc:32:3: note: in expansion of macro 'SERIALIZE_READ_VALUE_FIELD_X'
+   32 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:574:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  574 |     APPLY_X_AND_Y(valuefields, SERIALIZE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:121:50: warning: taking address of packed member of 'myrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:181:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  181 |   SERIALIZE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+test.cc:33:3: note: in expansion of macro 'SERIALIZE_READ_VALUE_FIELD_X'
+   33 |   y(int16_t,v1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:574:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  574 |     APPLY_X_AND_Y(valuefields, SERIALIZE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'void encoder<myrec::value>::encode_prefix_read(const uint8_t*, myrec::value*, size_t) const':
+record/encoder.h:127:50: warning: taking address of packed member of 'myrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:186:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  186 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:32:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_VALUE_FIELD_X'
+   32 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:580:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  580 |     APPLY_X_AND_Y(valuefields, SERIALIZE_PREFIX_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:127:50: warning: taking address of packed member of 'myrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:186:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  186 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:33:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_VALUE_FIELD_X'
+   33 |   y(int16_t,v1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:580:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  580 |     APPLY_X_AND_Y(valuefields, SERIALIZE_PREFIX_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'bool encoder<myrec::value>::encode_failsafe_read(const uint8_t*, size_t, myrec::value*) const':
+record/encoder.h:136:63: warning: taking address of packed member of 'myrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:191:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  191 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:32:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X'
+   32 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:585:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  585 |     APPLY_X_AND_Y(valuefields, SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:136:63: warning: taking address of packed member of 'myrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:191:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  191 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:33:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X'
+   33 |   y(int16_t,v1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:585:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  585 |     APPLY_X_AND_Y(valuefields, SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'size_t encoder<myrec::value>::encode_nbytes(const myrec::value*) const':
+record/encoder.h:146:49: warning: taking address of packed member of 'myrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  146 |     size += serializer< tpe, compress >::nbytes(&obj->name); \
+record/encoder.h:196:3: note: in expansion of macro 'SERIALIZE_NBYTES_FIELD'
+  196 |   SERIALIZE_NBYTES_FIELD(tpe, name, true)
+      |   ^~~~~~~~~~~~~~~~~~~~~~
+test.cc:32:3: note: in expansion of macro 'SERIALIZE_NBYTES_VALUE_FIELD_X'
+   32 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:592:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  592 |     APPLY_X_AND_Y(valuefields, SERIALIZE_NBYTES_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:146:49: warning: taking address of packed member of 'myrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  146 |     size += serializer< tpe, compress >::nbytes(&obj->name); \
+record/encoder.h:196:3: note: in expansion of macro 'SERIALIZE_NBYTES_FIELD'
+  196 |   SERIALIZE_NBYTES_FIELD(tpe, name, true)
+      |   ^~~~~~~~~~~~~~~~~~~~~~
+test.cc:33:3: note: in expansion of macro 'SERIALIZE_NBYTES_VALUE_FIELD_X'
+   33 |   y(int16_t,v1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'MYREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:592:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  592 |     APPLY_X_AND_Y(valuefields, SERIALIZE_NBYTES_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:34:1: note: in expansion of macro 'DO_STRUCT'
+   34 | DO_STRUCT(myrec, MYREC_KEY_FIELDS, MYREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c memory.cc -o out-perf.debug.check.masstree/memory.o
+test.cc: In member function 'void encoder<cursorrec::key>::encode_read(const uint8_t*, cursorrec::key*) const':
+record/encoder.h:121:50: warning: taking address of packed member of 'cursorrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:179:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  179 |   SERIALIZE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+test.cc:37:3: note: in expansion of macro 'SERIALIZE_READ_KEY_FIELD_X'
+   37 |   x(int32_t,k0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:520:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  520 |     APPLY_X_AND_Y(keyfields, SERIALIZE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:121:50: warning: taking address of packed member of 'cursorrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:179:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  179 |   SERIALIZE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+test.cc:38:3: note: in expansion of macro 'SERIALIZE_READ_KEY_FIELD_X'
+   38 |   y(int32_t,k1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:520:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  520 |     APPLY_X_AND_Y(keyfields, SERIALIZE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'void encoder<cursorrec::key>::encode_prefix_read(const uint8_t*, cursorrec::key*, size_t) const':
+record/encoder.h:127:50: warning: taking address of packed member of 'cursorrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:184:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  184 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:37:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_KEY_FIELD_X'
+   37 |   x(int32_t,k0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:526:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  526 |     APPLY_X_AND_Y(keyfields, SERIALIZE_PREFIX_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:127:50: warning: taking address of packed member of 'cursorrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:184:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  184 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:38:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_KEY_FIELD_X'
+   38 |   y(int32_t,k1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:526:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  526 |     APPLY_X_AND_Y(keyfields, SERIALIZE_PREFIX_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'bool encoder<cursorrec::key>::encode_failsafe_read(const uint8_t*, size_t, cursorrec::key*) const':
+record/encoder.h:136:63: warning: taking address of packed member of 'cursorrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:189:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  189 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:37:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_KEY_FIELD_X'
+   37 |   x(int32_t,k0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:531:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  531 |     APPLY_X_AND_Y(keyfields, SERIALIZE_FAILSAFE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:136:63: warning: taking address of packed member of 'cursorrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:189:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  189 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:38:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_KEY_FIELD_X'
+   38 |   y(int32_t,k1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:531:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  531 |     APPLY_X_AND_Y(keyfields, SERIALIZE_FAILSAFE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'void encoder<cursorrec::value>::encode_read(const uint8_t*, cursorrec::value*) const':
+record/encoder.h:121:50: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:181:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  181 |   SERIALIZE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+test.cc:40:3: note: in expansion of macro 'SERIALIZE_READ_VALUE_FIELD_X'
+   40 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:574:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  574 |     APPLY_X_AND_Y(valuefields, SERIALIZE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:121:50: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:181:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  181 |   SERIALIZE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+test.cc:41:3: note: in expansion of macro 'SERIALIZE_READ_VALUE_FIELD_X'
+   41 |   y(int16_t,v1) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:574:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  574 |     APPLY_X_AND_Y(valuefields, SERIALIZE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:121:50: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:181:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  181 |   SERIALIZE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+test.cc:42:3: note: in expansion of macro 'SERIALIZE_READ_VALUE_FIELD_X'
+   42 |   y(int32_t,v2) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:574:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  574 |     APPLY_X_AND_Y(valuefields, SERIALIZE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:121:50: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:181:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  181 |   SERIALIZE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+test.cc:45:3: note: in expansion of macro 'SERIALIZE_READ_VALUE_FIELD_X'
+   45 |   y(int32_t,v5) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:574:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  574 |     APPLY_X_AND_Y(valuefields, SERIALIZE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'void encoder<cursorrec::value>::encode_prefix_read(const uint8_t*, cursorrec::value*, size_t) const':
+record/encoder.h:127:50: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:186:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  186 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:40:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_VALUE_FIELD_X'
+   40 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:580:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  580 |     APPLY_X_AND_Y(valuefields, SERIALIZE_PREFIX_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:127:50: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:186:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  186 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:41:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_VALUE_FIELD_X'
+   41 |   y(int16_t,v1) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:580:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  580 |     APPLY_X_AND_Y(valuefields, SERIALIZE_PREFIX_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:127:50: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:186:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  186 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:42:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_VALUE_FIELD_X'
+   42 |   y(int32_t,v2) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:580:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  580 |     APPLY_X_AND_Y(valuefields, SERIALIZE_PREFIX_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:127:50: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:186:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  186 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:45:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_VALUE_FIELD_X'
+   45 |   y(int32_t,v5) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:580:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  580 |     APPLY_X_AND_Y(valuefields, SERIALIZE_PREFIX_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'bool encoder<cursorrec::value>::encode_failsafe_read(const uint8_t*, size_t, cursorrec::value*) const':
+record/encoder.h:136:63: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:191:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  191 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:40:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X'
+   40 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:585:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  585 |     APPLY_X_AND_Y(valuefields, SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:136:63: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:191:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  191 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:41:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X'
+   41 |   y(int16_t,v1) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:585:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  585 |     APPLY_X_AND_Y(valuefields, SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:136:63: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:191:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  191 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:42:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X'
+   42 |   y(int32_t,v2) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:585:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  585 |     APPLY_X_AND_Y(valuefields, SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:136:63: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:191:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  191 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test.cc:45:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X'
+   45 |   y(int32_t,v5) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:585:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  585 |     APPLY_X_AND_Y(valuefields, SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+test.cc: In member function 'size_t encoder<cursorrec::value>::encode_nbytes(const cursorrec::value*) const':
+record/encoder.h:146:49: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  146 |     size += serializer< tpe, compress >::nbytes(&obj->name); \
+record/encoder.h:196:3: note: in expansion of macro 'SERIALIZE_NBYTES_FIELD'
+  196 |   SERIALIZE_NBYTES_FIELD(tpe, name, true)
+      |   ^~~~~~~~~~~~~~~~~~~~~~
+test.cc:40:3: note: in expansion of macro 'SERIALIZE_NBYTES_VALUE_FIELD_X'
+   40 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:592:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  592 |     APPLY_X_AND_Y(valuefields, SERIALIZE_NBYTES_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:146:49: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  146 |     size += serializer< tpe, compress >::nbytes(&obj->name); \
+record/encoder.h:196:3: note: in expansion of macro 'SERIALIZE_NBYTES_FIELD'
+  196 |   SERIALIZE_NBYTES_FIELD(tpe, name, true)
+      |   ^~~~~~~~~~~~~~~~~~~~~~
+test.cc:41:3: note: in expansion of macro 'SERIALIZE_NBYTES_VALUE_FIELD_X'
+   41 |   y(int16_t,v1) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:592:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  592 |     APPLY_X_AND_Y(valuefields, SERIALIZE_NBYTES_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:146:49: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  146 |     size += serializer< tpe, compress >::nbytes(&obj->name); \
+record/encoder.h:196:3: note: in expansion of macro 'SERIALIZE_NBYTES_FIELD'
+  196 |   SERIALIZE_NBYTES_FIELD(tpe, name, true)
+      |   ^~~~~~~~~~~~~~~~~~~~~~
+test.cc:42:3: note: in expansion of macro 'SERIALIZE_NBYTES_VALUE_FIELD_X'
+   42 |   y(int32_t,v2) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:592:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  592 |     APPLY_X_AND_Y(valuefields, SERIALIZE_NBYTES_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:146:49: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  146 |     size += serializer< tpe, compress >::nbytes(&obj->name); \
+record/encoder.h:196:3: note: in expansion of macro 'SERIALIZE_NBYTES_FIELD'
+  196 |   SERIALIZE_NBYTES_FIELD(tpe, name, true)
+      |   ^~~~~~~~~~~~~~~~~~~~~~
+test.cc:45:3: note: in expansion of macro 'SERIALIZE_NBYTES_VALUE_FIELD_X'
+   45 |   y(int32_t,v5) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'CURSORREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:592:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  592 |     APPLY_X_AND_Y(valuefields, SERIALIZE_NBYTES_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+test.cc:47:1: note: in expansion of macro 'DO_STRUCT'
+   47 | DO_STRUCT(cursorrec, CURSORREC_KEY_FIELDS, CURSORREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+In file included from masstree/local_vector.hh:6,
+                 from masstree/masstree_tcursor.hh:18,
+                 from masstree/masstree_scan.hh:18,
+                 from masstree_btree.h:29:
+test.cc: In function 'void recordtest::TestCursor()':
+test.cc:856:30: warning: taking address of packed member of 'cursorrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  856 |   ALWAYS_ASSERT(si32::nbytes(&v.v2) == v2_oldsz);
+      |                              ^~~~~
+test.cc:856:3: note: in expansion of macro 'ALWAYS_ASSERT'
+  856 |   ALWAYS_ASSERT(si32::nbytes(&v.v2) == v2_oldsz);
+      |   ^~~~~~~~~~~~~
+In file included from test.cc:8:
+circbuf.h: In instantiation of 'circbuf<Tp, Capacity>::circbuf() [with Tp = int; unsigned int Capacity = 5]':
+test.cc:199:38:   required from here
+circbuf.h:20:11: warning: 'void* memset(void*, int, size_t)' clearing an object of type 'struct std::atomic<int*>' with no trivial copy-assignment; use value-initialization instead [-Wclass-memaccess]
+   20 |     memset(&buf_[0], 0, Capacity * sizeof(buf_[0]));
+      |     ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from circbuf.h:4:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/atomic:415:12: note: 'struct std::atomic<int*>' declared here
+  415 |     struct atomic<_Tp*>
+      |            ^~~~~~~~~~~~
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c rcu.cc -o out-perf.debug.check.masstree/rcu.o
+In file included from util.h:22,
+                 from core.h:6,
+                 from counter.h:13,
+                 from pxqueue.h:6,
+                 from test.cc:9:
+small_vector.h: In instantiation of 'void small_vector<T, SmallSize>::assignFrom(const small_vector<T, SmallSize>&) [with T = std::__cxx11::basic_string<char>; long unsigned int SmallSize = 4]':
+small_vector.h:42:5:   required from 'small_vector<T, SmallSize>::small_vector(const small_vector<T, SmallSize>&) [with T = std::__cxx11::basic_string<char>; long unsigned int SmallSize = 4]'
+test.cc:401:22:   required from here
+small_vector.h:622:19: warning: 'void* __builtin_memcpy(void*, const void*, long unsigned int)' writing to an object of type 'class std::__cxx11::basic_string<char>' with no trivial copy-assignment; use copy-assignment or copy-initialization instead [-Wclass-memaccess]
+  622 |         NDB_MEMCPY(ptr(), that.ptr(), that.n * sizeof(T));
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/string:53:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/basic_string.h:85:11: note: 'class std::__cxx11::basic_string<char>' declared here
+   85 |     class basic_string
+      |           ^~~~~~~~~~~~
+In file included from txn.h:33:
+static_vector.h: In instantiation of 'void static_vector<T, StaticSize>::assignFrom(const static_vector<T, StaticSize>&) [with T = std::__cxx11::basic_string<char>; long unsigned int StaticSize = 4]':
+static_vector.h:31:5:   required from 'static_vector<T, StaticSize>::static_vector(const static_vector<T, StaticSize>&) [with T = std::__cxx11::basic_string<char>; long unsigned int StaticSize = 4]'
+test.cc:406:43:   required from here
+static_vector.h:371:17: warning: 'void* __builtin_memcpy(void*, const void*, long unsigned int)' writing to an object of type 'class std::__cxx11::basic_string<char>' with no trivial copy-assignment; use copy-assignment or copy-initialization instead [-Wclass-memaccess]
+  371 |       NDB_MEMCPY(ptr(), that.ptr(), that.n * sizeof(T));
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/basic_string.h:85:11: note: 'class std::__cxx11::basic_string<char>' declared here
+   85 |     class basic_string
+      |           ^~~~~~~~~~~~
+In file included from masstree/masstree_struct.hh:20,
+                 from masstree/masstree_tcursor.hh:20,
+                 from masstree/masstree_scan.hh:18,
+                 from masstree_btree.h:29,
+                 from btree_choice.h:4,
+                 from txn.h:22,
+                 from btree_impl.h:17,
+                 from btree.cc:15:
+masstree/stringbag.hh: In instantiation of 'stringbag<T>::stringbag(int, size_t) [with T = short unsigned int; size_t = long unsigned int]':
+masstree/masstree_struct.hh:721:33:   required from 'void Masstree::leaf<P>::assign_ksuf(int, lcdf::Str, bool, threadinfo&) [with P = testing_concurrent_btree_traits; threadinfo = simple_threadinfo]'
+masstree/masstree_struct.hh:505:13:   required from 'void Masstree::leaf<P>::assign(int, const key_type&, threadinfo&) [with P = testing_concurrent_btree_traits; key_type = Masstree::key<long unsigned int>; threadinfo = simple_threadinfo]'
+masstree/masstree_insert.hh:52:23:   required from 'bool Masstree::tcursor<P>::find_insert(threadinfo&) [with P = testing_concurrent_btree_traits; threadinfo = simple_threadinfo]'
+masstree_btree.h:606:30:   required from 'bool mbtree<P>::insert(const key_type&, value_type, value_type*, insert_info_t*) [with P = testing_concurrent_btree_traits; key_type = varkey; value_type = unsigned char*]'
+btree.cc:73:15:   required from here
+masstree/stringbag.hh:90:15: warning: 'void* memset(void*, int, size_t)' clearing an object of non-trivial type 'struct stringbag<short unsigned int>::info_type'; use assignment instead [-Wclass-memaccess]
+   90 |         memset(info_, 0, sizeof(info_type) * width);
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+masstree/stringbag.hh:49:12: note: 'struct stringbag<short unsigned int>::info_type' declared here
+   49 |     struct info_type {
+      |            ^~~~~~~~~
+masstree/stringbag.hh: In instantiation of 'stringbag<T>::stringbag(int, size_t) [with T = unsigned char; size_t = long unsigned int]':
+masstree/masstree_struct.hh:306:13:   required from 'Masstree::leaf<P>::leaf(size_t, kvtimestamp_t) [with P = testing_concurrent_btree_traits; size_t = long unsigned int; kvtimestamp_t = long unsigned int]'
+masstree/masstree_struct.hh:312:22:   required from 'static Masstree::leaf<P>* Masstree::leaf<P>::make(int, kvtimestamp_t, threadinfo&) [with P = testing_concurrent_btree_traits; kvtimestamp_t = long unsigned int; threadinfo = simple_threadinfo]'
+masstree/masstree_struct.hh:319:26:   required from 'static Masstree::leaf<P>* Masstree::leaf<P>::make_root(int, Masstree::leaf<P>*, threadinfo&) [with P = testing_concurrent_btree_traits; threadinfo = simple_threadinfo]'
+masstree/masstree_struct.hh:544:44:   required from 'void Masstree::basic_table<P>::initialize(threadinfo&) [with P = testing_concurrent_btree_traits; threadinfo = simple_threadinfo]'
+masstree_btree.h:233:22:   required from 'mbtree<P>::mbtree() [with P = testing_concurrent_btree_traits]'
+btree.cc:68:28:   required from here
+masstree/stringbag.hh:90:15: warning: 'void* memset(void*, int, size_t)' clearing an object of non-trivial type 'struct stringbag<unsigned char>::info_type'; use assignment instead [-Wclass-memaccess]
+   90 |         memset(info_, 0, sizeof(info_type) * width);
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+masstree/stringbag.hh:49:12: note: 'struct stringbag<unsigned char>::info_type' declared here
+   49 |     struct info_type {
+      |            ^~~~~~~~~
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c stats_server.cc -o out-perf.debug.check.masstree/stats_server.o
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c thread.cc -o out-perf.debug.check.masstree/thread.o
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c ticker.cc -o out-perf.debug.check.masstree/ticker.o
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c tuple.cc -o out-perf.debug.check.masstree/tuple.o
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c txn_btree.cc -o out-perf.debug.check.masstree/txn_btree.o
+In file included from masstree/str.hh:18,
+                 from masstree/string_slice.hh:18,
+                 from varkey.h:20,
+                 from tuple.h:17,
+                 from tuple.cc:1:
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:163:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  163 | LCDF_MAKE_STRING_HASH(lcdf::Str)
+      | ^~~~~~~~~~~~~~~~~~~~~
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/refwrap.h:39,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/vector:66,
+                 from tuple.h:5:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:164:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  164 | LCDF_MAKE_STRING_HASH(lcdf::inline_string)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/string.hh:879:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  879 | LCDF_MAKE_STRING_HASH(lcdf::String)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c txn.cc -o out-perf.debug.check.masstree/txn.o
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c txn_proto2_impl.cc -o out-perf.debug.check.masstree/txn_proto2_impl.o
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -c varint.cc -o out-perf.debug.check.masstree/varint.o
+In file included from masstree/str.hh:18,
+                 from masstree/string_slice.hh:18,
+                 from varkey.h:20,
+                 from masstree_btree.h:19,
+                 from btree_choice.h:4,
+                 from txn.h:22,
+                 from txn_btree.cc:7:
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:163:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  163 | LCDF_MAKE_STRING_HASH(lcdf::Str)
+      | ^~~~~~~~~~~~~~~~~~~~~
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/unique_ptr.h:37,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/memory:75,
+                 from txn_btree.cc:3:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:164:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  164 | LCDF_MAKE_STRING_HASH(lcdf::inline_string)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/string.hh:879:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  879 | LCDF_MAKE_STRING_HASH(lcdf::String)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+In file included from txn_btree.cc:15:
+txn_btree.cc: In member function 'void encoder<testrec::key>::encode_read(const uint8_t*, testrec::key*) const':
+record/encoder.h:121:50: warning: taking address of packed member of 'testrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:179:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  179 |   SERIALIZE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:581:3: note: in expansion of macro 'SERIALIZE_READ_KEY_FIELD_X'
+  581 |   x(int32_t,k0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:520:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  520 |     APPLY_X_AND_Y(keyfields, SERIALIZE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:121:50: warning: taking address of packed member of 'testrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:179:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  179 |   SERIALIZE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:582:3: note: in expansion of macro 'SERIALIZE_READ_KEY_FIELD_X'
+  582 |   y(int32_t,k1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:520:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  520 |     APPLY_X_AND_Y(keyfields, SERIALIZE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+txn_btree.cc: In member function 'void encoder<testrec::key>::encode_prefix_read(const uint8_t*, testrec::key*, size_t) const':
+record/encoder.h:127:50: warning: taking address of packed member of 'testrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:184:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  184 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:581:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_KEY_FIELD_X'
+  581 |   x(int32_t,k0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:526:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  526 |     APPLY_X_AND_Y(keyfields, SERIALIZE_PREFIX_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:127:50: warning: taking address of packed member of 'testrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:184:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  184 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:582:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_KEY_FIELD_X'
+  582 |   y(int32_t,k1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:526:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  526 |     APPLY_X_AND_Y(keyfields, SERIALIZE_PREFIX_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+txn_btree.cc: In member function 'bool encoder<testrec::key>::encode_failsafe_read(const uint8_t*, size_t, testrec::key*) const':
+record/encoder.h:136:63: warning: taking address of packed member of 'testrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:189:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  189 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:581:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_KEY_FIELD_X'
+  581 |   x(int32_t,k0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:531:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  531 |     APPLY_X_AND_Y(keyfields, SERIALIZE_FAILSAFE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:136:63: warning: taking address of packed member of 'testrec::key' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:189:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  189 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, false, BIG_TO_HOST_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:582:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_KEY_FIELD_X'
+  582 |   y(int32_t,k1)
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_KEY_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:531:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  531 |     APPLY_X_AND_Y(keyfields, SERIALIZE_FAILSAFE_READ_KEY_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+txn_btree.cc: In member function 'void encoder<testrec::value>::encode_read(const uint8_t*, testrec::value*) const':
+record/encoder.h:121:50: warning: taking address of packed member of 'testrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:181:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  181 |   SERIALIZE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:584:3: note: in expansion of macro 'SERIALIZE_READ_VALUE_FIELD_X'
+  584 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:574:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  574 |     APPLY_X_AND_Y(valuefields, SERIALIZE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:121:50: warning: taking address of packed member of 'testrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  121 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:181:3: note: in expansion of macro 'SERIALIZE_READ_FIELD'
+  181 |   SERIALIZE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:585:3: note: in expansion of macro 'SERIALIZE_READ_VALUE_FIELD_X'
+  585 |   y(int16_t,v1) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:574:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  574 |     APPLY_X_AND_Y(valuefields, SERIALIZE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+txn_btree.cc: In member function 'void encoder<testrec::value>::encode_prefix_read(const uint8_t*, testrec::value*, size_t) const':
+record/encoder.h:127:50: warning: taking address of packed member of 'testrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:186:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  186 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:584:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_VALUE_FIELD_X'
+  584 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:580:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  580 |     APPLY_X_AND_Y(valuefields, SERIALIZE_PREFIX_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:127:50: warning: taking address of packed member of 'testrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  127 |     buf = serializer< tpe, compress >::read(buf, &obj->name); \
+record/encoder.h:186:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_FIELD'
+  186 |   SERIALIZE_PREFIX_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:585:3: note: in expansion of macro 'SERIALIZE_PREFIX_READ_VALUE_FIELD_X'
+  585 |   y(int16_t,v1) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:580:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  580 |     APPLY_X_AND_Y(valuefields, SERIALIZE_PREFIX_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+txn_btree.cc: In member function 'bool encoder<testrec::value>::encode_failsafe_read(const uint8_t*, size_t, testrec::value*) const':
+record/encoder.h:136:63: warning: taking address of packed member of 'testrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:191:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  191 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:584:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X'
+  584 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:585:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  585 |     APPLY_X_AND_Y(valuefields, SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:136:63: warning: taking address of packed member of 'testrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  136 |       serializer< tpe, compress >::failsafe_read(buf, nbytes, &obj->name); \
+record/encoder.h:191:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_FIELD'
+  191 |   SERIALIZE_FAILSAFE_READ_FIELD(tpe, name, true, IDENT_TRANSFORM)
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:585:3: note: in expansion of macro 'SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X'
+  585 |   y(int16_t,v1) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:585:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  585 |     APPLY_X_AND_Y(valuefields, SERIALIZE_FAILSAFE_READ_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+txn_btree.cc: In member function 'size_t encoder<testrec::value>::encode_nbytes(const testrec::value*) const':
+record/encoder.h:146:49: warning: taking address of packed member of 'testrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  146 |     size += serializer< tpe, compress >::nbytes(&obj->name); \
+record/encoder.h:196:3: note: in expansion of macro 'SERIALIZE_NBYTES_FIELD'
+  196 |   SERIALIZE_NBYTES_FIELD(tpe, name, true)
+      |   ^~~~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:584:3: note: in expansion of macro 'SERIALIZE_NBYTES_VALUE_FIELD_X'
+  584 |   x(int32_t,v0) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:592:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  592 |     APPLY_X_AND_Y(valuefields, SERIALIZE_NBYTES_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+record/encoder.h:146:49: warning: taking address of packed member of 'testrec::value' may result in an unaligned pointer value [-Waddress-of-packed-member]
+  146 |     size += serializer< tpe, compress >::nbytes(&obj->name); \
+record/encoder.h:196:3: note: in expansion of macro 'SERIALIZE_NBYTES_FIELD'
+  196 |   SERIALIZE_NBYTES_FIELD(tpe, name, true)
+      |   ^~~~~~~~~~~~~~~~~~~~~~
+txn_btree.cc:585:3: note: in expansion of macro 'SERIALIZE_NBYTES_VALUE_FIELD_X'
+  585 |   y(int16_t,v1) \
+      |   ^
+record/encoder.h:365:29: note: in expansion of macro 'TESTREC_VALUE_FIELDS'
+  365 | #define APPLY_X_AND_Y(x, y) x(y, y)
+      |                             ^
+record/encoder.h:592:5: note: in expansion of macro 'APPLY_X_AND_Y'
+  592 |     APPLY_X_AND_Y(valuefields, SERIALIZE_NBYTES_VALUE_FIELD_X) \
+      |     ^~~~~~~~~~~~~
+txn_btree.cc:587:1: note: in expansion of macro 'DO_STRUCT'
+  587 | DO_STRUCT(testrec, TESTREC_KEY_FIELDS, TESTREC_VALUE_FIELDS)
+      | ^~~~~~~~~
+In file included from txn_proto2_impl.h:15,
+                 from txn_btree.cc:8:
+circbuf.h: In instantiation of 'circbuf<Tp, Capacity>::circbuf() [with Tp = txn_logger::pbuffer; unsigned int Capacity = 256]':
+txn_proto2_impl.h:221:69:   required from here
+circbuf.h:20:11: warning: 'void* memset(void*, int, size_t)' clearing an object of type 'struct std::atomic<txn_logger::pbuffer*>' with no trivial copy-assignment; use value-initialization instead [-Wclass-memaccess]
+   20 |     memset(&buf_[0], 0, Capacity * sizeof(buf_[0]));
+      |     ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from txn_btree.cc:4:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/atomic:415:12: note: 'struct std::atomic<txn_logger::pbuffer*>' declared here
+  415 |     struct atomic<_Tp*>
+      |            ^~~~~~~~~~~~
+masstree_btree.h: In instantiation of 'mbtree<P>::~mbtree() [with P = masstree_params]':
+base_txn_btree.h:46:3:   required from 'base_txn_btree<Transaction, P>::~base_txn_btree() [with Transaction = transaction_proto2; P = typed_txn_btree_<schema<testrec> >]'
+typed_txn_btree.h:388:7:   required from 'void test_typed_btree() [with TxnType = transaction_proto2; Traits = default_stable_transaction_traits]'
+txn_btree.cc:1885:74:   required from here
+masstree_btree.h:237:16: warning: unused variable 'guard' [-Wunused-variable]
+  237 |     rcu_region guard;
+      |                ^~~~~
+In file included from masstree/str.hh:18,
+                 from masstree/string_slice.hh:18,
+                 from varkey.h:20,
+                 from masstree_btree.h:19,
+                 from btree_choice.h:4,
+                 from txn.h:22,
+                 from txn.cc:3:
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:163:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  163 | LCDF_MAKE_STRING_HASH(lcdf::Str)
+      | ^~~~~~~~~~~~~~~~~~~~~
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/string:48,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/stdexcept:39,
+                 from macros.h:5,
+                 from txn.cc:1:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:164:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  164 | LCDF_MAKE_STRING_HASH(lcdf::inline_string)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/string.hh:879:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  879 | LCDF_MAKE_STRING_HASH(lcdf::String)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree_btree.h: In instantiation of 'bool mbtree<P>::insert(const key_type&, value_type, value_type*, insert_info_t*) [with P = masstree_params; key_type = varkey; value_type = unsigned char*]':
+txn_impl.h:422:40:   required from 'bool transaction<Protocol, Traits>::commit(bool) [with Protocol = transaction_proto2; Traits = default_transaction_traits]'
+txn_btree.cc:156:18:   required from 'void test1() [with TxnType = transaction_proto2; Traits = default_transaction_traits]'
+txn_btree.cc:1886:56:   required from here
+masstree_btree.h:603:14: warning: unused variable 'guard' [-Wunused-variable]
+  603 |   rcu_region guard;
+      |              ^~~~~
+masstree_btree.h: In instantiation of 'void mbtree<P>::tree_walk(tree_walk_callback&) const [with P = masstree_params]':
+base_txn_btree.h:250:20:   required from 'std::map<std::__cxx11::basic_string<char>, long unsigned int> base_txn_btree<Transaction, P>::unsafe_purge(bool) [with Transaction = transaction_proto2; P = typed_txn_btree_<schema<testrec> >]'
+base_txn_btree.h:45:7:   required from 'base_txn_btree<Transaction, P>::~base_txn_btree() [with Transaction = transaction_proto2; P = typed_txn_btree_<schema<testrec> >]'
+typed_txn_btree.h:388:7:   required from 'void test_typed_btree() [with TxnType = transaction_proto2; Traits = default_stable_transaction_traits]'
+txn_btree.cc:1885:74:   required from here
+masstree_btree.h:503:14: warning: unused variable 'guard' [-Wunused-variable]
+  503 |   rcu_region guard;
+      |              ^~~~~
+masstree_btree.h: In instantiation of 'void mbtree<P>::clear() [with P = masstree_params]':
+base_txn_btree.h:251:25:   required from 'std::map<std::__cxx11::basic_string<char>, long unsigned int> base_txn_btree<Transaction, P>::unsafe_purge(bool) [with Transaction = transaction_proto2; P = typed_txn_btree_<schema<testrec> >]'
+base_txn_btree.h:45:7:   required from 'base_txn_btree<Transaction, P>::~base_txn_btree() [with Transaction = transaction_proto2; P = typed_txn_btree_<schema<testrec> >]'
+typed_txn_btree.h:388:7:   required from 'void test_typed_btree() [with TxnType = transaction_proto2; Traits = default_stable_transaction_traits]'
+txn_btree.cc:1885:74:   required from here
+masstree_btree.h:246:16: warning: unused variable 'guard' [-Wunused-variable]
+  246 |     rcu_region guard;
+      |                ^~~~~
+masstree_btree.h: In instantiation of 'bool mbtree<P>::search(const key_type&, value_type&, versioned_node_t*) const [with P = masstree_params; key_type = varkey; value_type = unsigned char*; versioned_node_t = std::pair<const Masstree::leaf<masstree_params>*, long unsigned int>]':
+base_txn_btree.h:231:51:   required from 'bool base_txn_btree<Transaction, P>::do_search(Transaction<Traits>&, const typename P::Key&, ValueReader&) [with Traits = default_stable_transaction_traits; ValueReader = typed_txn_btree_<schema<testrec> >::single_value_reader; Transaction = transaction_proto2; P = typed_txn_btree_<schema<testrec> >; typename P::Key = testrec::key]'
+typed_txn_btree.h:523:25:   required from 'bool typed_txn_btree<Transaction, Schema>::search(Transaction<Traits>&, const key_type&, value_type&, FieldsMask) [with Traits = default_stable_transaction_traits; FieldsMask = util::Fields<7>; Transaction = transaction_proto2; Schema = schema<testrec>; key_type = testrec::key; value_type = testrec::value]'
+txn_btree.cc:638:5:   required from 'void test_typed_btree() [with TxnType = transaction_proto2; Traits = default_stable_transaction_traits]'
+txn_btree.cc:1885:74:   required from here
+masstree_btree.h:587:14: warning: unused variable 'guard' [-Wunused-variable]
+  587 |   rcu_region guard;
+      |              ^~~~~
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -include masstree/config.h -c masstree/compiler.cc -o out-perf.debug.check.masstree/compiler.o
+masstree_btree.h: In instantiation of 'bool mbtree<P>::remove(const key_type&, value_type*) [with P = masstree_params; key_type = varkey; value_type = unsigned char*]':
+txn_impl.h:90:38:   required from 'void transaction<Protocol, Traits>::cleanup_inserted_tuple_marker(dbtuple*, const std::string&, concurrent_btree*) [with Protocol = transaction_proto2; Traits = default_transaction_traits; std::string = std::__cxx11::basic_string<char>; concurrent_btree = mbtree<masstree_params>]'
+txn_impl.h:471:15:   required from 'bool transaction<Protocol, Traits>::commit(bool) [with Protocol = transaction_proto2; Traits = default_transaction_traits]'
+txn_btree.cc:156:18:   required from 'void test1() [with TxnType = transaction_proto2; Traits = default_transaction_traits]'
+txn_btree.cc:1886:56:   required from here
+masstree_btree.h:651:14: warning: unused variable 'guard' [-Wunused-variable]
+  651 |   rcu_region guard;
+      |              ^~~~~
+masstree_btree.h: In instantiation of 'bool mbtree<P>::insert_if_absent(const key_type&, value_type, insert_info_t*) [with P = masstree_params; key_type = varkey; value_type = unsigned char*]':
+txn_impl.h:529:7:   required from 'std::pair<dbtuple*, bool> transaction<Protocol, Traits>::try_insert_new_tuple(concurrent_btree&, const std::string*, const void*, dbtuple::tuple_writer_t) [with Protocol = transaction_proto2; Traits = default_stable_transaction_traits; concurrent_btree = mbtree<masstree_params>; std::string = std::__cxx11::basic_string<char>; dbtuple::tuple_writer_t = long unsigned int (*)(dbtuple::TupleWriterMode, const void*, unsigned char*, long unsigned int)]'
+base_txn_btree.h:342:38:   required from 'void base_txn_btree<Transaction, P>::do_tree_put(Transaction<Traits>&, const std::string*, const typename P::Value*, dbtuple::tuple_writer_t, bool) [with Traits = default_stable_transaction_traits; Transaction = transaction_proto2; P = typed_txn_btree_<schema<testrec> >; std::string = std::__cxx11::basic_string<char>; typename P::Value = testrec::value; dbtuple::tuple_writer_t = long unsigned int (*)(dbtuple::TupleWriterMode, const void*, unsigned char*, long unsigned int)]'
+typed_txn_btree.h:578:20:   required from 'void typed_txn_btree<Transaction, Schema>::insert(Transaction<Traits>&, const key_type&, const value_type&) [with Traits = default_stable_transaction_traits; Transaction = transaction_proto2; Schema = schema<testrec>; key_type = testrec::key; value_type = testrec::value]'
+txn_btree.cc:639:15:   required from 'void test_typed_btree() [with TxnType = transaction_proto2; Traits = default_stable_transaction_traits]'
+txn_btree.cc:1885:74:   required from here
+masstree_btree.h:625:14: warning: unused variable 'guard' [-Wunused-variable]
+  625 |   rcu_region guard;
+      |              ^~~~~
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -include masstree/config.h -c masstree/str.cc -o out-perf.debug.check.masstree/str.o
+In file included from masstree/str.hh:18,
+                 from masstree/string_slice.hh:18,
+                 from varkey.h:20,
+                 from masstree_btree.h:19,
+                 from btree_choice.h:4,
+                 from txn.h:22,
+                 from txn_proto2_impl.h:11,
+                 from txn_proto2_impl.cc:9:
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:163:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  163 | LCDF_MAKE_STRING_HASH(lcdf::Str)
+      | ^~~~~~~~~~~~~~~~~~~~~
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/string:48,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/locale_classes.h:40,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/ios_base.h:41,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/ios:42,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/ostream:38,
+                 from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/iostream:39,
+                 from txn_proto2_impl.cc:1:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:164:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  164 | LCDF_MAKE_STRING_HASH(lcdf::inline_string)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/string.hh:879:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  879 | LCDF_MAKE_STRING_HASH(lcdf::String)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+In file included from masstree/masstree_struct.hh:20,
+                 from masstree/masstree_tcursor.hh:20,
+                 from masstree/masstree_scan.hh:18,
+                 from masstree_btree.h:29:
+masstree/stringbag.hh: In instantiation of 'stringbag<T>::stringbag(int, size_t) [with T = short unsigned int; size_t = long unsigned int]':
+masstree/masstree_struct.hh:721:33:   required from 'void Masstree::leaf<P>::assign_ksuf(int, lcdf::Str, bool, threadinfo&) [with P = masstree_params; threadinfo = simple_threadinfo]'
+masstree/masstree_struct.hh:505:13:   required from 'void Masstree::leaf<P>::assign(int, const key_type&, threadinfo&) [with P = masstree_params; key_type = Masstree::key<long unsigned int>; threadinfo = simple_threadinfo]'
+masstree/masstree_insert.hh:52:23:   required from 'bool Masstree::tcursor<P>::find_insert(threadinfo&) [with P = masstree_params; threadinfo = simple_threadinfo]'
+masstree_btree.h:606:30:   required from 'bool mbtree<P>::insert(const key_type&, value_type, value_type*, insert_info_t*) [with P = masstree_params; key_type = varkey; value_type = unsigned char*]'
+txn_impl.h:422:40:   required from 'bool transaction<Protocol, Traits>::commit(bool) [with Protocol = transaction_proto2; Traits = default_transaction_traits]'
+txn_btree.cc:156:18:   required from 'void test1() [with TxnType = transaction_proto2; Traits = default_transaction_traits]'
+txn_btree.cc:1886:56:   required from here
+masstree/stringbag.hh:90:15: warning: 'void* memset(void*, int, size_t)' clearing an object of non-trivial type 'struct stringbag<short unsigned int>::info_type'; use assignment instead [-Wclass-memaccess]
+   90 |         memset(info_, 0, sizeof(info_type) * width);
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+masstree/stringbag.hh:49:12: note: 'struct stringbag<short unsigned int>::info_type' declared here
+   49 |     struct info_type {
+      |            ^~~~~~~~~
+In file included from txn_proto2_impl.h:15,
+                 from txn.cc:4:
+circbuf.h: In instantiation of 'circbuf<Tp, Capacity>::circbuf() [with Tp = txn_logger::pbuffer; unsigned int Capacity = 256]':
+txn_proto2_impl.h:221:69:   required from here
+circbuf.h:20:11: warning: 'void* memset(void*, int, size_t)' clearing an object of type 'struct std::atomic<txn_logger::pbuffer*>' with no trivial copy-assignment; use value-initialization instead [-Wclass-memaccess]
+   20 |     memset(&buf_[0], 0, Capacity * sizeof(buf_[0]));
+      |     ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from masstree_btree.h:15:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/atomic:415:12: note: 'struct std::atomic<txn_logger::pbuffer*>' declared here
+  415 |     struct atomic<_Tp*>
+      |            ^~~~~~~~~~~~
+masstree/stringbag.hh: In instantiation of 'stringbag<T>::stringbag(int, size_t) [with T = unsigned char; size_t = long unsigned int]':
+masstree/masstree_struct.hh:306:13:   required from 'Masstree::leaf<P>::leaf(size_t, kvtimestamp_t) [with P = masstree_params; size_t = long unsigned int; kvtimestamp_t = long unsigned int]'
+masstree/masstree_struct.hh:312:22:   required from 'static Masstree::leaf<P>* Masstree::leaf<P>::make(int, kvtimestamp_t, threadinfo&) [with P = masstree_params; kvtimestamp_t = long unsigned int; threadinfo = simple_threadinfo]'
+masstree/masstree_split.hh:185:39:   required from 'bool Masstree::tcursor<P>::make_split(threadinfo&) [with P = masstree_params; threadinfo = simple_threadinfo]'
+masstree/masstree_insert.hh:58:12:   required from 'bool Masstree::tcursor<P>::find_insert(threadinfo&) [with P = masstree_params; threadinfo = simple_threadinfo]'
+masstree_btree.h:606:30:   required from 'bool mbtree<P>::insert(const key_type&, value_type, value_type*, insert_info_t*) [with P = masstree_params; key_type = varkey; value_type = unsigned char*]'
+txn_impl.h:422:40:   required from 'bool transaction<Protocol, Traits>::commit(bool) [with Protocol = transaction_proto2; Traits = default_transaction_traits]'
+txn_btree.cc:156:18:   required from 'void test1() [with TxnType = transaction_proto2; Traits = default_transaction_traits]'
+txn_btree.cc:1886:56:   required from here
+masstree/stringbag.hh:90:15: warning: 'void* memset(void*, int, size_t)' clearing an object of non-trivial type 'struct stringbag<unsigned char>::info_type'; use assignment instead [-Wclass-memaccess]
+   90 |         memset(info_, 0, sizeof(info_type) * width);
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+masstree/stringbag.hh:49:12: note: 'struct stringbag<unsigned char>::info_type' declared here
+   49 |     struct info_type {
+      |            ^~~~~~~~~
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -include masstree/config.h -c masstree/string.cc -o out-perf.debug.check.masstree/string.o
+In file included from txn_proto2_impl.h:15:
+circbuf.h: In instantiation of 'circbuf<Tp, Capacity>::circbuf() [with Tp = txn_logger::pbuffer; unsigned int Capacity = 256]':
+txn_proto2_impl.h:221:69:   required from here
+circbuf.h:20:11: warning: 'void* memset(void*, int, size_t)' clearing an object of type 'struct std::atomic<txn_logger::pbuffer*>' with no trivial copy-assignment; use value-initialization instead [-Wclass-memaccess]
+   20 |     memset(&buf_[0], 0, Capacity * sizeof(buf_[0]));
+      |     ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from txn_proto2_impl.h:5:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/atomic:415:12: note: 'struct std::atomic<txn_logger::pbuffer*>' declared here
+  415 |     struct atomic<_Tp*>
+      |            ^~~~~~~~~~~~
+In file included from masstree/str.hh:18,
+                 from masstree/str.cc:16:
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:163:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  163 | LCDF_MAKE_STRING_HASH(lcdf::Str)
+      | ^~~~~~~~~~~~~~~~~~~~~
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/functional:49,
+                 from masstree/hashcode.hh:21,
+                 from masstree/string_base.hh:19:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:164:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  164 | LCDF_MAKE_STRING_HASH(lcdf::inline_string)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree_btree.h: In instantiation of 'bool mbtree<P>::remove(const key_type&, value_type*) [with P = masstree_params; key_type = varkey; value_type = unsigned char*]':
+txn_proto2_impl.cc:675:50:   required from here
+masstree_btree.h:651:14: warning: unused variable 'guard' [-Wunused-variable]
+  651 |   rcu_region guard;
+      |              ^~~~~
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -include masstree/config.h -c masstree/straccum.cc -o out-perf.debug.check.masstree/straccum.o
+In file included from masstree/string.hh:18,
+                 from masstree/string.cc:35:
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/string.hh:879:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  879 | LCDF_MAKE_STRING_HASH(lcdf::String)
+      | ^~~~~~~~~~~~~~~~~~~~~
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/functional:49,
+                 from masstree/hashcode.hh:21,
+                 from masstree/string_base.hh:19:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+In file included from masstree/string.hh:18,
+                 from masstree/straccum.hh:21,
+                 from masstree/straccum.cc:34:
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/string.hh:879:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  879 | LCDF_MAKE_STRING_HASH(lcdf::String)
+      | ^~~~~~~~~~~~~~~~~~~~~
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/functional:49,
+                 from masstree/hashcode.hh:21,
+                 from masstree/string_base.hh:19:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh: In member function 'const char* lcdf::String_base<T>::encode_json_partial(E&) const [with E = lcdf::StringAccum; T = lcdf::String]':
+masstree/string_base.hh:551:34: warning: 'snprintf' output truncated before the last format character [-Wformat-truncation=]
+  551 |             snprintf(x, 5, "u%04X", c);
+      |                                  ^
+masstree/string_base.hh:551:21: note: 'snprintf' output 6 bytes into a destination of size 5
+  551 |             snprintf(x, 5, "u%04X", c);
+      |             ~~~~~~~~^~~~~~~~~~~~~~~~~~
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -g -Wall -std=c++0x -MD -Ithird-party/lz4 -DCONFIG_H=\"config/config-perf.h\" -fno-omit-frame-pointer -DDEBUG -DCHECK_INVARIANTS -DNDB_MASSTREE -include masstree/config.h -include masstree/config.h -c masstree/json.cc -o out-perf.debug.check.masstree/json.o
+In file included from masstree/string.hh:18,
+                 from masstree/straccum.hh:21,
+                 from masstree/json.hh:19,
+                 from masstree/json.cc:17:
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/string.hh:879:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  879 | LCDF_MAKE_STRING_HASH(lcdf::String)
+      | ^~~~~~~~~~~~~~~~~~~~~
+In file included from /storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/functional:49,
+                 from masstree/hashcode.hh:21,
+                 from masstree/string_base.hh:19:
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:163:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  163 | LCDF_MAKE_STRING_HASH(lcdf::Str)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/string_base.hh:502:18: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+  502 |         : public unary_function<const type&, size_t> {     \
+      |                  ^~~~~~~~~~~~~~
+masstree/str.hh:164:1: note: in expansion of macro 'LCDF_MAKE_STRING_HASH'
+  164 | LCDF_MAKE_STRING_HASH(lcdf::inline_string)
+      | ^~~~~~~~~~~~~~~~~~~~~
+/storage/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/../lib/gcc/x86_64-pc-linux-gnu/12.3.0/../../../../include/c++/12.3.0/bits/stl_function.h:117:12: note: declared here
+  117 |     struct unary_function
+      |            ^~~~~~~~~~~~~~
+masstree/json.hh: In constructor 'lcdf::Json::Json(lcdf::Json&&)':
+masstree/json.hh:1505:11: warning: 'void* memset(void*, int, size_t)' clearing an object of type 'class lcdf::Json' with no trivial copy-assignment; use assignment or value-initialization instead [-Wclass-memaccess]
+ 1505 |     memset(&x, 0, sizeof(x));
+      |     ~~~~~~^~~~~~~~~~~~~~~~~~
+masstree/json.hh:44:7: note: 'class lcdf::Json' declared here
+   44 | class Json {
+      |       ^~~~
+masstree/json.cc: In member function 'void lcdf::Json::ObjectJson::grow(bool)':
+masstree/json.cc:117:19: warning: 'void* memcpy(void*, const void*, size_t)' writing to an object of type 'struct lcdf::Json::ObjectItem' with no trivial copy-assignment; use copy-initialization instead [-Wclass-memaccess]
+  117 |             memcpy(oi, ob, sizeof(ObjectItem));
+      |             ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+masstree/json.hh:433:14: note: 'struct lcdf::Json::ObjectItem' declared here
+  433 | struct Json::ObjectItem {
+      |              ^~~~~~~~~~
+masstree/json.cc: In member function 'void lcdf::Json::hard_uniqueify_array(bool, int)':
+masstree/json.cc:250:15: warning: 'void* memcpy(void*, const void*, size_t)' writing to an object of type 'class lcdf::Json' with no trivial copy-assignment; use copy-assignment or copy-initialization instead [-Wclass-memaccess]
+  250 |         memcpy(u_.a.x->a, old_u.a.x->a, sizeof(Json) * u_.a.x->size);
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+masstree/json.hh:44:7: note: 'class lcdf::Json' declared here
+   44 | class Json {
+      |       ^~~~
+masstree/json.cc:268:27: warning: 'void* memset(void*, int, size_t)' clearing an object of type 'class lcdf::Json' with no trivial copy-assignment; use assignment or value-initialization instead [-Wclass-memaccess]
+  268 |                     memset(&u_.a.x->a[u_.a.x->size], 0, sizeof(Json) * (i + 1 - u_.a.x->size));
+      |                     ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+masstree/json.hh:44:7: note: 'class lcdf::Json' declared here
+   44 | class Json {
+      |       ^~~~
+masstree/json.cc: In member function 'void* lcdf::Json::uniqueify_array_insert(bool, size_type)':
+masstree/json.cc:343:16: warning: 'void* memmove(void*, const void*, size_t)' writing to an object of type 'class lcdf::Json' with no trivial copy-assignment; use copy-assignment or copy-initialization instead [-Wclass-memaccess]
+  343 |         memmove(&u_.a.x->a[pos + 1], &u_.a.x->a[pos], (size - pos) * sizeof(Json));
+      |         ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+masstree/json.hh:44:7: note: 'class lcdf::Json' declared here
+   44 | class Json {
+      |       ^~~~
+masstree/json.cc: In member function 'lcdf::Json::array_iterator lcdf::Json::erase(array_iterator, array_iterator)':
+masstree/json.cc:357:20: warning: 'void* memmove(void*, const void*, size_t)' writing to an object of type 'class lcdf::Json' with no trivial copy-assignment; use copy-assignment or copy-initialization instead [-Wclass-memaccess]
+  357 |             memmove(&u_.a.x->a[fpos], &u_.a.x->a[lpos],
+      |             ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  358 |                     (size - lpos) * sizeof(Json));
+      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+masstree/json.hh:44:7: note: 'class lcdf::Json' declared here
+   44 | class Json {
+      |       ^~~~
+masstree/json.cc: In member function 'lcdf::Json& lcdf::Json::hard_get_insert(size_type)':
+masstree/json.cc:534:19: warning: 'void* memset(void*, int, size_t)' clearing an object of type 'class lcdf::Json' with no trivial copy-assignment; use assignment or value-initialization instead [-Wclass-memaccess]
+  534 |             memset(&u_.a.x->a[u_.a.x->size], 0, sizeof(Json) * (x + 1 - u_.a.x->size));
+      |             ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+masstree/json.hh:44:7: note: 'class lcdf::Json' declared here
+   44 | class Json {
+      |       ^~~~
+masstree/string_base.hh: In member function 'const char* lcdf::String_base<T>::encode_json_partial(E&) const [with E = lcdf::StringAccum; T = lcdf::String]':
+masstree/string_base.hh:551:34: warning: 'snprintf' output truncated before the last format character [-Wformat-truncation=]
+  551 |             snprintf(x, 5, "u%04X", c);
+      |                                  ^
+masstree/string_base.hh:551:21: note: 'snprintf' output 6 bytes into a destination of size 5
+  551 |             snprintf(x, 5, "u%04X", c);
+      |             ~~~~~~~~^~~~~~~~~~~~~~~~~~
+/usr/local/pace-apps/spack/packages/linux-rhel9-x86_64_v3/gcc-11.3.1/gcc-12.3.0-ukkkutsxfl5kpnnaxflpkq2jtliwthfz/bin/g++ -o out-perf.debug.check.masstree/test out-perf.debug.check.masstree/test.o out-perf.debug.check.masstree/allocator.o out-perf.debug.check.masstree/btree.o out-perf.debug.check.masstree/core.o out-perf.debug.check.masstree/counter.o out-perf.debug.check.masstree/memory.o out-perf.debug.check.masstree/rcu.o out-perf.debug.check.masstree/stats_server.o out-perf.debug.check.masstree/thread.o out-perf.debug.check.masstree/ticker.o out-perf.debug.check.masstree/tuple.o out-perf.debug.check.masstree/txn_btree.o out-perf.debug.check.masstree/txn.o out-perf.debug.check.masstree/txn_proto2_impl.o out-perf.debug.check.masstree/varint.o out-perf.debug.check.masstree/compiler.o out-perf.debug.check.masstree/str.o out-perf.debug.check.masstree/string.o out-perf.debug.check.masstree/straccum.o out-perf.debug.check.masstree/json.o third-party/lz4/liblz4.so -lpthread -lnuma -lrt -Lthird-party/lz4 -llz4 -Wl,-rpath,/tmp/silo-build.3aVK2Q/silo/third-party/lz4

@@ -1,0 +1,67 @@
+diff --git a/Makefile b/Makefile
+index 682b4cb..f4b69b3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -80,7 +80,7 @@ CXXFLAGS += -MD -Ithird-party/lz4 -DCONFIG_H=\"$(CONFIG_H)\"
+ ifeq ($(DEBUG_S),1)
+         CXXFLAGS += -fno-omit-frame-pointer -DDEBUG
+ else
+-        CXXFLAGS += -Werror -O2 -funroll-loops -fno-omit-frame-pointer
++        CXXFLAGS += -O2 -funroll-loops -fno-omit-frame-pointer
+ endif
+ ifeq ($(CHECK_INVARIANTS_S),1)
+ 	CXXFLAGS += -DCHECK_INVARIANTS
+@@ -149,10 +149,9 @@ OBJFILES := $(patsubst %.cc, $(O)/%.o, $(SRCFILES))
+ MASSTREE_OBJFILES := $(patsubst masstree/%.cc, $(O)/%.o, $(MASSTREE_SRCFILES))
+ 
+ BENCH_CXXFLAGS := $(CXXFLAGS)
+-BENCH_LDFLAGS := $(LDFLAGS) -ldb_cxx -lz -lrt -lcrypt -laio -ldl -lssl -lcrypto
++BENCH_LDFLAGS := $(LDFLAGS)
+ 
+-BENCH_SRCFILES = benchmarks/bdb_wrapper.cc \
+-	benchmarks/bench.cc \
++BENCH_SRCFILES = benchmarks/bench.cc \
+ 	benchmarks/encstress.cc \
+ 	benchmarks/bid.cc \
+ 	benchmarks/masstree/kvrandom.cc \
+diff --git a/benchmarks/dbtest.cc b/benchmarks/dbtest.cc
+index 0605654..cc2a42b 100644
+--- a/benchmarks/dbtest.cc
++++ b/benchmarks/dbtest.cc
+@@ -14,7 +14,6 @@
+ #include "../allocator.h"
+ #include "../stats_server.h"
+ #include "bench.h"
+-#include "bdb_wrapper.h"
+ #include "ndb_wrapper.h"
+ #include "ndb_wrapper_impl.h"
+ #include "kvdb_wrapper.h"
+@@ -275,12 +274,7 @@ main(int argc, char **argv)
+   }
+ #endif
+ 
+-  if (db_type == "bdb") {
+-    const string cmd = "rm -rf " + basedir + "/db/*";
+-    // XXX(stephentu): laziness
+-    int ret UNUSED = system(cmd.c_str());
+-    db = new bdb_wrapper("db", bench_type + ".db");
+-  } else if (db_type == "ndb-proto1") {
++  if (db_type == "ndb-proto1") {
+     // XXX: hacky simulation of proto1
+     db = new ndb_wrapper<transaction_proto2>(
+         logfiles, assignments, !nofsync, do_compress, fake_writes);
+diff --git a/util.h b/util.h
+index a63f7ae..36880b1 100644
+--- a/util.h
++++ b/util.h
+@@ -21,6 +21,10 @@
+ #include "macros.h"
+ #include "small_vector.h"
+ 
++// Make the existing pair formatter visible when format_list is defined.
++template <typename A, typename B>
++std::ostream &operator<<(std::ostream &o, const std::pair<A, B> &p);
++
+ namespace util {
+ 
+ // padded, aligned primitives

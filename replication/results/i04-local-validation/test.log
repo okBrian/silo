@@ -1,0 +1,28 @@
+PID: 8610
+circbuf test passed
+allocator::Initialize()
+  hugepgsize: 2097152
+  use MADV_WILLNEED: 1
+  mmap() region [0x7fff67e00000, 0x7ffff8000000)
+cpu0 owns [0x7fff67e00000, 0x7fff6fe00000)
+cpu1 owns [0x7fff6fe00000, 0x7fff77e00000)
+cpu2 owns [0x7fff77e00000, 0x7fff7fe00000)
+cpu3 owns [0x7fff7fe00000, 0x7fff87e00000)
+cpu4 owns [0x7fff87e00000, 0x7fff8fe00000)
+cpu5 owns [0x7fff8fe00000, 0x7fff97e00000)
+cpu6 owns [0x7fff97e00000, 0x7fff9fe00000)
+cpu7 owns [0x7fff9fe00000, 0x7fffa7e00000)
+cpu8 owns [0x7fffa7e00000, 0x7fffafe00000)
+cpu9 owns [0x7fffafe00000, 0x7fffb7e00000)
+cpu10 owns [0x7fffb7e00000, 0x7fffbfe00000)
+cpu11 owns [0x7fffbfe00000, 0x7fffc7e00000)
+cpu12 owns [0x7fffc7e00000, 0x7fffcfe00000)
+cpu13 owns [0x7fffcfe00000, 0x7fffd7e00000)
+cpu14 owns [0x7fffd7e00000, 0x7fffdfe00000)
+cpu15 owns [0x7fffdfe00000, 0x7fffe7e00000)
+cpu16 owns [0x7fffe7e00000, 0x7fffefe00000)
+cpu17 owns [0x7fffefe00000, 0x7ffff7e00000)
+testing_concurrent_btree::TestFast passed
+num_inserts: 45
+num_removes: 45
+btr size: 34
