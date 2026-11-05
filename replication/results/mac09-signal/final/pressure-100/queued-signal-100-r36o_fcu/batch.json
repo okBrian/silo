@@ -1,0 +1,68 @@
+{
+  "contract_version": 1,
+  "batch_id": "queued-signal-100-r36o_fcu",
+  "config": {
+    "name": "queued-signal-100",
+    "format": "queued",
+    "policy": "wait",
+    "variants": [
+      {
+        "workers": 1,
+        "warehouses": 1,
+        "policy": "linux-signal"
+      },
+      {
+        "workers": 2,
+        "warehouses": 2,
+        "policy": "linux-signal"
+      }
+    ],
+    "repeats": 1,
+    "phases_s": {
+      "warmup": 0,
+      "measurement": 3,
+      "drain_limit": 10
+    },
+    "timeout_s": 210,
+    "queue": {
+      "first_seed": 1,
+      "interval_us": 1000,
+      "batch_per_worker": 4,
+      "global_capacity_per_worker": 4,
+      "worker_capacity": 4,
+      "q2_variant": "q2_min_stock_v1"
+    },
+    "starvation_threshold": 100
+  },
+  "created_at_utc": "2026-11-05T19:28:29+00:00",
+  "hostname": "81b9728354b6",
+  "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.35",
+  "slurm_job_id": null,
+  "source_checkout": "/mac09-source",
+  "revisions": {
+    "masstree": {
+      "head": "1150824e6a10a0384ba4bfed6b916ce62f96315f",
+      "tracked_diff_sha256": "71ca5788c3b26870966ae9d19bd9fbe287d2f93642fb31a574111630cb3c28ac",
+      "untracked_paths": []
+    },
+    "silo": {
+      "head": "c7989984e6e6795d88046157cef7c6d40e33d133",
+      "tracked_diff_sha256": "1c2c3b0ff9f9b501685b7aecc5c34de2df95300fe95220f2bdb4fdd73a00afe8",
+      "untracked_paths": [
+        "benchmarks/signal_backend.cc",
+        "benchmarks/signal_backend.h",
+        "replication/experiments/configs/queued-signal-100.json",
+        "replication/experiments/configs/queued-signal-25.json",
+        "replication/tests/signal_backend_test.cc",
+        "replication/tests/validate_signal_backend.sh"
+      ]
+    }
+  },
+  "binary_sha256": "4778be83052415efbd98b1bc29060a86b9f61c8737df4847f5fd8d0bda13ce1b",
+  "build_info": "Linux-signal backend in emulated Linux; GCC 11.4; WORKER_CONTEXTS=1; archived MAC-01 compatibility patch",
+  "tool_sha256": "ffacc05375cc690e0c3443e620c26e32ccff48a59ff7ef899526c29c371ab18a",
+  "run_ids": [
+    "queued-signal-100-r36o_fcu-r1-v1",
+    "queued-signal-100-r36o_fcu-r1-v2"
+  ]
+}

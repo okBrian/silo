@@ -31,7 +31,7 @@ for build in debug optimized ubsan; do
     ubsan) opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all) ;;
   esac
   c++ "${flags[@]}" "${opt[@]}" -DSILO_WORKER_CONTEXTS \
-    benchmarks/request_driver.cc benchmarks/worker_context.cc \
+    benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc \
     replication/tests/batched_notifications_test.cc -o "$evidence/batched-$build"
   timeout 60s "$evidence/batched-$build" > "$evidence/batched-$build.log" 2>&1
 done
@@ -42,7 +42,7 @@ done
 for build in wait cooperative; do
   context=()
   if [[ "$build" == cooperative ]]; then
-    context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc)
+    context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/signal_backend.cc)
   fi
   c++ "${flags[@]}" -O2 "${context[@]}" benchmarks/request_driver.cc \
     replication/tests/request_driver_test.cc -o "$evidence/driver-$build"

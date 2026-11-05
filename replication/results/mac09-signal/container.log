@@ -1,0 +1,1 @@
+81b9728354b6b3410eba34807deb558123865c6c2e26ebe7e8f4be4cf178614e image=silo-mac07-tools:local entrypoint=["sleep"] mounts=[]

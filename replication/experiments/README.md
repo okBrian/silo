@@ -90,7 +90,13 @@ and cancellations retain their ordinary terminal records.
 `configs/queued-starvation-25.json` and `configs/queued-starvation-100.json` are
 three-second functional pressure configurations, using Cooperative with 64-read
 checkpoints and four shorts per worker every millisecond. They do not expose the
-notification checkpoint test backend or implement the MAC-09 signal backend.
+notification checkpoint test backend. The separate `queued-signal-25.json` and
+`queued-signal-100.json` configurations select MAC-09's opt-in `linux-signal`
+backend on the same workload. This backend requires x86-64 Linux/glibc and
+`WORKER_CONTEXTS=1`; it captures only inside audited assembly windows at Q2 read
+boundaries and records actual handler/capture counters separately. See the
+[signal contract](../docs/linux-signal-backend.md) and
+[validation script](../tests/validate_signal_backend.sh).
 See [the contract](../docs/experiment-contract.md) for enforcement, overshoot and
 fixed-FIFO limits and [the validation script](../tests/validate_starvation.sh)
 for a disposable Linux build and test recipe.

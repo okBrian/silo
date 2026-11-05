@@ -1,0 +1,4 @@
+silo-mac09-validation stopped after both validation scripts and independent replay passed.
+Container state: exited; exit code: 137 after explicit docker stop timeout.
+The idle sleep entrypoint was stopped; validation exit codes remain 0 in final/exit-status and final-fixtures/exit-status.
+Earlier evidence containers remained stopped.

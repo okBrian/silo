@@ -1,0 +1,81 @@
+Database Benchmark:
+  pid: 2823
+settings:
+  par-loading : 0
+  pin-cpus    : 0
+  slow-exit   : 0
+  retry-txns  : 0
+  backoff-txns: 0
+  bench       : tpcc
+  scale       : 2
+  num-cpus    : 2
+  num-threads : 2
+  db-type     : ndb-proto2
+  basedir     : /mac09-evidence/final/pressure-25/queued-signal-25-ipz89ghd/queued-signal-25-ipz89ghd-r1-v2
+  txn-flags   : 0
+  runtime     : 3
+  var-encode  : yes
+  allocator   : libc
+  numa-memory : disabled
+  logfiles : []
+  assignments : []
+  disable-gc : 0
+  disable-snapshots : 0
+  stats-server-sockfile: 
+system properties:
+  btree_internal_node_size: 264
+  btree_leaf_node_size    : 312
+  tuple_prefetch          : no
+  btree_node_prefetch     : yes
+tpcc settings:
+  cross_partition_transactions : 1
+  read_only_snapshots          : 1
+  partition_locks              : 0
+  separate_tree_per_partition  : 0
+  new_order_remote_item_pct    : 1
+  new_order_fast_id_gen        : 0
+  uniform_item_dist            : 0
+  order_status_scan_hack       : 0
+  workload_mix                 : [45, 43, 4, 4, 4]
+[INFO] finished loading warehouse
+[INFO]   * average warehouse record length: 97 bytes
+num batches: 30
+[INFO] finished loading district
+[INFO]   * average district record length: 99 bytes
+[INFO] finished loading item
+[INFO]   * average item record length: 84.1739 bytes
+[INFO] finished loading order
+[INFO]   * average order_line record length: 11.1187 bytes
+[INFO]   * average oorder record length: 7.7038 bytes
+[INFO]   * average new_order record length: 12 bytes
+[INFO] finished loading customer
+[INFO]   * average customer record length: 656.862 bytes 
+[INFO] finished loading stock
+[INFO]   * average stock record length: 8 bytes
+timed region dataloading took 11729.8 ms
+DB size: 226.406 MB
+wait_an_epoch(): consistent reads happening in e-1: 6
+[0, 0, 0] txns persisted in loading phase
+table customer_0 size 60000
+table customer_name_idx_0 size 60000
+table district_0 size 20
+table history_0 size 60000
+table item_0 size 100000
+table new_order_0 size 18000
+table oorder_0 size 60000
+table oorder_c_id_idx_0 size 60000
+table order_line_0 size 599589
+table q2_nation size 62
+table q2_region size 5
+table q2_supplier size 10000
+table stock_0 size 200000
+table stock_data_0 size 200000
+table warehouse_0 size 2
+starting benchmark...
+tpcc: worker id 8 => warehouses [1, 2)
+tpcc: worker id 9 => warehouses [2, 3)
+phase=measurement cutoff_ns=37482670118729 generated=25818 completed=12639 rejected=13179 cancelled=0 dropped=0 cutoff_pending_global=7 cutoff_queued=3 cutoff_running=2 cutoff_due_ungenerated=0 commits_in_window=12627 drain_commits=12 failed=0
+notifications phase=measurement worker=0 signal_sends=1727 real_handlers=1599 async_captures=1393 signal_deferred=206 signal_rearms=206 switches=2630 low_resumes=2630
+starvation phase=measurement worker=0 clock=driver_ns threshold=25 admission_blocks=154 checkpoint_blocks=103813 forced_low_returns=1989 low_requests=842 high_service_ns=518036034 low_service_ns=2299033887
+notifications phase=measurement worker=1 signal_sends=1487 real_handlers=1516 async_captures=1268 signal_deferred=248 signal_rearms=248 switches=2091 low_resumes=2091
+starvation phase=measurement worker=1 clock=driver_ns threshold=25 admission_blocks=81 checkpoint_blocks=65308 forced_low_returns=1456 low_requests=984 high_service_ns=437732121 low_service_ns=2415409276

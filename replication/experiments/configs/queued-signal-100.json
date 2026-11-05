@@ -1,0 +1,33 @@
+{
+  "name": "queued-signal-100",
+  "format": "queued",
+  "policy": "wait",
+  "variants": [
+    {
+      "workers": 1,
+      "warehouses": 1,
+      "policy": "linux-signal"
+    },
+    {
+      "workers": 2,
+      "warehouses": 2,
+      "policy": "linux-signal"
+    }
+  ],
+  "repeats": 1,
+  "phases_s": {
+    "warmup": 0,
+    "measurement": 3,
+    "drain_limit": 10
+  },
+  "timeout_s": 210,
+  "queue": {
+    "first_seed": 1,
+    "interval_us": 1000,
+    "batch_per_worker": 4,
+    "global_capacity_per_worker": 4,
+    "worker_capacity": 4,
+    "q2_variant": "q2_min_stock_v1"
+  },
+  "starvation_threshold": 100
+}

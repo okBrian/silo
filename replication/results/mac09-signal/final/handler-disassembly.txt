@@ -1,0 +1,108 @@
+0000000000003860 <SignalBackend::handler(int, siginfo_t*, void*)>:
+    3860:	f3 0f 1e fa          	endbr64 
+    3864:	55                   	push   %rbp
+    3865:	53                   	push   %rbx
+    3866:	48 83 ec 08          	sub    $0x8,%rsp
+    386a:	64 48 8b 1c 25 f8 ff 	mov    %fs:0xfffffffffffffff8,%rbx
+    3871:	ff ff 
+    3873:	48 85 db             	test   %rbx,%rbx
+    3876:	0f 84 82 01 00 00    	je     39fe <SignalBackend::handler(int, siginfo_t*, void*)+0x19e>
+    387c:	8b 83 64 01 00 00    	mov    0x164(%rbx),%eax
+    3882:	48 89 d5             	mov    %rdx,%rbp
+    3885:	3d ff ff ff 7f       	cmp    $0x7fffffff,%eax
+    388a:	74 0f                	je     389b <SignalBackend::handler(int, siginfo_t*, void*)+0x3b>
+    388c:	8b 83 64 01 00 00    	mov    0x164(%rbx),%eax
+    3892:	83 c0 01             	add    $0x1,%eax
+    3895:	89 83 64 01 00 00    	mov    %eax,0x164(%rbx)
+    389b:	8b 93 60 01 00 00    	mov    0x160(%rbx),%edx
+    38a1:	48 8b 85 a8 00 00 00 	mov    0xa8(%rbp),%rax
+    38a8:	85 d2                	test   %edx,%edx
+    38aa:	0f 84 58 01 00 00    	je     3a08 <SignalBackend::handler(int, siginfo_t*, void*)+0x1a8>
+    38b0:	48 8d 15 3f ff ff ff 	lea    -0xc1(%rip),%rdx        # 37f6 <silo_signal_begin>
+    38b7:	48 39 c2             	cmp    %rax,%rdx
+    38ba:	0f 87 48 01 00 00    	ja     3a08 <SignalBackend::handler(int, siginfo_t*, void*)+0x1a8>
+    38c0:	48 8d 0d 4c ff ff ff 	lea    -0xb4(%rip),%rcx        # 3813 <silo_signal_end>
+    38c7:	48 39 c8             	cmp    %rcx,%rax
+    38ca:	0f 83 38 01 00 00    	jae    3a08 <SignalBackend::handler(int, siginfo_t*, void*)+0x1a8>
+    38d0:	8b 8b 68 01 00 00    	mov    0x168(%rbx),%ecx
+    38d6:	81 f9 ff ff ff 7f    	cmp    $0x7fffffff,%ecx
+    38dc:	74 0f                	je     38ed <SignalBackend::handler(int, siginfo_t*, void*)+0x8d>
+    38de:	8b 8b 68 01 00 00    	mov    0x168(%rbx),%ecx
+    38e4:	83 c1 01             	add    $0x1,%ecx
+    38e7:	89 8b 68 01 00 00    	mov    %ecx,0x168(%rbx)
+    38ed:	c7 83 78 01 00 00 00 	movl   $0x0,0x178(%rbx)
+    38f4:	00 00 00 
+    38f7:	48 39 c2             	cmp    %rax,%rdx
+    38fa:	73 2c                	jae    3928 <SignalBackend::handler(int, siginfo_t*, void*)+0xc8>
+    38fc:	48 8d 15 fc fe ff ff 	lea    -0x104(%rip),%rdx        # 37ff <silo_signal_loop_end>
+    3903:	48 39 d0             	cmp    %rdx,%rax
+    3906:	73 20                	jae    3928 <SignalBackend::handler(int, siginfo_t*, void*)+0xc8>
+    3908:	8b 93 74 01 00 00    	mov    0x174(%rbx),%edx
+    390e:	81 fa ff ff ff 7f    	cmp    $0x7fffffff,%edx
+    3914:	74 12                	je     3928 <SignalBackend::handler(int, siginfo_t*, void*)+0xc8>
+    3916:	8b 93 74 01 00 00    	mov    0x174(%rbx),%edx
+    391c:	83 c2 01             	add    $0x1,%edx
+    391f:	89 93 74 01 00 00    	mov    %edx,0x174(%rbx)
+    3925:	0f 1f 00             	nopl   (%rax)
+    3928:	66 48 0f 6e c0       	movq   %rax,%xmm0
+    392d:	f3 0f 6f 8d 28 01 00 	movdqu 0x128(%rbp),%xmm1
+    3934:	00 
+    3935:	f3 0f 6f 95 38 01 00 	movdqu 0x138(%rbp),%xmm2
+    393c:	00 
+    393d:	c7 83 60 01 00 00 00 	movl   $0x0,0x160(%rbx)
+    3944:	00 00 00 
+    3947:	0f 16 85 a0 00 00 00 	movhps 0xa0(%rbp),%xmm0
+    394e:	f3 0f 6f 9d 48 01 00 	movdqu 0x148(%rbp),%xmm3
+    3955:	00 
+    3956:	f3 0f 6f a5 58 01 00 	movdqu 0x158(%rbp),%xmm4
+    395d:	00 
+    395e:	48 89 ab c0 00 00 00 	mov    %rbp,0xc0(%rbx)
+    3965:	0f 11 83 c8 00 00 00 	movups %xmm0,0xc8(%rbx)
+    396c:	48 8b 45 68          	mov    0x68(%rbp),%rax
+    3970:	f3 0f 6f ad 68 01 00 	movdqu 0x168(%rbp),%xmm5
+    3977:	00 
+    3978:	48 8d bd 28 01 00 00 	lea    0x128(%rbp),%rdi
+    397f:	f3 0f 6f b5 78 01 00 	movdqu 0x178(%rbp),%xmm6
+    3986:	00 
+    3987:	f3 0f 6f bd 88 01 00 	movdqu 0x188(%rbp),%xmm7
+    398e:	00 
+    398f:	0f 11 8b e0 00 00 00 	movups %xmm1,0xe0(%rbx)
+    3996:	48 89 83 d8 00 00 00 	mov    %rax,0xd8(%rbx)
+    399d:	f3 0f 6f 8d 98 01 00 	movdqu 0x198(%rbp),%xmm1
+    39a4:	00 
+    39a5:	0f 11 93 f0 00 00 00 	movups %xmm2,0xf0(%rbx)
+    39ac:	0f 11 9b 00 01 00 00 	movups %xmm3,0x100(%rbx)
+    39b3:	0f 11 a3 10 01 00 00 	movups %xmm4,0x110(%rbx)
+    39ba:	0f 11 ab 20 01 00 00 	movups %xmm5,0x120(%rbx)
+    39c1:	0f 11 b3 30 01 00 00 	movups %xmm6,0x130(%rbx)
+    39c8:	0f 11 bb 40 01 00 00 	movups %xmm7,0x140(%rbx)
+    39cf:	0f 11 8b 50 01 00 00 	movups %xmm1,0x150(%rbx)
+    39d6:	e8 05 ea ff ff       	call   23e0 <sigfillset@plt>
+    39db:	48 8d 05 5e 00 00 00 	lea    0x5e(%rip),%rax        # 3a40 <SignalBackend::landing(SignalBackend*)>
+    39e2:	f3 0f 7e 83 a8 00 00 	movq   0xa8(%rbx),%xmm0
+    39e9:	00 
+    39ea:	48 89 5d 68          	mov    %rbx,0x68(%rbp)
+    39ee:	66 48 0f 6e d0       	movq   %rax,%xmm2
+    39f3:	66 0f 6c c2          	punpcklqdq %xmm2,%xmm0
+    39f7:	0f 11 85 a0 00 00 00 	movups %xmm0,0xa0(%rbp)
+    39fe:	48 83 c4 08          	add    $0x8,%rsp
+    3a02:	5b                   	pop    %rbx
+    3a03:	5d                   	pop    %rbp
+    3a04:	c3                   	ret    
+    3a05:	0f 1f 00             	nopl   (%rax)
+    3a08:	c7 83 78 01 00 00 01 	movl   $0x1,0x178(%rbx)
+    3a0f:	00 00 00 
+    3a12:	8b 83 6c 01 00 00    	mov    0x16c(%rbx),%eax
+    3a18:	3d ff ff ff 7f       	cmp    $0x7fffffff,%eax
+    3a1d:	74 df                	je     39fe <SignalBackend::handler(int, siginfo_t*, void*)+0x19e>
+    3a1f:	8b 83 6c 01 00 00    	mov    0x16c(%rbx),%eax
+    3a25:	83 c0 01             	add    $0x1,%eax
+    3a28:	89 83 6c 01 00 00    	mov    %eax,0x16c(%rbx)
+    3a2e:	48 83 c4 08          	add    $0x8,%rsp
+    3a32:	5b                   	pop    %rbx
+    3a33:	5d                   	pop    %rbp
+    3a34:	c3                   	ret    
+    3a35:	90                   	nop
+    3a36:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+    3a3d:	00 00 00 
+

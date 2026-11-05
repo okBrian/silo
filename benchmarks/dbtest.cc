@@ -191,8 +191,10 @@ main(int argc, char **argv)
         queued_config.policy = queued::Policy::wait;
       else if (string(optarg) == "cooperative")
         queued_config.policy = queued::Policy::cooperative;
+      else if (string(optarg) == "linux-signal")
+        queued_config.policy = queued::Policy::linux_signal;
       else {
-        cerr << "[ERROR] --queued-policy must be wait or cooperative" << endl;
+        cerr << "[ERROR] --queued-policy must be wait, cooperative or linux-signal" << endl;
         return 1;
       }
       break;
@@ -297,7 +299,7 @@ main(int argc, char **argv)
       cerr << "[ERROR] starvation threshold requires --queued-mixed" << endl;
       return 1;
     }
-    if (queued_config.policy == queued::Policy::cooperative) {
+    if (queued_config.policy != queued::Policy::wait) {
 #ifndef SILO_WORKER_CONTEXTS
       cerr << "[ERROR] Cooperative requires a WORKER_CONTEXTS=1 build" << endl;
       return 1;

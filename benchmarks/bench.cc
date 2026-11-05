@@ -128,7 +128,7 @@ bench_worker::run()
   barrier_b->wait_for();
   if (measured_driver) {
     std::unique_ptr<bench_txn_context> low;
-    if (queued_config.policy == queued::Policy::cooperative)
+    if (queued_config.policy != queued::Policy::wait)
       low.reset(new bench_txn_context(0, *db, transaction_base::TXN_FLAG_READ_ONLY));
     const auto run_phase = [&](queued::Driver &driver) {
       queued::Driver::ReadCheckpoint checkpoint;

@@ -12,7 +12,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
                        uint64_t oracle, bool expire, const char *label) {
   using namespace queued;
   Config config;
-  config.policy = Policy::notification_checkpoint;
+  config.policy = notification_cases::policy();
   config.low_kind = Kind::q2;
   config.starvation_threshold = 50;
   config.interval = 10;
@@ -23,6 +23,8 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
     while (old < to && !time.compare_exchange_weak(old, to)) {}
   };
   std::promise<void> started, initial, overrun, checked, recovery, refill, done, producer_done;
+  std::promise<void> first_pass;
+  auto first_pass_f = first_pass.get_future();
   auto started_f = started.get_future();
   auto initial_f = initial.get_future();
   auto overrun_f = overrun.get_future();
@@ -37,7 +39,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
   NotificationModel model(1, [&](size_t w) { ptr->deliver_notification(w); });
   Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
     if (next == 110) { started_f.wait(); advance(110); }
-    else if (next == 120) { overrun_f.wait(); advance(130); }
+    else if (next == 120) { first_pass.set_value(); overrun_f.wait(); advance(130); }
     else if (waits++ == 0) {
       // The producer has just observed the coherent over-budget snapshot.
       checked.set_value();
@@ -92,6 +94,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
         if (++reads == 1) {
           started.set_value();
           initial_f.wait();
+          first_pass_f.wait(); // The producer has queued the reset-check low.
           driver.on_record_read(0);
           STARVE_CHECK(high_commits == 2 && time == 130);
           const auto b = driver.budget_snapshot(0);
@@ -140,12 +143,13 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
   STARVE_CHECK(records[0].attempts == 2 && records[0].aborts == 1 && records[0].outcome == Outcome::committed);
   STARVE_CHECK(!budget.low_active && (expire || (budget.high_cycles == 0 && stats.low_requests >= 2)));
   STARVE_CHECK(highs == (expire ? 6 : 8) && low_commits >= 1 && cancelled == (expire ? 3 : 0));
+  STARVE_CHECK(!notification_cases::signal_backend() || notifications.signal_captures > 0);
   std::cout << "CASE " << label << " expire=" << expire << " threshold=50 clock=controlled_ns seed=1"
             << " exact_threshold_dispatch=1 retry_retained=1 high_generated=8 high_commits=" << highs
             << " q2_commits=" << low_commits << " cancelled=" << cancelled
             << " forced_returns=" << stats.forced_low_returns << " low_service_ns=" << stats.low_service_ns
             << " high_service_ns=" << stats.high_service_ns << " switches=" << notifications.switches
-            << " modeled_deliveries=" << model.stats(0).deliveries << " real_handlers=0 checksum=" << oracle << '\n';
+            << " modeled_deliveries=" << model.stats(0).deliveries << " real_handlers=" << notifications.signal_handlers << " async_captures=" << notifications.signal_captures << " checksum=" << oracle << '\n';
   write_header(std::cout);
   write_results(driver, std::cout, std::cout, label, "controlled");
 }
@@ -157,13 +161,15 @@ inline void limits(unsigned threshold, const LowRun &run_low, const HighCommit &
                    uint64_t oracle, const char *label) {
   using namespace queued;
   Config config;
-  config.policy = Policy::notification_checkpoint;
+  config.policy = notification_cases::policy();
   config.low_kind = Kind::q2;
   config.starvation_threshold = threshold;
   config.batch_size = config.high_capacity = config.global_capacity = 4;
   config.interval = 10;
   std::atomic<Ns> time{100};
   std::promise<void> started, published, done, closed;
+  std::promise<void> first_pass;
+  auto first_pass_f = first_pass.get_future();
   auto started_f = started.get_future();
   auto published_f = published.get_future();
   auto done_f = done.get_future();
@@ -171,7 +177,7 @@ inline void limits(unsigned threshold, const LowRun &run_low, const HighCommit &
   unsigned highs = 0, active_highs = 0, reads = 0;
   Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
     if (next == 110) { started_f.wait(); time = 110; }
-    else { done_f.wait(); time = 500; }
+    else { if (next == 120) first_pass.set_value(); done_f.wait(); time = 500; }
   }, [&](size_t) { published.set_value(); });
   std::thread producer([&] { driver.produce(20, 1000); closed.set_value(); });
   driver.run_prepared_worker(0, [&](const Request &r) -> Driver::Prepared {
@@ -184,7 +190,7 @@ inline void limits(unsigned threshold, const LowRun &run_low, const HighCommit &
     return [&](uint64_t &checksum) {
       const bool ok = run_low(checksum, [&] {
         if (r.id == 0) {
-          if (++reads == 1) { started.set_value(); published_f.wait(); }
+          if (++reads == 1) { started.set_value(); published_f.wait(); first_pass_f.wait(); }
           time.fetch_add(10);
           driver.on_record_read(0);
         }
@@ -202,14 +208,16 @@ inline void limits(unsigned threshold, const LowRun &run_low, const HighCommit &
   producer.join();
   driver.wait_for_drain();
   const auto stats = driver.starvation_stats(0);
+  const auto notifications = driver.notification_stats(0);
   notification_cases::check(!driver.failed() && highs == 4 && active_highs == (threshold ? 4 : 1), __LINE__);
+  notification_cases::check(!notification_cases::signal_backend() || notifications.signal_captures > 0, __LINE__);
   notification_cases::check(stats.forced_low_returns == (threshold ? 0 : 1) &&
                             (threshold || stats.checkpoint_blocks > 0), __LINE__);
   const auto b = driver.budget_snapshot(0);
   notification_cases::check(!b.low_active && b.high_cycles == 0 && stats.low_requests == 2, __LINE__);
   std::cout << "CASE " << label << " threshold=" << threshold << " clock=controlled_ns seed=1 active_highs="
             << active_highs << " high_commits=" << highs << " forced_returns=" << stats.forced_low_returns
-            << " low_service_ns=" << stats.low_service_ns << " real_handlers=0 checksum=" << oracle << '\n';
+            << " low_service_ns=" << stats.low_service_ns << " real_handlers=" << notifications.signal_handlers << " async_captures=" << notifications.signal_captures << " checksum=" << oracle << '\n';
   write_header(std::cout);
   write_results(driver, std::cout, std::cout, label, "controlled");
 }

@@ -1,0 +1,144 @@
++ trap 'status=$?; printf "%s\n" "$status" > "$evidence/exit-status"' EXIT
++ sha256sum benchmarks/request_driver.cc benchmarks/request_driver.h benchmarks/worker_context.cc benchmarks/worker_context.h benchmarks/signal_backend.cc benchmarks/signal_backend.h replication/tests/batched_notification_cases.h replication/tests/batched_notifications_test.cc replication/tests/starvation_cases.h replication/tests/starvation_test.cc replication/tests/tpcc_mixed_test.cc replication/tests/validate_signal_fixtures.sh
++ flags=(-std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS)
++ runtime=(benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc)
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O0 -g)
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O0 -g benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac09-evidence/final-fixtures/batched_notifications-debug
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-debug signal
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O0 -g benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac09-evidence/final-fixtures/starvation-debug
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-debug signal
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O3)
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O3 benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac09-evidence/final-fixtures/batched_notifications-optimized
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O3 benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac09-evidence/final-fixtures/starvation-optimized
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all)
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O2 -fsanitize=undefined -fno-sanitize-recover=all benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac09-evidence/final-fixtures/batched_notifications-ubsan
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-ubsan signal
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O2 -fsanitize=undefined -fno-sanitize-recover=all benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac09-evidence/final-fixtures/starvation-ubsan
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-ubsan signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/batched_notifications-optimized
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final-fixtures/starvation-optimized
++ make -j2 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 tpcc_mixed_test
++ out=out-perf.masstree.contexts
++ timeout -k 5s 120s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test signal
++ timeout -k 5s 120s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test
++ sha256sum out-perf.masstree.contexts/replication/tests/tpcc_mixed_test /mac09-evidence/final-fixtures/batched_notifications-debug /mac09-evidence/final-fixtures/batched_notifications-optimized /mac09-evidence/final-fixtures/batched_notifications-ubsan /mac09-evidence/final-fixtures/starvation-debug /mac09-evidence/final-fixtures/starvation-optimized /mac09-evidence/final-fixtures/starvation-ubsan
++ echo 'PASS final signal/checkpoint fixtures; 53 real aborted write probes while Q2 is paused'
+PASS final signal/checkpoint fixtures; 53 real aborted write probes while Q2 is paused
++ status=0
++ printf '%s\n' 0

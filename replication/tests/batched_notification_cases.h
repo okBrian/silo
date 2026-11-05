@@ -14,6 +14,9 @@
 
 namespace notification_cases {
 
+inline bool &signal_backend() { static bool enabled = false; return enabled; }
+inline queued::Policy policy() { return signal_backend() ? queued::Policy::linux_signal : queued::Policy::notification_checkpoint; }
+
 inline void check(bool value, int line) {
   if (!value) {
     std::cerr << "FAIL batched notification case at line " << line << '\n';
@@ -32,7 +35,7 @@ inline void transition_case(queued::ServiceTransition target, unsigned mode,
                             uint64_t expected_checksum, const char *label) {
   using namespace queued;
   Config config;
-  config.policy = Policy::notification_checkpoint;
+  config.policy = policy();
   config.low_kind = Kind::q2;
   config.interval = 10;
   config.batch_size = 2;
@@ -142,7 +145,8 @@ inline void transition_case(queued::ServiceTransition target, unsigned mode,
   const unsigned switches = target == ServiceTransition::high_entry ? 1 : 2;
   BATCH_CHECK(initial_empty_checked && reads >= 2 && high_records == 4 && attempts == 5);
   BATCH_CHECK(publications == 2 && stats.publication_passes == 2 && stats.admitted_high == 4);
-  BATCH_CHECK(stats.deliveries == transport.deliveries && stats.deferrals == 2);
+  BATCH_CHECK(stats.deliveries == transport.deliveries + (signal_backend() ? publications : 0) && stats.deferrals == 2);
+  BATCH_CHECK(!signal_backend() || stats.signal_captures > 0);
   BATCH_CHECK(stats.spurious_checks >= 1 && stats.queue_fallbacks >= 1 && !stats.pending_hint);
   BATCH_CHECK(stats.switches == switches && stats.high_entries == switches &&
               stats.empty_checks == switches && stats.low_resumes == switches);
@@ -154,7 +158,8 @@ inline void transition_case(queued::ServiceTransition target, unsigned mode,
             << " mode=" << mode << " clock=controlled_ns seed=" << config.seed
             << " publications=" << publications << " admitted=4 sends=" << transport.sends
             << " coalesced=" << transport.coalesced << " modeled_deliveries=" << transport.deliveries
-            << " unsolicited=" << transport.unsolicited << " real_handlers=0 deferrals="
+            << " unsolicited=" << transport.unsolicited << " backend=" << (signal_backend() ? "linux-signal" : "checkpoint")
+            << " real_handlers=" << stats.signal_handlers << " async_captures=" << stats.signal_captures << " deferrals="
             << stats.deferrals << " switches=" << stats.switches << " low_resumes="
             << stats.low_resumes << " hints_consumed=" << stats.hints_consumed
             << " queue_fallbacks=" << stats.queue_fallbacks << " spurious_checks="

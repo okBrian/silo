@@ -4,6 +4,7 @@ static void partial_admission() {
   using namespace queued;
   using notification_cases::check;
   Config config;
+  if (notification_cases::signal_backend()) { config.policy = Policy::linux_signal; config.low_kind = Kind::q2; }
   config.workers = 2;
   config.batch_size = 6;
   config.global_capacity = 4;
@@ -84,7 +85,7 @@ static void partial_admission() {
     auto transport = model.stats(w);
     check(publications[w] == 2 && served[w] == 4, __LINE__);
     check(stats.publication_passes == 2 && stats.admitted_high == 4 &&
-          stats.deliveries == 2 && stats.switches == 0, __LINE__);
+          stats.deliveries == (notification_cases::signal_backend() ? 4u : 2u) && stats.switches == 0, __LINE__);
     check(transport.sends == 4 && transport.coalesced == 3 &&
           transport.deliveries == 2 && transport.unsolicited == 1 && !transport.pending, __LINE__);
   }
@@ -100,6 +101,7 @@ static void drain_expiry() {
   using namespace queued;
   using notification_cases::check;
   Config config;
+  if (notification_cases::signal_backend()) { config.policy = Policy::linux_signal; config.low_kind = Kind::q2; }
   config.interval = 10;
   config.batch_size = config.global_capacity = 4;
   config.high_capacity = 1;
@@ -142,7 +144,7 @@ static void drain_expiry() {
   check(model.stats(0).pending && !model.stats(0).deliveries, __LINE__);
   // A delayed delivery after join is a harmless stale hint while Driver lives.
   check(model.deliver(0) && !model.deliver(0), __LINE__);
-  check(driver.notification_stats(0).deliveries == 1 &&
+  check(driver.notification_stats(0).deliveries == (notification_cases::signal_backend() ? 2u : 1u) &&
         driver.notification_stats(0).switches == 0, __LINE__);
   std::cout << "CASE drain-expiry clock=controlled_ns seed=1 high_generated=4 admitted=1"
                " cancelled_high=4 cancelled_low=1 safe_low_commits=1 sends=1"
@@ -151,7 +153,8 @@ static void drain_expiry() {
   write_results(driver, std::cout, std::cout, "drain-expiry", "controlled");
 }
 
-int main() {
+int main(int argc, char **) {
+  notification_cases::signal_backend() = argc > 1;
   partial_admission();
   drain_expiry();
 #ifdef SILO_WORKER_CONTEXTS

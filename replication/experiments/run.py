@@ -60,8 +60,8 @@ def validate(config, allowed):
         require(phases["warmup"] == phases["drain_limit"] == 0,
                 "stock dbtest has no separate warm-up or drain")
     else:
-        require(config.get("policy", "wait") in ("wait", "cooperative"),
-                "queued policy must be wait or cooperative")
+        require(config.get("policy", "wait") in ("wait", "cooperative", "linux-signal"),
+                "queued policy must be wait, cooperative or linux-signal")
         queue = config["queue"]
         require(isinstance(queue, dict) and QUEUE <= queue.keys() <= QUEUE | {"q2_variant"} and
                 ("q2_variant" not in queue or queue["q2_variant"] == Q2_VARIANT) and
@@ -70,6 +70,7 @@ def validate(config, allowed):
                 "queue requires positive integer settings and uint64 seeds across all repeats")
     require(isinstance(config["variants"], list) and config["variants"], "variants must be nonempty")
     has_cooperative = False
+    has_context = False
     for variant in config["variants"]:
         optional_variant = {"cpus", "policy"} if mode == "queued" else {"cpus"}
         require(isinstance(variant, dict) and {"workers", "warehouses"} <= variant.keys()
@@ -78,8 +79,9 @@ def validate(config, allowed):
         require(integer(workers) and integer(warehouses), "workers and warehouses must be positive integers")
         if mode == "queued":
             policy = variant.get("policy", config.get("policy", "wait"))
-            require(policy in ("wait", "cooperative"), "queued policy must be wait or cooperative")
+            require(policy in ("wait", "cooperative", "linux-signal"), "queued policy must be wait, cooperative or linux-signal")
             has_cooperative |= policy == "cooperative"
+            has_context |= policy != "wait"
             require(workers == warehouses, "I06 queued mode requires one warehouse per worker")
             batch = queue["batch_per_worker"] * workers
             require(max(batch, queue["global_capacity_per_worker"] * workers) < 2**32,
@@ -95,7 +97,7 @@ def validate(config, allowed):
                     and len(set(cpus)) == len(cpus), "cpus must be a nonempty list of distinct CPU IDs")
             require(allowed is not None and set(cpus) <= set(allowed),
                     "explicit cpus require Linux and must belong to the inherited allocation")
-    if has_cooperative:
+    if has_context:
         require("q2_variant" in queue, "Cooperative requires a mixed Q2 workload")
     if "yield_interval" in config:
         require(has_cooperative and integer(config["yield_interval"], 1, 2**32 - 1),

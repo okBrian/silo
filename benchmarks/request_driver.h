@@ -18,7 +18,7 @@ constexpr Ns second = 1000 * ms;
 enum class Kind { new_order, payment, synthetic_low, q2 };
 // notification_checkpoint is a local C++ test backend, serviced only at audited
 // reads. It is deliberately not exposed as the native Preemptive policy.
-enum class Policy { wait, cooperative, notification_checkpoint };
+enum class Policy { wait, cooperative, notification_checkpoint, linux_signal };
 enum class ServiceTransition { high_entry, high_empty, before_low_resume };
 
 // Counters read after join; budget_snapshot() is the synchronized live API.
@@ -34,6 +34,7 @@ struct StarvationStats {
 // Read only after producer and workers join. Notifications are hints; queue
 // admission, attempts and terminal outcomes remain independent record counts.
 struct NotificationStats {
+  uint64_t signal_sends = 0, signal_handlers = 0, signal_captures = 0, signal_deferred = 0, signal_rearms = 0;
   uint64_t publication_passes = 0;
   uint64_t admitted_high = 0;
   uint64_t deliveries = 0;

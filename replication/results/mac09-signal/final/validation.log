@@ -1,0 +1,238 @@
++ trap 'status=$?; printf "%s\n" "$status" > "$evidence/exit-status"' EXIT
++ git rev-parse HEAD
++ git diff --binary HEAD
+++ git -C masstree rev-parse HEAD
++ test 1150824e6a10a0384ba4bfed6b916ce62f96315f = 1150824e6a10a0384ba4bfed6b916ce62f96315f
++ uname -a
++ cat /etc/os-release
++ c++ --version
++ getconf GNU_LIBC_VERSION
++ lscpu
++ taskset -pc 305
++ sha256sum Makefile preemption.h benchmarks/request_driver.cc benchmarks/request_driver.h benchmarks/worker_context.cc benchmarks/worker_context.h benchmarks/signal_backend.cc benchmarks/signal_backend.h benchmarks/bench.cc benchmarks/dbtest.cc benchmarks/tpcc_q2.h replication/tests/signal_backend_test.cc replication/tests/batched_notification_cases.h replication/tests/batched_notifications_test.cc replication/tests/starvation_cases.h replication/tests/starvation_test.cc replication/tests/tpcc_mixed_test.cc replication/tests/validate_signal_backend.sh replication/tests/test_i05_experiments.py replication/experiments/run.py replication/experiments/configs/queued-signal-100.json replication/experiments/configs/queued-signal-25.json
++ flags=(-std=c++11 -Wall -Wextra -Werror -pedantic -pthread)
++ runtime=(benchmarks/worker_context.cc benchmarks/signal_backend.cc)
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O0 -g)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O0 -g benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/signal_backend_test.cc -o /mac09-evidence/final/signal-debug
++ timeout -k 5s 60s /mac09-evidence/final/signal-debug
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O0 -g -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac09-evidence/final/batched_notifications-debug
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-debug signal
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O0 -g -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac09-evidence/final/starvation-debug
++ timeout -k 5s 60s /mac09-evidence/final/starvation-debug signal
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O3)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O3 benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/signal_backend_test.cc -o /mac09-evidence/final/signal-optimized
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O3 -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac09-evidence/final/batched_notifications-optimized
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O3 -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac09-evidence/final/starvation-optimized
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 -fsanitize=undefined -fno-sanitize-recover=all benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/signal_backend_test.cc -o /mac09-evidence/final/signal-ubsan
++ timeout -k 5s 60s /mac09-evidence/final/signal-ubsan
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 -fsanitize=undefined -fno-sanitize-recover=all -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac09-evidence/final/batched_notifications-ubsan
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-ubsan signal
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 -fsanitize=undefined -fno-sanitize-recover=all -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac09-evidence/final/starvation-ubsan
++ timeout -k 5s 60s /mac09-evidence/final/starvation-ubsan signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for repetition in {1..20}
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/signal-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized signal
++ for suite in signal batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized signal
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-optimized
++ for suite in batched_notifications starvation
++ timeout -k 5s 60s /mac09-evidence/final/starvation-optimized
++ for build in wait cooperative
++ context=()
++ [[ wait == cooperative ]]
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /mac09-evidence/final/driver-wait
++ timeout -k 5s 60s /mac09-evidence/final/driver-wait
++ for build in wait cooperative
++ context=()
++ [[ cooperative == cooperative ]]
++ context=(-DSILO_WORKER_CONTEXTS "${runtime[@]}")
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 -DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/signal_backend.cc benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /mac09-evidence/final/driver-cooperative
++ timeout -k 5s 60s /mac09-evidence/final/driver-cooperative
++ python3 -B -m unittest discover -s replication/tests -p test_i05_experiments.py -v
++ objdump -d -C /mac09-evidence/final/signal-optimized
++ gzip
++ git apply replication/results/mac01-mac02/build-compatibility.diff
++ make -j1 -C third-party/lz4 library
++ make -j1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 masstree/config.h
++ make -j2 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 dbtest tpcc_mixed_test silo_context_test
++ out=out-perf.masstree.contexts
++ timeout -k 5s 120s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test signal
++ timeout -k 5s 120s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test
++ timeout -k 5s 120s ./out-perf.masstree.contexts/replication/tests/silo_context_test
++ for threshold in 25 100
++ python3 -B replication/experiments/run.py replication/experiments/configs/queued-signal-25.json --source /mac09-source --dbtest out-perf.masstree.contexts/benchmarks/dbtest --output /mac09-evidence/final/pressure-25 --build-info 'Linux-signal backend in emulated Linux; GCC 11.4; WORKER_CONTEXTS=1; archived MAC-01 compatibility patch'
+Experiment directory: /mac09-evidence/final/pressure-25/queued-signal-25-ipz89ghd
+Running queued-signal-25-ipz89ghd-r1-v1
+Running queued-signal-25-ipz89ghd-r1-v2
++ batches=("$evidence/pressure-$threshold"/*/batch.json)
++ test 1 = 1
++ batch=/mac09-evidence/final/pressure-25/queued-signal-25-ipz89ghd
++ python3 -B replication/experiments/analyze.py --output /mac09-evidence/final/analysis-25 batch /mac09-evidence/final/pressure-25/queued-signal-25-ipz89ghd
++ python3 -B replication/experiments/report.py /mac09-evidence/final/analysis-25/analysis.json --output /mac09-evidence/final/report-25 --label 'Linux-signal backend in emulated Linux; local functional pressure; monotonic ns' --require-complete
++ for threshold in 25 100
++ python3 -B replication/experiments/run.py replication/experiments/configs/queued-signal-100.json --source /mac09-source --dbtest out-perf.masstree.contexts/benchmarks/dbtest --output /mac09-evidence/final/pressure-100 --build-info 'Linux-signal backend in emulated Linux; GCC 11.4; WORKER_CONTEXTS=1; archived MAC-01 compatibility patch'
+Experiment directory: /mac09-evidence/final/pressure-100/queued-signal-100-r36o_fcu
+Running queued-signal-100-r36o_fcu-r1-v1
+Running queued-signal-100-r36o_fcu-r1-v2
++ batches=("$evidence/pressure-$threshold"/*/batch.json)
++ test 1 = 1
++ batch=/mac09-evidence/final/pressure-100/queued-signal-100-r36o_fcu
++ python3 -B replication/experiments/analyze.py --output /mac09-evidence/final/analysis-100 batch /mac09-evidence/final/pressure-100/queued-signal-100-r36o_fcu
++ python3 -B replication/experiments/report.py /mac09-evidence/final/analysis-100/analysis.json --output /mac09-evidence/final/report-100 --label 'Linux-signal backend in emulated Linux; local functional pressure; monotonic ns' --require-complete
++ sha256sum out-perf.masstree.contexts/benchmarks/dbtest out-perf.masstree.contexts/replication/tests/tpcc_mixed_test out-perf.masstree.contexts/replication/tests/silo_context_test /mac09-evidence/final/signal-debug /mac09-evidence/final/signal-optimized /mac09-evidence/final/signal-ubsan /mac09-evidence/final/batched_notifications-debug /mac09-evidence/final/batched_notifications-optimized /mac09-evidence/final/batched_notifications-ubsan /mac09-evidence/final/starvation-debug /mac09-evidence/final/starvation-optimized /mac09-evidence/final/starvation-ubsan
++ echo 'PASS MAC-09 Linux-signal backend in emulated Linux; MAC-07/MAC-08 signal repetitions'
+PASS MAC-09 Linux-signal backend in emulated Linux; MAC-07/MAC-08 signal repetitions
++ status=0
++ printf '%s\n' 0

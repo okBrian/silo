@@ -1,5 +1,6 @@
 #include "starvation_cases.h"
-int main() {
+int main(int argc, char **) {
+  notification_cases::signal_backend() = argc > 1;
   for (unsigned threshold : {0u, 100u})
     starvation_cases::limits(threshold, [](uint64_t &sum, const std::function<void()> &read) {
       sum = 0;

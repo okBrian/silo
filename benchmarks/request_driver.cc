@@ -2,6 +2,7 @@
 
 #ifdef SILO_WORKER_CONTEXTS
 #include "worker_context.h"
+#include "signal_backend.h"
 #include "../preemption.h"
 #endif
 
@@ -101,6 +102,7 @@ struct Worker {
   }
 #ifdef SILO_WORKER_CONTEXTS
   Cooperative *cooperative = nullptr; // Owned by the worker's original stack.
+  SignalBackend *signal = nullptr; // Registration guarded by mutex.
 #endif
 };
 
@@ -220,6 +222,12 @@ void Driver::deliver_notification(size_t worker) {
   Worker &w = *state->workers.at(worker);
   w.deliveries.fetch_add(1, std::memory_order_relaxed);
   w.notification_pending.store(true, std::memory_order_release);
+#ifdef SILO_WORKER_CONTEXTS
+  if (state->config.policy == Policy::linux_signal) {
+    std::lock_guard<std::mutex> lock(w.mutex);
+    if (w.signal) w.signal->send();
+  }
+#endif
 }
 
 NotificationStats Driver::notification_stats(size_t worker) const {
@@ -317,11 +325,13 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id, uint64_t first_hi
     for (size_t i = 0; i < config.workers; ++i)
       if (published[i])
         ++s.workers[i]->notifications.publication_passes;
-    if (s.high_published) {
+    if (s.high_published || config.policy == Policy::linux_signal) {
       try {
         for (size_t i = 0; i < config.workers; ++i)
-          if (published[i])
-            s.high_published(i);
+          if (published[i]) {
+            if (config.policy == Policy::linux_signal) deliver_notification(i);
+            if (s.high_published) s.high_published(i);
+          }
       } catch (...) {
         s.fatal.store(true, std::memory_order_release);
         break;
@@ -390,7 +400,7 @@ void Driver::on_record_read(size_t worker) {
     ++w.starvation.checkpoint_blocks;
     return;
   }
-  if (s.config.policy == Policy::notification_checkpoint) {
+  if (s.config.policy == Policy::notification_checkpoint || s.config.policy == Policy::linux_signal) {
     // Clear the hint BEFORE checking the authoritative queue. A delayed or
     // coalesced hint cannot hide work published at high-empty/low-resume.
     const bool hinted = w.notification_pending.exchange(false, std::memory_order_acq_rel);
@@ -405,12 +415,16 @@ void Driver::on_record_read(size_t worker) {
       ++w.notifications.queue_fallbacks;
     if (ScopedNonPreemptible::blocked()) {
       ++w.notifications.deferrals;
+      if (w.signal) w.signal->window(scheduler.context, false);
       return;
     }
     if (!s.fatal.load(std::memory_order_acquire) &&
         s.clock() < s.drain_deadline.load(std::memory_order_acquire)) {
+      const unsigned before = w.signal ? w.signal->captures() : 0;
+      if (w.signal) w.signal->window(scheduler.context, true);
+      if (!w.signal || w.signal->captures() == before) scheduler.context.yield();
+      if (w.signal && !w.signal->continuation_ok()) throw std::runtime_error("signal continuation canary");
       ++w.notifications.switches;
-      scheduler.context.yield();
     }
     return;
   }
@@ -502,11 +516,15 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
       w.records.push_back(request);
   };
 #ifdef SILO_WORKER_CONTEXTS
+  std::unique_ptr<SignalBackend> signal;
   std::unique_ptr<Cooperative> cooperative;
   if (s.config.policy != Policy::wait) {
     try {
+      if (s.config.policy == Policy::linux_signal) signal.reset(new SignalBackend);
       cooperative.reset(new Cooperative(execute_request));
       w.cooperative = cooperative.get();
+      std::lock_guard<std::mutex> lock(w.mutex);
+      w.signal = signal.get();
     } catch (const std::exception &) {
       s.fatal.store(true, std::memory_order_release);
     }
@@ -600,6 +618,15 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
     cooperative->context.resume();
     w.cooperative = nullptr;
   }
+  if (signal) {
+    std::lock_guard<std::mutex> lock(w.mutex);
+    w.signal = nullptr;
+    w.notifications.signal_sends = signal->sends();
+    w.notifications.signal_handlers = signal->handlers();
+    w.notifications.signal_captures = signal->captures();
+    w.notifications.signal_deferred = signal->deferred();
+    w.notifications.signal_rearms = signal->rearms();
+  }
 #endif
   std::lock_guard<std::mutex> lock(s.ready_mutex);
   ++s.drained_count;
@@ -687,6 +714,12 @@ void write_results(const Driver &driver, std::ostream &out, std::ostream &summar
           << " commits_in_window=" << commits_in_window << " drain_commits=" << drain_commits
           << " failed=" << driver.failed() << '\n';
   for (size_t i = 0; i < driver.worker_count(); ++i) {
+    const auto n = driver.notification_stats(i);
+    summary << "notifications phase=" << phase << " worker=" << i
+            << " signal_sends=" << n.signal_sends << " real_handlers=" << n.signal_handlers
+            << " async_captures=" << n.signal_captures << " signal_deferred=" << n.signal_deferred
+            << " signal_rearms=" << n.signal_rearms
+            << " switches=" << n.switches << " low_resumes=" << n.low_resumes << '\n';
     const StarvationStats stats = driver.starvation_stats(i);
     summary << "starvation phase=" << phase << " worker=" << i
             << " clock=driver_ns threshold=" << driver.budget_threshold()

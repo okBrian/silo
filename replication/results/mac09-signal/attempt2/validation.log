@@ -1,0 +1,32 @@
++ trap 'status=$?; printf "%s\n" "$status" > "$evidence/exit-status"' EXIT
++ git rev-parse HEAD
++ git diff --binary HEAD
+++ git -C masstree rev-parse HEAD
++ test 1150824e6a10a0384ba4bfed6b916ce62f96315f = 1150824e6a10a0384ba4bfed6b916ce62f96315f
++ uname -a
++ cat /etc/os-release
++ c++ --version
++ getconf GNU_LIBC_VERSION
++ lscpu
++ taskset -pc 206
++ sha256sum Makefile preemption.h benchmarks/request_driver.cc benchmarks/request_driver.h benchmarks/worker_context.cc benchmarks/worker_context.h benchmarks/signal_backend.cc benchmarks/signal_backend.h benchmarks/bench.cc benchmarks/dbtest.cc benchmarks/tpcc_q2.h replication/tests/signal_backend_test.cc replication/tests/batched_notification_cases.h replication/tests/batched_notifications_test.cc replication/tests/starvation_cases.h replication/tests/starvation_test.cc replication/tests/tpcc_mixed_test.cc replication/tests/validate_signal_backend.sh replication/tests/test_i05_experiments.py replication/experiments/run.py replication/experiments/configs/queued-signal-100.json replication/experiments/configs/queued-signal-25.json
++ flags=(-std=c++11 -Wall -Wextra -Werror -pedantic -pthread)
++ runtime=(benchmarks/worker_context.cc benchmarks/signal_backend.cc)
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O0 -g)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O0 -g benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/signal_backend_test.cc -o /mac09-evidence/final/signal-debug
++ timeout -k 5s 60s /mac09-evidence/final/signal-debug
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O0 -g -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac09-evidence/final/batched_notifications-debug
++ timeout -k 5s 60s /mac09-evidence/final/batched_notifications-debug signal
++ for suite in batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O0 -g -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac09-evidence/final/starvation-debug
+In file included from replication/tests/starvation_test.cc:1:
+replication/tests/starvation_cases.h: In function 'void starvation_cases::limits(unsigned int, const LowRun&, const HighCommit&, uint64_t, const char*)':
+replication/tests/starvation_cases.h:212:83: error: 'notifications' was not declared in this scope; did you mean 'notification_cases'?
+  212 |             << " low_service_ns=" << stats.low_service_ns << " real_handlers=" << notifications.signal_handlers << " async_captures=" << notifications.signal_captures << " checksum=" << oracle << '\n';
+      |                                                                                   ^~~~~~~~~~~~~
+      |                                                                                   notification_cases
++ status=1
++ printf '%s\n' 1

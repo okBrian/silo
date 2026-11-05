@@ -168,8 +168,8 @@ BENCH_SRCFILES = benchmarks/bdb_wrapper.cc \
 	benchmarks/ycsb.cc
 
 ifeq ($(strip $(WORKER_CONTEXTS)),1)
-BENCH_SRCFILES += benchmarks/worker_context.cc
-CONTEXT_OBJ := $(O)/benchmarks/worker_context.o
+BENCH_SRCFILES += benchmarks/worker_context.cc benchmarks/signal_backend.cc
+CONTEXT_OBJ := $(O)/benchmarks/worker_context.o $(O)/benchmarks/signal_backend.o
 endif
 
 ifeq ($(MYSQL_S),1)

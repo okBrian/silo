@@ -1,0 +1,525 @@
+diff --git a/Makefile b/Makefile
+index a43cbf0..3c627e2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -81,7 +81,7 @@ CXXFLAGS += -MD -Ithird-party/lz4 -DCONFIG_H=\"$(CONFIG_H)\"
+ ifeq ($(DEBUG_S),1)
+         CXXFLAGS += -fno-omit-frame-pointer -DDEBUG
+ else
+-        CXXFLAGS += -Werror -O2 -funroll-loops -fno-omit-frame-pointer
++        CXXFLAGS += -O1 -funroll-loops -fno-omit-frame-pointer
+ endif
+ ifeq ($(CHECK_INVARIANTS_S),1)
+ 	CXXFLAGS += -DCHECK_INVARIANTS
+@@ -168,8 +168,8 @@ BENCH_SRCFILES = benchmarks/bdb_wrapper.cc \
+ 	benchmarks/ycsb.cc
+ 
+ ifeq ($(strip $(WORKER_CONTEXTS)),1)
+-BENCH_SRCFILES += benchmarks/worker_context.cc
+-CONTEXT_OBJ := $(O)/benchmarks/worker_context.o
++BENCH_SRCFILES += benchmarks/worker_context.cc benchmarks/signal_backend.cc
++CONTEXT_OBJ := $(O)/benchmarks/worker_context.o $(O)/benchmarks/signal_backend.o
+ endif
+ 
+ ifeq ($(MYSQL_S),1)
+diff --git a/benchmarks/bench.cc b/benchmarks/bench.cc
+index b5f32bc..4ad4e08 100644
+--- a/benchmarks/bench.cc
++++ b/benchmarks/bench.cc
+@@ -128,7 +128,7 @@ bench_worker::run()
+   barrier_b->wait_for();
+   if (measured_driver) {
+     std::unique_ptr<bench_txn_context> low;
+-    if (queued_config.policy == queued::Policy::cooperative)
++    if (queued_config.policy != queued::Policy::wait)
+       low.reset(new bench_txn_context(0, *db, transaction_base::TXN_FLAG_READ_ONLY));
+     const auto run_phase = [&](queued::Driver &driver) {
+       queued::Driver::ReadCheckpoint checkpoint;
+diff --git a/benchmarks/dbtest.cc b/benchmarks/dbtest.cc
+index 06aa79a..9fead5f 100644
+--- a/benchmarks/dbtest.cc
++++ b/benchmarks/dbtest.cc
+@@ -191,8 +191,10 @@ main(int argc, char **argv)
+         queued_config.policy = queued::Policy::wait;
+       else if (string(optarg) == "cooperative")
+         queued_config.policy = queued::Policy::cooperative;
++      else if (string(optarg) == "linux-signal")
++        queued_config.policy = queued::Policy::linux_signal;
+       else {
+-        cerr << "[ERROR] --queued-policy must be wait or cooperative" << endl;
++        cerr << "[ERROR] --queued-policy must be wait, cooperative or linux-signal" << endl;
+         return 1;
+       }
+       break;
+@@ -297,7 +299,7 @@ main(int argc, char **argv)
+       cerr << "[ERROR] starvation threshold requires --queued-mixed" << endl;
+       return 1;
+     }
+-    if (queued_config.policy == queued::Policy::cooperative) {
++    if (queued_config.policy != queued::Policy::wait) {
+ #ifndef SILO_WORKER_CONTEXTS
+       cerr << "[ERROR] Cooperative requires a WORKER_CONTEXTS=1 build" << endl;
+       return 1;
+diff --git a/benchmarks/request_driver.cc b/benchmarks/request_driver.cc
+index 250ad56..5c918a8 100644
+--- a/benchmarks/request_driver.cc
++++ b/benchmarks/request_driver.cc
+@@ -2,6 +2,7 @@
+ 
+ #ifdef SILO_WORKER_CONTEXTS
+ #include "worker_context.h"
++#include "signal_backend.h"
+ #include "../preemption.h"
+ #endif
+ 
+@@ -101,6 +102,7 @@ struct Worker {
+   }
+ #ifdef SILO_WORKER_CONTEXTS
+   Cooperative *cooperative = nullptr; // Owned by the worker's original stack.
++  SignalBackend *signal = nullptr; // Registration guarded by mutex.
+ #endif
+ };
+ 
+@@ -220,6 +222,12 @@ void Driver::deliver_notification(size_t worker) {
+   Worker &w = *state->workers.at(worker);
+   w.deliveries.fetch_add(1, std::memory_order_relaxed);
+   w.notification_pending.store(true, std::memory_order_release);
++#ifdef SILO_WORKER_CONTEXTS
++  if (state->config.policy == Policy::linux_signal) {
++    std::lock_guard<std::mutex> lock(w.mutex);
++    if (w.signal) w.signal->send();
++  }
++#endif
+ }
+ 
+ NotificationStats Driver::notification_stats(size_t worker) const {
+@@ -317,11 +325,13 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id, uint64_t first_hi
+     for (size_t i = 0; i < config.workers; ++i)
+       if (published[i])
+         ++s.workers[i]->notifications.publication_passes;
+-    if (s.high_published) {
++    if (s.high_published || config.policy == Policy::linux_signal) {
+       try {
+         for (size_t i = 0; i < config.workers; ++i)
+-          if (published[i])
+-            s.high_published(i);
++          if (published[i]) {
++            if (config.policy == Policy::linux_signal) deliver_notification(i);
++            if (s.high_published) s.high_published(i);
++          }
+       } catch (...) {
+         s.fatal.store(true, std::memory_order_release);
+         break;
+@@ -390,7 +400,7 @@ void Driver::on_record_read(size_t worker) {
+     ++w.starvation.checkpoint_blocks;
+     return;
+   }
+-  if (s.config.policy == Policy::notification_checkpoint) {
++  if (s.config.policy == Policy::notification_checkpoint || s.config.policy == Policy::linux_signal) {
+     // Clear the hint BEFORE checking the authoritative queue. A delayed or
+     // coalesced hint cannot hide work published at high-empty/low-resume.
+     const bool hinted = w.notification_pending.exchange(false, std::memory_order_acq_rel);
+@@ -405,12 +415,16 @@ void Driver::on_record_read(size_t worker) {
+       ++w.notifications.queue_fallbacks;
+     if (ScopedNonPreemptible::blocked()) {
+       ++w.notifications.deferrals;
++      if (w.signal) w.signal->window(scheduler.context, false);
+       return;
+     }
+     if (!s.fatal.load(std::memory_order_acquire) &&
+         s.clock() < s.drain_deadline.load(std::memory_order_acquire)) {
++      const unsigned before = w.signal ? w.signal->captures() : 0;
++      if (w.signal) w.signal->window(scheduler.context, true);
++      if (!w.signal || w.signal->captures() == before) scheduler.context.yield();
++      if (w.signal && !w.signal->continuation_ok()) throw std::runtime_error("signal continuation canary");
+       ++w.notifications.switches;
+-      scheduler.context.yield();
+     }
+     return;
+   }
+@@ -502,11 +516,15 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
+       w.records.push_back(request);
+   };
+ #ifdef SILO_WORKER_CONTEXTS
++  std::unique_ptr<SignalBackend> signal;
+   std::unique_ptr<Cooperative> cooperative;
+   if (s.config.policy != Policy::wait) {
+     try {
++      if (s.config.policy == Policy::linux_signal) signal.reset(new SignalBackend);
+       cooperative.reset(new Cooperative(execute_request));
+       w.cooperative = cooperative.get();
++      std::lock_guard<std::mutex> lock(w.mutex);
++      w.signal = signal.get();
+     } catch (const std::exception &) {
+       s.fatal.store(true, std::memory_order_release);
+     }
+@@ -600,6 +618,15 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
+     cooperative->context.resume();
+     w.cooperative = nullptr;
+   }
++  if (signal) {
++    std::lock_guard<std::mutex> lock(w.mutex);
++    w.signal = nullptr;
++    w.notifications.signal_sends = signal->sends();
++    w.notifications.signal_handlers = signal->handlers();
++    w.notifications.signal_captures = signal->captures();
++    w.notifications.signal_deferred = signal->deferred();
++    w.notifications.signal_rearms = signal->rearms();
++  }
+ #endif
+   std::lock_guard<std::mutex> lock(s.ready_mutex);
+   ++s.drained_count;
+@@ -687,6 +714,12 @@ void write_results(const Driver &driver, std::ostream &out, std::ostream &summar
+           << " commits_in_window=" << commits_in_window << " drain_commits=" << drain_commits
+           << " failed=" << driver.failed() << '\n';
+   for (size_t i = 0; i < driver.worker_count(); ++i) {
++    const auto n = driver.notification_stats(i);
++    summary << "notifications phase=" << phase << " worker=" << i
++            << " signal_sends=" << n.signal_sends << " real_handlers=" << n.signal_handlers
++            << " async_captures=" << n.signal_captures << " signal_deferred=" << n.signal_deferred
++            << " signal_rearms=" << n.signal_rearms
++            << " switches=" << n.switches << " low_resumes=" << n.low_resumes << '\n';
+     const StarvationStats stats = driver.starvation_stats(i);
+     summary << "starvation phase=" << phase << " worker=" << i
+             << " clock=driver_ns threshold=" << driver.budget_threshold()
+diff --git a/benchmarks/request_driver.h b/benchmarks/request_driver.h
+index f8bb161..9ccaba7 100644
+--- a/benchmarks/request_driver.h
++++ b/benchmarks/request_driver.h
+@@ -18,7 +18,7 @@ constexpr Ns second = 1000 * ms;
+ enum class Kind { new_order, payment, synthetic_low, q2 };
+ // notification_checkpoint is a local C++ test backend, serviced only at audited
+ // reads. It is deliberately not exposed as the native Preemptive policy.
+-enum class Policy { wait, cooperative, notification_checkpoint };
++enum class Policy { wait, cooperative, notification_checkpoint, linux_signal };
+ enum class ServiceTransition { high_entry, high_empty, before_low_resume };
+ 
+ // Counters read after join; budget_snapshot() is the synchronized live API.
+@@ -34,6 +34,7 @@ struct StarvationStats {
+ // Read only after producer and workers join. Notifications are hints; queue
+ // admission, attempts and terminal outcomes remain independent record counts.
+ struct NotificationStats {
++  uint64_t signal_sends = 0, signal_handlers = 0, signal_captures = 0, signal_deferred = 0, signal_rearms = 0;
+   uint64_t publication_passes = 0;
+   uint64_t admitted_high = 0;
+   uint64_t deliveries = 0;
+diff --git a/masstree b/masstree
+--- a/masstree
++++ b/masstree
+@@ -1 +1 @@
+-Subproject commit 1150824e6a10a0384ba4bfed6b916ce62f96315f
++Subproject commit 1150824e6a10a0384ba4bfed6b916ce62f96315f-dirty
+diff --git a/replication/experiments/run.py b/replication/experiments/run.py
+index bd30dc9..99c93f7 100644
+--- a/replication/experiments/run.py
++++ b/replication/experiments/run.py
+@@ -60,8 +60,8 @@ def validate(config, allowed):
+         require(phases["warmup"] == phases["drain_limit"] == 0,
+                 "stock dbtest has no separate warm-up or drain")
+     else:
+-        require(config.get("policy", "wait") in ("wait", "cooperative"),
+-                "queued policy must be wait or cooperative")
++        require(config.get("policy", "wait") in ("wait", "cooperative", "linux-signal"),
++                "queued policy must be wait, cooperative or linux-signal")
+         queue = config["queue"]
+         require(isinstance(queue, dict) and QUEUE <= queue.keys() <= QUEUE | {"q2_variant"} and
+                 ("q2_variant" not in queue or queue["q2_variant"] == Q2_VARIANT) and
+@@ -70,6 +70,7 @@ def validate(config, allowed):
+                 "queue requires positive integer settings and uint64 seeds across all repeats")
+     require(isinstance(config["variants"], list) and config["variants"], "variants must be nonempty")
+     has_cooperative = False
++    has_context = False
+     for variant in config["variants"]:
+         optional_variant = {"cpus", "policy"} if mode == "queued" else {"cpus"}
+         require(isinstance(variant, dict) and {"workers", "warehouses"} <= variant.keys()
+@@ -78,8 +79,9 @@ def validate(config, allowed):
+         require(integer(workers) and integer(warehouses), "workers and warehouses must be positive integers")
+         if mode == "queued":
+             policy = variant.get("policy", config.get("policy", "wait"))
+-            require(policy in ("wait", "cooperative"), "queued policy must be wait or cooperative")
++            require(policy in ("wait", "cooperative", "linux-signal"), "queued policy must be wait, cooperative or linux-signal")
+             has_cooperative |= policy == "cooperative"
++            has_context |= policy != "wait"
+             require(workers == warehouses, "I06 queued mode requires one warehouse per worker")
+             batch = queue["batch_per_worker"] * workers
+             require(max(batch, queue["global_capacity_per_worker"] * workers) < 2**32,
+@@ -95,7 +97,7 @@ def validate(config, allowed):
+                     and len(set(cpus)) == len(cpus), "cpus must be a nonempty list of distinct CPU IDs")
+             require(allowed is not None and set(cpus) <= set(allowed),
+                     "explicit cpus require Linux and must belong to the inherited allocation")
+-    if has_cooperative:
++    if has_context:
+         require("q2_variant" in queue, "Cooperative requires a mixed Q2 workload")
+     if "yield_interval" in config:
+         require(has_cooperative and integer(config["yield_interval"], 1, 2**32 - 1),
+diff --git a/replication/experiments/validate-local.sh b/replication/experiments/validate-local.sh
+index a5fa84a..e1bc48d 100644
+--- a/replication/experiments/validate-local.sh
++++ b/replication/experiments/validate-local.sh
+@@ -56,7 +56,7 @@ out=out-perf.masstree.contexts
+ timeout 90s "./$out/replication/tests/tpcc_mixed_test"
+ timeout 90s "./$out/replication/tests/silo_context_test"
+ c++ -std=c++11 -O2 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS \
+-  benchmarks/request_driver.cc benchmarks/worker_context.cc replication/tests/request_driver_test.cc \
++  benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/request_driver_test.cc \
+   -o "$work/request_driver_test"
+ timeout 90s "$work/request_driver_test"
+ python3 -B -m unittest discover -s "$kit/../tests" -p 'test_i05_experiments.py' -v
+diff --git a/replication/tests/batched_notification_cases.h b/replication/tests/batched_notification_cases.h
+index 9111b5d..d2c01d4 100644
+--- a/replication/tests/batched_notification_cases.h
++++ b/replication/tests/batched_notification_cases.h
+@@ -14,6 +14,9 @@
+ 
+ namespace notification_cases {
+ 
++inline bool &signal_backend() { static bool enabled = false; return enabled; }
++inline queued::Policy policy() { return signal_backend() ? queued::Policy::linux_signal : queued::Policy::notification_checkpoint; }
++
+ inline void check(bool value, int line) {
+   if (!value) {
+     std::cerr << "FAIL batched notification case at line " << line << '\n';
+@@ -32,7 +35,7 @@ inline void transition_case(queued::ServiceTransition target, unsigned mode,
+                             uint64_t expected_checksum, const char *label) {
+   using namespace queued;
+   Config config;
+-  config.policy = Policy::notification_checkpoint;
++  config.policy = policy();
+   config.low_kind = Kind::q2;
+   config.interval = 10;
+   config.batch_size = 2;
+@@ -142,7 +145,8 @@ inline void transition_case(queued::ServiceTransition target, unsigned mode,
+   const unsigned switches = target == ServiceTransition::high_entry ? 1 : 2;
+   BATCH_CHECK(initial_empty_checked && reads >= 2 && high_records == 4 && attempts == 5);
+   BATCH_CHECK(publications == 2 && stats.publication_passes == 2 && stats.admitted_high == 4);
+-  BATCH_CHECK(stats.deliveries == transport.deliveries && stats.deferrals == 2);
++  BATCH_CHECK(stats.deliveries == transport.deliveries + (signal_backend() ? publications : 0) && stats.deferrals == 2);
++  BATCH_CHECK(!signal_backend() || stats.signal_captures > 0);
+   BATCH_CHECK(stats.spurious_checks >= 1 && stats.queue_fallbacks >= 1 && !stats.pending_hint);
+   BATCH_CHECK(stats.switches == switches && stats.high_entries == switches &&
+               stats.empty_checks == switches && stats.low_resumes == switches);
+@@ -154,7 +158,8 @@ inline void transition_case(queued::ServiceTransition target, unsigned mode,
+             << " mode=" << mode << " clock=controlled_ns seed=" << config.seed
+             << " publications=" << publications << " admitted=4 sends=" << transport.sends
+             << " coalesced=" << transport.coalesced << " modeled_deliveries=" << transport.deliveries
+-            << " unsolicited=" << transport.unsolicited << " real_handlers=0 deferrals="
++            << " unsolicited=" << transport.unsolicited << " backend=" << (signal_backend() ? "linux-signal" : "checkpoint")
++            << " real_handlers=" << stats.signal_handlers << " async_captures=" << stats.signal_captures << " deferrals="
+             << stats.deferrals << " switches=" << stats.switches << " low_resumes="
+             << stats.low_resumes << " hints_consumed=" << stats.hints_consumed
+             << " queue_fallbacks=" << stats.queue_fallbacks << " spurious_checks="
+diff --git a/replication/tests/batched_notifications_test.cc b/replication/tests/batched_notifications_test.cc
+index 3313425..a35d075 100644
+--- a/replication/tests/batched_notifications_test.cc
++++ b/replication/tests/batched_notifications_test.cc
+@@ -4,6 +4,7 @@ static void partial_admission() {
+   using namespace queued;
+   using notification_cases::check;
+   Config config;
++  if (notification_cases::signal_backend()) { config.policy = Policy::linux_signal; config.low_kind = Kind::q2; }
+   config.workers = 2;
+   config.batch_size = 6;
+   config.global_capacity = 4;
+@@ -84,7 +85,7 @@ static void partial_admission() {
+     auto transport = model.stats(w);
+     check(publications[w] == 2 && served[w] == 4, __LINE__);
+     check(stats.publication_passes == 2 && stats.admitted_high == 4 &&
+-          stats.deliveries == 2 && stats.switches == 0, __LINE__);
++          stats.deliveries == (notification_cases::signal_backend() ? 4u : 2u) && stats.switches == 0, __LINE__);
+     check(transport.sends == 4 && transport.coalesced == 3 &&
+           transport.deliveries == 2 && transport.unsolicited == 1 && !transport.pending, __LINE__);
+   }
+@@ -100,6 +101,7 @@ static void drain_expiry() {
+   using namespace queued;
+   using notification_cases::check;
+   Config config;
++  if (notification_cases::signal_backend()) { config.policy = Policy::linux_signal; config.low_kind = Kind::q2; }
+   config.interval = 10;
+   config.batch_size = config.global_capacity = 4;
+   config.high_capacity = 1;
+@@ -142,7 +144,7 @@ static void drain_expiry() {
+   check(model.stats(0).pending && !model.stats(0).deliveries, __LINE__);
+   // A delayed delivery after join is a harmless stale hint while Driver lives.
+   check(model.deliver(0) && !model.deliver(0), __LINE__);
+-  check(driver.notification_stats(0).deliveries == 1 &&
++  check(driver.notification_stats(0).deliveries == (notification_cases::signal_backend() ? 2u : 1u) &&
+         driver.notification_stats(0).switches == 0, __LINE__);
+   std::cout << "CASE drain-expiry clock=controlled_ns seed=1 high_generated=4 admitted=1"
+                " cancelled_high=4 cancelled_low=1 safe_low_commits=1 sends=1"
+@@ -151,7 +153,8 @@ static void drain_expiry() {
+   write_results(driver, std::cout, std::cout, "drain-expiry", "controlled");
+ }
+ 
+-int main() {
++int main(int argc, char **) {
++  notification_cases::signal_backend() = argc > 1;
+   partial_admission();
+   drain_expiry();
+ #ifdef SILO_WORKER_CONTEXTS
+diff --git a/replication/tests/starvation_cases.h b/replication/tests/starvation_cases.h
+index 3c84f3d..2a577c8 100644
+--- a/replication/tests/starvation_cases.h
++++ b/replication/tests/starvation_cases.h
+@@ -12,7 +12,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+                        uint64_t oracle, bool expire, const char *label) {
+   using namespace queued;
+   Config config;
+-  config.policy = Policy::notification_checkpoint;
++  config.policy = notification_cases::policy();
+   config.low_kind = Kind::q2;
+   config.starvation_threshold = 50;
+   config.interval = 10;
+@@ -140,12 +140,13 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+   STARVE_CHECK(records[0].attempts == 2 && records[0].aborts == 1 && records[0].outcome == Outcome::committed);
+   STARVE_CHECK(!budget.low_active && (expire || (budget.high_cycles == 0 && stats.low_requests >= 2)));
+   STARVE_CHECK(highs == (expire ? 6 : 8) && low_commits >= 1 && cancelled == (expire ? 3 : 0));
++  STARVE_CHECK(!notification_cases::signal_backend() || notifications.signal_captures > 0);
+   std::cout << "CASE " << label << " expire=" << expire << " threshold=50 clock=controlled_ns seed=1"
+             << " exact_threshold_dispatch=1 retry_retained=1 high_generated=8 high_commits=" << highs
+             << " q2_commits=" << low_commits << " cancelled=" << cancelled
+             << " forced_returns=" << stats.forced_low_returns << " low_service_ns=" << stats.low_service_ns
+             << " high_service_ns=" << stats.high_service_ns << " switches=" << notifications.switches
+-            << " modeled_deliveries=" << model.stats(0).deliveries << " real_handlers=0 checksum=" << oracle << '\n';
++            << " modeled_deliveries=" << model.stats(0).deliveries << " real_handlers=" << notifications.signal_handlers << " async_captures=" << notifications.signal_captures << " checksum=" << oracle << '\n';
+   write_header(std::cout);
+   write_results(driver, std::cout, std::cout, label, "controlled");
+ }
+@@ -157,7 +158,7 @@ inline void limits(unsigned threshold, const LowRun &run_low, const HighCommit &
+                    uint64_t oracle, const char *label) {
+   using namespace queued;
+   Config config;
+-  config.policy = Policy::notification_checkpoint;
++  config.policy = notification_cases::policy();
+   config.low_kind = Kind::q2;
+   config.starvation_threshold = threshold;
+   config.batch_size = config.high_capacity = config.global_capacity = 4;
+@@ -202,14 +203,16 @@ inline void limits(unsigned threshold, const LowRun &run_low, const HighCommit &
+   producer.join();
+   driver.wait_for_drain();
+   const auto stats = driver.starvation_stats(0);
++  const auto notifications = driver.notification_stats(0);
+   notification_cases::check(!driver.failed() && highs == 4 && active_highs == (threshold ? 4 : 1), __LINE__);
++  notification_cases::check(!notification_cases::signal_backend() || notifications.signal_captures > 0, __LINE__);
+   notification_cases::check(stats.forced_low_returns == (threshold ? 0 : 1) &&
+                             (threshold || stats.checkpoint_blocks > 0), __LINE__);
+   const auto b = driver.budget_snapshot(0);
+   notification_cases::check(!b.low_active && b.high_cycles == 0 && stats.low_requests == 2, __LINE__);
+   std::cout << "CASE " << label << " threshold=" << threshold << " clock=controlled_ns seed=1 active_highs="
+             << active_highs << " high_commits=" << highs << " forced_returns=" << stats.forced_low_returns
+-            << " low_service_ns=" << stats.low_service_ns << " real_handlers=0 checksum=" << oracle << '\n';
++            << " low_service_ns=" << stats.low_service_ns << " real_handlers=" << notifications.signal_handlers << " async_captures=" << notifications.signal_captures << " checksum=" << oracle << '\n';
+   write_header(std::cout);
+   write_results(driver, std::cout, std::cout, label, "controlled");
+ }
+diff --git a/replication/tests/starvation_test.cc b/replication/tests/starvation_test.cc
+index f0ae19b..2048014 100644
+--- a/replication/tests/starvation_test.cc
++++ b/replication/tests/starvation_test.cc
+@@ -1,5 +1,6 @@
+ #include "starvation_cases.h"
+-int main() {
++int main(int argc, char **) {
++  notification_cases::signal_backend() = argc > 1;
+   for (unsigned threshold : {0u, 100u})
+     starvation_cases::limits(threshold, [](uint64_t &sum, const std::function<void()> &read) {
+       sum = 0;
+diff --git a/replication/tests/test_i05_experiments.py b/replication/tests/test_i05_experiments.py
+index b0a1e85..46fe1c5 100644
+--- a/replication/tests/test_i05_experiments.py
++++ b/replication/tests/test_i05_experiments.py
+@@ -218,7 +218,21 @@ class RunnerTests(unittest.TestCase):
+         self.assertEqual(planned["command"][option + 1], "wait")
+         self.assertEqual(planned["policy"], "wait")
+         config["policy"] = "invalid"
+-        with self.assertRaisesRegex(ValueError, "queued policy must be wait or cooperative"):
++        with self.assertRaisesRegex(ValueError, "queued policy must be wait, cooperative or linux-signal"):
++            run.validate(config, None)
++
++    def test_linux_signal_configuration_is_explicit_and_requires_q2(self):
++        config = json.loads((EXPERIMENTS / "configs" / "queued-signal-25.json").read_text())
++        run.validate(config, None)
++        planned = run.plan_run(config, config["variants"][0], 1, 1,
++                               Path("/tmp/batch"), Path("/tmp/dbtest"), None)
++        self.assertEqual(planned["policy"], "linux-signal")
++        option = planned["command"].index("--queued-policy")
++        self.assertEqual(planned["command"][option + 1], "linux-signal")
++        self.assertEqual(planned["starvation_threshold"], 25)
++        self.assertNotIn("--queued-yield-interval", planned["command"])
++        del config["queue"]["q2_variant"]
++        with self.assertRaisesRegex(ValueError, "mixed Q2"):
+             run.validate(config, None)
+ 
+     def test_paired_policy_configuration_preserves_inputs(self):
+diff --git a/replication/tests/tpcc_mixed_test.cc b/replication/tests/tpcc_mixed_test.cc
+index 7ad7467..b5153e9 100644
+--- a/replication/tests/tpcc_mixed_test.cc
++++ b/replication/tests/tpcc_mixed_test.cc
+@@ -315,8 +315,9 @@ struct Fixture {
+ 
+ } // namespace
+ 
+-int main()
++int main(int argc, char **)
+ {
++  notification_cases::signal_backend() = argc > 1;
+   nthreads = 2;
+   scale_factor = 2;
+   Fixture fixture;
+diff --git a/replication/tests/validate_batched_notifications.sh b/replication/tests/validate_batched_notifications.sh
+index 1b0e37e..3e3ef96 100644
+--- a/replication/tests/validate_batched_notifications.sh
++++ b/replication/tests/validate_batched_notifications.sh
+@@ -31,7 +31,7 @@ for build in debug optimized ubsan; do
+     ubsan) opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all) ;;
+   esac
+   c++ "${flags[@]}" "${opt[@]}" -DSILO_WORKER_CONTEXTS \
+-    benchmarks/request_driver.cc benchmarks/worker_context.cc \
++    benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc \
+     replication/tests/batched_notifications_test.cc -o "$evidence/batched-$build"
+   timeout 60s "$evidence/batched-$build" > "$evidence/batched-$build.log" 2>&1
+ done
+@@ -42,7 +42,7 @@ done
+ for build in wait cooperative; do
+   context=()
+   if [[ "$build" == cooperative ]]; then
+-    context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc)
++    context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/signal_backend.cc)
+   fi
+   c++ "${flags[@]}" -O2 "${context[@]}" benchmarks/request_driver.cc \
+     replication/tests/request_driver_test.cc -o "$evidence/driver-$build"
+diff --git a/replication/tests/validate_starvation.sh b/replication/tests/validate_starvation.sh
+index a41faec..a5bd19a 100644
+--- a/replication/tests/validate_starvation.sh
++++ b/replication/tests/validate_starvation.sh
+@@ -22,7 +22,7 @@ for build in debug optimized ubsan; do
+     optimized) opt=(-O3) ;;
+     ubsan) opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all) ;;
+   esac
+-  c++ "${flags[@]}" "${opt[@]}" -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc \
++  c++ "${flags[@]}" "${opt[@]}" -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc \
+     replication/tests/starvation_test.cc -o "$evidence/starvation-$build"
+   timeout 60s "$evidence/starvation-$build" > "$evidence/starvation-$build.log" 2>&1
+ done
+@@ -31,7 +31,7 @@ for repetition in {1..20}; do
+ done
+ for build in wait cooperative; do
+   context=()
+-  if [[ "$build" == cooperative ]]; then context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc); fi
++  if [[ "$build" == cooperative ]]; then context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/signal_backend.cc); fi
+   c++ "${flags[@]}" -O2 "${context[@]}" benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o "$evidence/driver-$build"
+   timeout 60s "$evidence/driver-$build" > "$evidence/driver-$build.log" 2>&1
+ done
+diff --git a/util.h b/util.h
+index a63f7ae..bb134ef 100644
+--- a/util.h
++++ b/util.h
+@@ -21,6 +21,9 @@
+ #include "macros.h"
+ #include "small_vector.h"
+ 
++template <typename A, typename B>
++std::ostream &operator<<(std::ostream &o, const std::pair<A, B> &p);
++
+ namespace util {
+ 
+ // padded, aligned primitives

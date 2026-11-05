@@ -1,0 +1,137 @@
+PASS 358 controlled CASE blocks; 2570 terminal records; 69 state checks; four signal pressure runs
+[
+  {
+    "run": "queued-signal-25-ipz89ghd-r1-v1",
+    "threshold": 25,
+    "workers": 1,
+    "q2_commits": 1181,
+    "short_arrivals": 11996,
+    "short_commits": 7693,
+    "rejected": 4303,
+    "cancelled": 0,
+    "short_aborts": 0,
+    "async_captures": 1649,
+    "forced_returns": 3870,
+    "admission_blocks": 283,
+    "low_service_ns": 2173653269,
+    "signal": [
+      {
+        "phase": "measurement",
+        "worker": "0",
+        "signal_sends": "1989",
+        "real_handlers": "1947",
+        "async_captures": "1649",
+        "signal_deferred": "298",
+        "signal_rearms": "298",
+        "switches": "4161",
+        "low_resumes": "4161"
+      }
+    ]
+  },
+  {
+    "run": "queued-signal-25-ipz89ghd-r1-v2",
+    "threshold": 25,
+    "workers": 2,
+    "q2_commits": 1826,
+    "short_arrivals": 23992,
+    "short_commits": 10813,
+    "rejected": 13179,
+    "cancelled": 0,
+    "short_aborts": 0,
+    "async_captures": 2661,
+    "forced_returns": 3445,
+    "admission_blocks": 235,
+    "low_service_ns": 4714443163,
+    "signal": [
+      {
+        "phase": "measurement",
+        "worker": "0",
+        "signal_sends": "1727",
+        "real_handlers": "1599",
+        "async_captures": "1393",
+        "signal_deferred": "206",
+        "signal_rearms": "206",
+        "switches": "2630",
+        "low_resumes": "2630"
+      },
+      {
+        "phase": "measurement",
+        "worker": "1",
+        "signal_sends": "1487",
+        "real_handlers": "1516",
+        "async_captures": "1268",
+        "signal_deferred": "248",
+        "signal_rearms": "248",
+        "switches": "2091",
+        "low_resumes": "2091"
+      }
+    ]
+  },
+  {
+    "run": "queued-signal-100-r36o_fcu-r1-v1",
+    "threshold": 100,
+    "workers": 1,
+    "q2_commits": 1415,
+    "short_arrivals": 11996,
+    "short_commits": 8960,
+    "rejected": 3036,
+    "cancelled": 0,
+    "short_aborts": 0,
+    "async_captures": 1423,
+    "forced_returns": 0,
+    "admission_blocks": 0,
+    "low_service_ns": 2087704638,
+    "signal": [
+      {
+        "phase": "measurement",
+        "worker": "0",
+        "signal_sends": "2262",
+        "real_handlers": "2034",
+        "async_captures": "1423",
+        "signal_deferred": "611",
+        "signal_rearms": "611",
+        "switches": "2093",
+        "low_resumes": "2093"
+      }
+    ]
+  },
+  {
+    "run": "queued-signal-100-r36o_fcu-r1-v2",
+    "threshold": 100,
+    "workers": 2,
+    "q2_commits": 2155,
+    "short_arrivals": 23992,
+    "short_commits": 12283,
+    "rejected": 11709,
+    "cancelled": 0,
+    "short_aborts": 0,
+    "async_captures": 2732,
+    "forced_returns": 0,
+    "admission_blocks": 0,
+    "low_service_ns": 4785392894,
+    "signal": [
+      {
+        "phase": "measurement",
+        "worker": "0",
+        "signal_sends": "1869",
+        "real_handlers": "1732",
+        "async_captures": "1291",
+        "signal_deferred": "441",
+        "signal_rearms": "441",
+        "switches": "1601",
+        "low_resumes": "1601"
+      },
+      {
+        "phase": "measurement",
+        "worker": "1",
+        "signal_sends": "1679",
+        "real_handlers": "1770",
+        "async_captures": "1441",
+        "signal_deferred": "329",
+        "signal_rearms": "327",
+        "switches": "1489",
+        "low_resumes": "1489"
+      }
+    ]
+  }
+]

@@ -1,0 +1,782 @@
+diff --git a/Makefile b/Makefile
+index a43cbf0..3bfb4e3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -168,8 +168,8 @@ BENCH_SRCFILES = benchmarks/bdb_wrapper.cc \
+ 	benchmarks/ycsb.cc
+ 
+ ifeq ($(strip $(WORKER_CONTEXTS)),1)
+-BENCH_SRCFILES += benchmarks/worker_context.cc
+-CONTEXT_OBJ := $(O)/benchmarks/worker_context.o
++BENCH_SRCFILES += benchmarks/worker_context.cc benchmarks/signal_backend.cc
++CONTEXT_OBJ := $(O)/benchmarks/worker_context.o $(O)/benchmarks/signal_backend.o
+ endif
+ 
+ ifeq ($(MYSQL_S),1)
+diff --git a/benchmarks/bench.cc b/benchmarks/bench.cc
+index b5f32bc..4ad4e08 100644
+--- a/benchmarks/bench.cc
++++ b/benchmarks/bench.cc
+@@ -128,7 +128,7 @@ bench_worker::run()
+   barrier_b->wait_for();
+   if (measured_driver) {
+     std::unique_ptr<bench_txn_context> low;
+-    if (queued_config.policy == queued::Policy::cooperative)
++    if (queued_config.policy != queued::Policy::wait)
+       low.reset(new bench_txn_context(0, *db, transaction_base::TXN_FLAG_READ_ONLY));
+     const auto run_phase = [&](queued::Driver &driver) {
+       queued::Driver::ReadCheckpoint checkpoint;
+diff --git a/benchmarks/dbtest.cc b/benchmarks/dbtest.cc
+index 06aa79a..9fead5f 100644
+--- a/benchmarks/dbtest.cc
++++ b/benchmarks/dbtest.cc
+@@ -191,8 +191,10 @@ main(int argc, char **argv)
+         queued_config.policy = queued::Policy::wait;
+       else if (string(optarg) == "cooperative")
+         queued_config.policy = queued::Policy::cooperative;
++      else if (string(optarg) == "linux-signal")
++        queued_config.policy = queued::Policy::linux_signal;
+       else {
+-        cerr << "[ERROR] --queued-policy must be wait or cooperative" << endl;
++        cerr << "[ERROR] --queued-policy must be wait, cooperative or linux-signal" << endl;
+         return 1;
+       }
+       break;
+@@ -297,7 +299,7 @@ main(int argc, char **argv)
+       cerr << "[ERROR] starvation threshold requires --queued-mixed" << endl;
+       return 1;
+     }
+-    if (queued_config.policy == queued::Policy::cooperative) {
++    if (queued_config.policy != queued::Policy::wait) {
+ #ifndef SILO_WORKER_CONTEXTS
+       cerr << "[ERROR] Cooperative requires a WORKER_CONTEXTS=1 build" << endl;
+       return 1;
+diff --git a/benchmarks/request_driver.cc b/benchmarks/request_driver.cc
+index 250ad56..5c918a8 100644
+--- a/benchmarks/request_driver.cc
++++ b/benchmarks/request_driver.cc
+@@ -2,6 +2,7 @@
+ 
+ #ifdef SILO_WORKER_CONTEXTS
+ #include "worker_context.h"
++#include "signal_backend.h"
+ #include "../preemption.h"
+ #endif
+ 
+@@ -101,6 +102,7 @@ struct Worker {
+   }
+ #ifdef SILO_WORKER_CONTEXTS
+   Cooperative *cooperative = nullptr; // Owned by the worker's original stack.
++  SignalBackend *signal = nullptr; // Registration guarded by mutex.
+ #endif
+ };
+ 
+@@ -220,6 +222,12 @@ void Driver::deliver_notification(size_t worker) {
+   Worker &w = *state->workers.at(worker);
+   w.deliveries.fetch_add(1, std::memory_order_relaxed);
+   w.notification_pending.store(true, std::memory_order_release);
++#ifdef SILO_WORKER_CONTEXTS
++  if (state->config.policy == Policy::linux_signal) {
++    std::lock_guard<std::mutex> lock(w.mutex);
++    if (w.signal) w.signal->send();
++  }
++#endif
+ }
+ 
+ NotificationStats Driver::notification_stats(size_t worker) const {
+@@ -317,11 +325,13 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id, uint64_t first_hi
+     for (size_t i = 0; i < config.workers; ++i)
+       if (published[i])
+         ++s.workers[i]->notifications.publication_passes;
+-    if (s.high_published) {
++    if (s.high_published || config.policy == Policy::linux_signal) {
+       try {
+         for (size_t i = 0; i < config.workers; ++i)
+-          if (published[i])
+-            s.high_published(i);
++          if (published[i]) {
++            if (config.policy == Policy::linux_signal) deliver_notification(i);
++            if (s.high_published) s.high_published(i);
++          }
+       } catch (...) {
+         s.fatal.store(true, std::memory_order_release);
+         break;
+@@ -390,7 +400,7 @@ void Driver::on_record_read(size_t worker) {
+     ++w.starvation.checkpoint_blocks;
+     return;
+   }
+-  if (s.config.policy == Policy::notification_checkpoint) {
++  if (s.config.policy == Policy::notification_checkpoint || s.config.policy == Policy::linux_signal) {
+     // Clear the hint BEFORE checking the authoritative queue. A delayed or
+     // coalesced hint cannot hide work published at high-empty/low-resume.
+     const bool hinted = w.notification_pending.exchange(false, std::memory_order_acq_rel);
+@@ -405,12 +415,16 @@ void Driver::on_record_read(size_t worker) {
+       ++w.notifications.queue_fallbacks;
+     if (ScopedNonPreemptible::blocked()) {
+       ++w.notifications.deferrals;
++      if (w.signal) w.signal->window(scheduler.context, false);
+       return;
+     }
+     if (!s.fatal.load(std::memory_order_acquire) &&
+         s.clock() < s.drain_deadline.load(std::memory_order_acquire)) {
++      const unsigned before = w.signal ? w.signal->captures() : 0;
++      if (w.signal) w.signal->window(scheduler.context, true);
++      if (!w.signal || w.signal->captures() == before) scheduler.context.yield();
++      if (w.signal && !w.signal->continuation_ok()) throw std::runtime_error("signal continuation canary");
+       ++w.notifications.switches;
+-      scheduler.context.yield();
+     }
+     return;
+   }
+@@ -502,11 +516,15 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
+       w.records.push_back(request);
+   };
+ #ifdef SILO_WORKER_CONTEXTS
++  std::unique_ptr<SignalBackend> signal;
+   std::unique_ptr<Cooperative> cooperative;
+   if (s.config.policy != Policy::wait) {
+     try {
++      if (s.config.policy == Policy::linux_signal) signal.reset(new SignalBackend);
+       cooperative.reset(new Cooperative(execute_request));
+       w.cooperative = cooperative.get();
++      std::lock_guard<std::mutex> lock(w.mutex);
++      w.signal = signal.get();
+     } catch (const std::exception &) {
+       s.fatal.store(true, std::memory_order_release);
+     }
+@@ -600,6 +618,15 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
+     cooperative->context.resume();
+     w.cooperative = nullptr;
+   }
++  if (signal) {
++    std::lock_guard<std::mutex> lock(w.mutex);
++    w.signal = nullptr;
++    w.notifications.signal_sends = signal->sends();
++    w.notifications.signal_handlers = signal->handlers();
++    w.notifications.signal_captures = signal->captures();
++    w.notifications.signal_deferred = signal->deferred();
++    w.notifications.signal_rearms = signal->rearms();
++  }
+ #endif
+   std::lock_guard<std::mutex> lock(s.ready_mutex);
+   ++s.drained_count;
+@@ -687,6 +714,12 @@ void write_results(const Driver &driver, std::ostream &out, std::ostream &summar
+           << " commits_in_window=" << commits_in_window << " drain_commits=" << drain_commits
+           << " failed=" << driver.failed() << '\n';
+   for (size_t i = 0; i < driver.worker_count(); ++i) {
++    const auto n = driver.notification_stats(i);
++    summary << "notifications phase=" << phase << " worker=" << i
++            << " signal_sends=" << n.signal_sends << " real_handlers=" << n.signal_handlers
++            << " async_captures=" << n.signal_captures << " signal_deferred=" << n.signal_deferred
++            << " signal_rearms=" << n.signal_rearms
++            << " switches=" << n.switches << " low_resumes=" << n.low_resumes << '\n';
+     const StarvationStats stats = driver.starvation_stats(i);
+     summary << "starvation phase=" << phase << " worker=" << i
+             << " clock=driver_ns threshold=" << driver.budget_threshold()
+diff --git a/benchmarks/request_driver.h b/benchmarks/request_driver.h
+index f8bb161..9ccaba7 100644
+--- a/benchmarks/request_driver.h
++++ b/benchmarks/request_driver.h
+@@ -18,7 +18,7 @@ constexpr Ns second = 1000 * ms;
+ enum class Kind { new_order, payment, synthetic_low, q2 };
+ // notification_checkpoint is a local C++ test backend, serviced only at audited
+ // reads. It is deliberately not exposed as the native Preemptive policy.
+-enum class Policy { wait, cooperative, notification_checkpoint };
++enum class Policy { wait, cooperative, notification_checkpoint, linux_signal };
+ enum class ServiceTransition { high_entry, high_empty, before_low_resume };
+ 
+ // Counters read after join; budget_snapshot() is the synchronized live API.
+@@ -34,6 +34,7 @@ struct StarvationStats {
+ // Read only after producer and workers join. Notifications are hints; queue
+ // admission, attempts and terminal outcomes remain independent record counts.
+ struct NotificationStats {
++  uint64_t signal_sends = 0, signal_handlers = 0, signal_captures = 0, signal_deferred = 0, signal_rearms = 0;
+   uint64_t publication_passes = 0;
+   uint64_t admitted_high = 0;
+   uint64_t deliveries = 0;
+diff --git a/replication/IMPLEMENTATION_STATUS.md b/replication/IMPLEMENTATION_STATUS.md
+index eea7012..da156d7 100644
+--- a/replication/IMPLEMENTATION_STATUS.md
++++ b/replication/IMPLEMENTATION_STATUS.md
+@@ -18,11 +18,11 @@ The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a
+ | I10 | Wait scheduler | Erica / Brian | Implemented and locally validated | [Deterministic scheduling test and four mixed runs](results/i10-wait/README.md). All 4,236 measurement requests committed, including 216 short requests |
+ | I11 | Cooperative scheduler | Brian | Implemented and locally validated | [Snapshot, interval and matched policy evidence](results/i11-cooperative/README.md). The eight runs committed 7,669 measurement requests. Cooperative recorded 38 mid-Q2 handoffs |
+ | I12 | Hardware interrupt delivery | Erin | Prepared · hardware validation pending | The standalone test for the UB-ADBLAB patched kernel compiled in the emulated guest and exited at its CPUID guard. Handler delivery and verified receiver resumption require a qualified Intel host. [Runbook](uintr/README.md) · [Local build and checks](results/mac03-uintr-kit/README.md) |
+-| I13 | Interrupt-driven switching | Erin / Brian | Software checks prepared · native switch pending | MAC-04 defines the initial register coverage and switch transitions, adds a Linux trap-return canary with a corruption control, and exercises nested deferral through the voluntary context. [Evidence and I13 handoff](results/mac04-software-checks/README.md) |
+-| I14 | Silo Preemptive scheduler | Brian / Erin | Local checkpoint notification service tested · native integration pending | MAC-07 adds a modeled-notification checkpoint backend and shared high-entry/empty/low-return hooks. Nine real Silo Q2 cases preserved snapshot checksums across 36 committed stock writes and 15 handoffs/resumptions. It does not implement asynchronous switching. MAC-09 signal integration, a qualified host and the I13 native switch remain pending. [MAC-07 implementation and evidence](results/mac07-batched-notifications/README.md) |
+-| I15 | Batched preemption | Brian | Controlled checkpoint transitions passed · signal/native integration pending | MAC-07's nine injected-event transition cases passed in debug, optimized and UBSan builds plus 20 repetitions and nine real Silo Q2 cases. The two-worker case reconciled 12 high arrivals as eight commits and four rejections, with four callbacks and nine attempts; drain-expiry accounting also passed. Final raw-record replay reconciled 262 case blocks. The first source-staging failure is retained. Signal-backend repetition and native hardware coalescing/return races remain pending. [Schedules, counters and failures](results/mac07-batched-notifications/README.md) |
+-| I16 | Starvation prevention | Brian | Local budget integration/overload validated · signal/native pending | MAC-08 wires coherent budget snapshots, admission and shared checkpoint/high-service decisions, retaining whole-request retry charges and low elapsed-service records. Four controlled cases passed across debug/optimized/UBSan plus 20 repeats and real Silo Q2. Four 25%/100% overload runs reconciled 7,609 Q2 commits, 42,439 short commits and 29,537 rejections. The 25% runs triggered 3,856 forced returns and 69 admission blocks; 100% triggered neither. Local nanosecond clocks, transaction-boundary overshoot and fixed FIFO head blocking are documented. MAC-09 signal repetition and native cycle/UINTR validation remain open. [Results, commands and retained failures](results/mac08-starvation/README.md) |
+-| I17 | Integrated validation | Everyone | Local clean-build workflow exercised · full validation pending | MAC-05 clean-built three targets and passed both engine tests, the driver, 13 experiment-tool tests and eight paired smoke runs. MAC-07 rebuilt three targets and added nine real Q2 notification-transition cases, with both engine suites, both driver builds and 13 tools tests passing. MAC-08 added four Q2 budget cases and four reconciled overload runs; both engine/driver suites and 14 tool tests passed. Native I13–I16 integration, signal repetition, the remaining consistency/pressure/stress matrix and upstream suite remain pending. [MAC-08 results](results/mac08-starvation/README.md) · [MAC-05 workflow](results/mac05-workflow/README.md) · [MAC-07 results and failures](results/mac07-batched-notifications/README.md) |
++| I13 | Interrupt-driven switching | Erin / Brian | Local signal capture/return validated · native switch pending | MAC-09 passed 69 state checks (1,518 captures/returns), including independent arithmetic-interior capture, legacy FP/SIMD preservation, separate GPR/SIMD corruption controls, protected deferral and cleanup. Uses restricted assembly windows and the Linux kernel signal frame; native UINTR entry/return preservation remains open. [Contract](docs/linux-signal-backend.md) · [MAC-09 evidence](results/mac09-signal/README.md) |
++| I14 | Silo Preemptive scheduler | Brian / Erin | Restricted local signal Q2 integration validated · native integration pending | MAC-09 added opt-in `linux-signal`, with per-worker real delivery and separate actual-capture/fallback counters. Nine Q2 transition cases preserved same-attempt checksums across 36 committed writes and 15 actual captures/resumptions; final Q2 fixtures also passed 53 real paused-write rollback/cleanup probes. Captures are confined to audited windows at completed reads; native UINTR integration remains MAC-06. [Results and limits](results/mac09-signal/README.md) |
++| I15 | Batched preemption | Brian | Local model/signal batching validated · native pending | MAC-07 signal repetition is complete: final debug/optimized/UBSan plus 20 repetitions passed 11 cases each, and nine real Q2 transitions passed. Rejections, cancellation, duplicate/coalesced modeled events, actual sends/handlers, protection and service/return transitions remain separately accounted. Partial-admission/drain cases intentionally use boundary service; actual captures are required in the nine transition cases. Native hardware coalescing/return races remain MAC-06. [MAC-09 evidence](results/mac09-signal/README.md) |
++| I16 | Starvation prevention | Brian | Local checkpoint/signal overload validated · native pending | MAC-08 signal repetition is complete. Final four-case suites passed all three builds plus 20 repetitions and real Q2; fixed a controlled-clock low-publication/reset race. Four signal overload runs reconciled 6,577 Q2 commits, 39,749 short commits and 32,227 rejections. At 25%: 7,315 forced returns / 518 admission blocks; at 100%: neither. Whole-request overshoot, local elapsed-ns timing and FIFO head blocking remain documented; native cycles/UINTR remain open. [MAC-09 results](results/mac09-signal/README.md) |
++| I17 | Integrated validation | Everyone | Local signal workflow validated · full native validation pending | MAC-09 full validation fresh-built all three targets and passed state, driver, engine/context, 15 tool tests and four pressure runs. Final fixture-only follow-up passed all three builds plus 20 repetitions, signal/checkpoint engine modes and 53 actual paused-write abort probes. Linux/Mac replay reconciled 358 controlled blocks / 2,570 records and all 71,976 pressure short arrivals; reports regenerate identically. The full script was not repeated after fixture-only improvements; unchanged runtime/binary hashes are verified. Native I13–I16, remaining native stress/consistency matrix and upstream suite remain pending. [Evidence and failures](results/mac09-signal/README.md) |
+ | I18 | Replication experiments | Erica / everyone | Collection workflow and run plan prepared · native experiments pending | MAC-05 archived/replayed eight Wait/Cooperative runs (7,910 measurement commits) and independently checked per-type percentiles/counts. Figure 10 target and five varied three-policy orders are documented; Preemptive, individual CPU placement and native performance collection remain pending. [Evidence](results/mac05-workflow/README.md) · [Run plan](experiments/HOST_WORKFLOW.md#figure-10-style-native-run-plan) |
+ | M01 | Milestone evidence assessment | Everyone | In progress | Archived ten-run baseline, passing adapted stock suite, and I06–I08 functional evidence are ready to cite. Timeline assessment and hardware decision remain open |
+ | M02 | Milestone report | Everyone | Not started | Original LaTeX source not supplied |
+@@ -94,3 +94,16 @@ Implemented November 4, 2026 on Silo source base `834a3f8e4421cf605c2a8cbd1b99c8
+ The Linux driver and engine tests verified exact intervals, empty queues, nested deferral, repeated handoffs, retry and abort accounting, and the expected Q2 checksum across nine writes. The I05 runner completed four matched policy pairs at one and two workers. Every measured request committed. Cooperative serviced 152 short requests during 38 Q2 handoffs, and Wait ran all shorts between Q2s. [Commands, raw evidence and comparison](results/i11-cooperative/README.md)
+ 
+ The comparison used emulated Linux x86-64, one-second measurement windows and a 64-read smoke interval. The 10,000-read default exceeded the Q2 size in the separate default-interval smoke. Native PACE comparisons remain open. I12 requires I03 qualification and an approved UINTR interface.
++
++## MAC-09 local signal validation record
++
++November 5, 2026, source base `c7989984e6e6795d88046157cef7c6d40e33d133` plus
++archived changes. MAC-09 and the pending MAC-07/MAC-08 signal repetitions are
++complete locally for the documented restricted windows/state. Exact commands,
++source/binary hashes, failed attempts, final fixture follow-up, raw records and
++replay are in [MAC-09 evidence](results/mac09-signal/README.md); the shared
++[local table](LOCAL_REPLICATION_PLAN.md#current-status) records the resulting
++local task statuses. These runs do not complete native I12–I18 or establish a
++matched three-policy performance comparison. MAC-10 acceptance assessment and
++MAC-11 report/package remain local next steps; MAC-06 owns native qualification,
++integration and final experiments.
+diff --git a/replication/LOCAL_REPLICATION_PLAN.md b/replication/LOCAL_REPLICATION_PLAN.md
+index 2371fda..3377c06 100644
+--- a/replication/LOCAL_REPLICATION_PLAN.md
++++ b/replication/LOCAL_REPLICATION_PLAN.md
+@@ -39,9 +39,9 @@ For the final, pursue a cloud or other Intel Linux host with verified UINTR expo
+ | MAC-04 · Prepare I13–I16 software checks | Complete locally · emulated Linux software checks | Both Linux trap builds passed 256 returns and detected deliberate register corruption. The voluntary context passed 32 deferred pause/resume rounds and one million round trips. The driver, both Silo engine tests, and 11 experiment-tool tests passed. Native switching, delivery races, and Q2 progress under load remain open. [Commands and results](results/mac04-software-checks/README.md#results) |
+ | MAC-05 · Dry-run the I17–I18 workflow | Complete locally · emulated Linux workflow validation | Clean-built all three targets; both engine tests, the driver and 13 experiment-tool tests passed. Eight fresh Wait/Cooperative runs reconciled: 7,910 measurement commits, 432 shorts and 40 mid-Q2 handoffs. Fresh and MAC-02 archives regenerated per-type metrics; the native three-policy plan is prepared, with execution and CPU pinning still pending. [Commands, results and limits](results/mac05-workflow/README.md) |
+ | MAC-06 · Qualify a host and execute the replication | Final phase · requires host access | No working UINTR host was secured for the midpoint. PACE's usable interface is unavailable to the team; the AWS VM result applies to that guest. Qualify any cloud or other Intel alternative separately. Local midpoint work proceeds through MAC-07–MAC-11. |
+-| MAC-07 · Integrate and test local batched notifications | Partial · controlled and Silo Q2 tests passed; signal repeat pending | Nine transition cases passed in debug, optimized and UBSan builds plus 20 repetitions. Nine real Silo Q2 cases preserved checksums across 36 committed stock writes and 15 pause/resume handoffs. The two-worker case reconciled 12 shorts as eight commits and four rejections; drain expiry retained five cancellations. Both engine suites, both driver builds and 13 experiment-tool tests passed. First staging failure retained. MAC-09 signal repetition is required for completion. [Commands, schedules, counters and failures](results/mac07-batched-notifications/README.md) |
+-| MAC-08 · Integrate and test local starvation prevention | Partial · local integration/overload passed; signal repeat pending | Budget now gates admission and shared checkpoint/high-service decisions using synchronized snapshots. Four controlled cases passed in debug, optimized and UBSan builds plus 20 repetitions, and with real Silo Q2. Four sustained-load runs at 25%/100% and one/two workers reconciled 7,609 Q2 commits, 42,439 short commits and 29,537 rejections. Both engine/driver suites, 14 tool tests and Mac snapshot ThreadSanitizer passed. Initial fixture/workflow failures retained; MAC-09 repeat remains required. [Commands, raw records and limits](results/mac08-starvation/README.md) |
+-| MAC-09 · Build the Linux-signal preemption test backend | Planned · additional runtime implementation required | Extend beyond MAC-04's fixed trap-return fixture to asynchronous delivery, state preservation, protected-region deferral, short service and Q2 resumption. Local backend results do not validate native I12–I14. |
++| MAC-07 · Integrate and test local batched notifications | Complete locally · model and Linux-signal integration | Final debug/optimized/UBSan builds plus 20 repetitions passed all 11 cases. Nine real Silo Q2 transition cases preserved their checksums across 36 committed writes and 15 actual captures/resumptions. Two-worker partial admission and bounded drain retained rejection/cancellation outcomes. [MAC-09 signal repetition and raw evidence](results/mac09-signal/README.md#actual-results) |
++| MAC-08 · Integrate and test local starvation prevention | Complete locally · checkpoint and Linux-signal integration | Final four-case suites passed all three builds plus 20 repetitions and real Q2. Signal pressure at 25%/100%, one/two workers, reconciled 6,577 Q2 commits, 39,749 short commits and 32,227 rejections. Restrictive 25% triggered 7,315 forced returns / 518 admission blocks. The controlled-clock reset race was fixed; native cycles/UINTR remain MAC-06. [Final cases, pressure and limitations](results/mac09-signal/README.md#actual-results) |
++| MAC-09 · Build the Linux-signal preemption test backend | Complete locally · restricted asynchronous windows in emulated Linux | Opt-in `linux-signal` captures/restores kernel frames inside audited assembly windows, separate from voluntary fallbacks. Passed 69 state checks, 358 controlled blocks / 2,570 terminal records, final Q2 cases with 53 actual paused-write abort/cleanup probes, regressions and four reconciled pressure runs. Pressure recorded 8,465 actual captures; source/binary continuity and Mac replay verified. Native I12–I14 remain pending. [Contract](docs/linux-signal-backend.md) · [Commands, results and failures](results/mac09-signal/README.md) |
+ | MAC-10 · Model UINTR notification behavior locally | Partial · supporting transport model exercised by MAC-07 | MAC-07 added a reusable per-worker pending-bit transport with explicit send/delivery, coalescing and unsolicited-event counters; tested delayed delivery, protection, transitions and stale post-join delivery. Broader MAC-10 acceptance remains to be assessed. Real instructions, kernel interface and delivery costs remain MAC-06. [Model and recorded scope](results/mac07-batched-notifications/README.md) |
+ | MAC-11 · Assemble and verify the local midpoint package | Planned · evidence available, report pending | Freeze local evidence, assess proposal changes, write the report and verify/package PDF and source. Maps to M01–M03; exact template source and submission details still need confirmation. |
+ 
+@@ -158,3 +158,5 @@ For each update, record the date, task ID, owner, branch and commit, actual comm
+ 
+ 
+ **November 5, 2026 · MAC-08 · Erin · `erin/local-replication-evidence` based on `2bb11b94ed493f4c27c87abe8185573d3f077093`, with source changes/hashes archived.** Connected `StarvationBudget` to producer admission, both local checkpoint policies and the shared high-service/return-to-low loop. Published coherent mutex-protected snapshots, retained accounting across retries, charged whole high requests and recorded low-context elapsed service. Added a 0–100 threshold CLI/config option and effective clock metadata. Ran `bash replication/tests/validate_starvation.sh /mac08-evidence` in a fresh isolated x86-64 Colima/QEMU container (Ubuntu 22.04.5, GCC 11.4/glibc 2.35). Debug, optimized and UBSan plus 20 repetitions passed four cases per execution. Four real Silo Q2 budget cases preserved the oracle checksum through 22 committed stock writes and seven Q2 commits; both engine and driver suites and 14 tool tests passed. The script stopped at its incorrectly formed analysis command after completing the 25% batch; corrected the command/batch selection and used the saved recovery script to analyze that batch, run the two 100% cases and pass both report gates (recovery exit 0). The entire corrected script was not rerun. Four actual three-second overload runs at 25%/100% and one/two workers committed 7,609 Q2s and 42,439 shorts, retaining 29,537 queue-full rejections and one real short conflict/retry. No pressure requests were cancelled or unaccounted for. Restrictive 25% recorded 3,856 forced low returns and 69 admission blocks; 100% recorded zero. Independent replay reconciled 96 controlled blocks/768 records and all pressure records, and regenerated identical reports. The Mac Wait driver, two-worker snapshot ThreadSanitizer and 14 tools tests also passed. Preserved two fixture failures and the failed collection invocation. The guest was stopped after collection. Accounting is local monotonic/logical nanoseconds, not native cycles; enforcement is between high requests, and fixed FIFO head blocking remains. MAC-08 stays partial pending MAC-09 signal repetition; native I16 remains MAC-06. Next ready work: MAC-09, with MAC-10/MAC-11 independent local work. [Evidence, failures and limitations](results/mac08-starvation/README.md)
++
++**November 5, 2026 · MAC-09 and MAC-07/MAC-08 completion · Erin · `erin/local-replication-evidence` based on `c7989984e6e6795d88046157cef7c6d40e33d133`, with source changes/hashes archived.** Implemented the opt-in Linux-signal backend, guarded kernel-frame/landing stacks, handler-safe capture/return, protected deferral/re-arm, separate signal/capture/fallback counters, CLI/runner support and a documented safe-window/TLS/state contract. In the isolated x86-64 Colima/QEMU guest (Ubuntu 22.04.5, GCC 11.4/glibc 2.35), the full validation exited 0: 69 state checks (debug/optimized/UBSan plus 20 repeats, independent arithmetic-interior capture and separate GPR/SIMD corruption controls), all three engine builds, both driver builds, 15 tools tests, checkpoint/context regressions and four signal pressure runs. The final fixture-only follow-up also exited 0 after strengthening controlled low-publication barriers and adding 53 actual failed-write rollback/cleanup probes while Q2 was paused; both controlled suites passed all three builds plus 20 repeats and the final engine fixture passed in signal/checkpoint modes. The entire full script was not repeated after fixture-only improvements; runtime and pressure-binary continuity were verified. Final independent replay on Linux and the Mac reconciled 358 controlled blocks / 2,570 records and every pressure arrival. Pressure committed 6,577 Q2s and 39,749 shorts, retained 32,227 rejections, and recorded 8,465 actual captures versus 14,065 total handoffs (5,600 voluntary fallbacks); no pressure requests were cancelled or missing. The 25% runs triggered 7,315 forced returns and 518 admission blocks; 100% triggered neither. Both pressure reports regenerated identically on the Mac. Retained staging, classification, fixture compile and reset-race failures. MAC-07/MAC-08's pending signal repetitions are now satisfied locally; MAC-09 is complete only for the documented windows/state, not arbitrary Silo/libc interruption or native UINTR. Next: MAC-10 acceptance assessment and MAC-11 package; MAC-06 remains the final native phase. [Evidence and precise scope](results/mac09-signal/README.md) · [Backend contract](docs/linux-signal-backend.md)
+diff --git a/replication/experiments/README.md b/replication/experiments/README.md
+index 40eac61..a19e222 100644
+--- a/replication/experiments/README.md
++++ b/replication/experiments/README.md
+@@ -90,7 +90,13 @@ and cancellations retain their ordinary terminal records.
+ `configs/queued-starvation-25.json` and `configs/queued-starvation-100.json` are
+ three-second functional pressure configurations, using Cooperative with 64-read
+ checkpoints and four shorts per worker every millisecond. They do not expose the
+-notification checkpoint test backend or implement the MAC-09 signal backend.
++notification checkpoint test backend. The separate `queued-signal-25.json` and
++`queued-signal-100.json` configurations select MAC-09's opt-in `linux-signal`
++backend on the same workload. This backend requires x86-64 Linux/glibc and
++`WORKER_CONTEXTS=1`; it captures only inside audited assembly windows at Q2 read
++boundaries and records actual handler/capture counters separately. See the
++[signal contract](../docs/linux-signal-backend.md) and
++[validation script](../tests/validate_signal_backend.sh).
+ See [the contract](../docs/experiment-contract.md) for enforcement, overshoot and
+ fixed-FIFO limits and [the validation script](../tests/validate_starvation.sh)
+ for a disposable Linux build and test recipe.
+diff --git a/replication/experiments/run.py b/replication/experiments/run.py
+index bd30dc9..99c93f7 100644
+--- a/replication/experiments/run.py
++++ b/replication/experiments/run.py
+@@ -60,8 +60,8 @@ def validate(config, allowed):
+         require(phases["warmup"] == phases["drain_limit"] == 0,
+                 "stock dbtest has no separate warm-up or drain")
+     else:
+-        require(config.get("policy", "wait") in ("wait", "cooperative"),
+-                "queued policy must be wait or cooperative")
++        require(config.get("policy", "wait") in ("wait", "cooperative", "linux-signal"),
++                "queued policy must be wait, cooperative or linux-signal")
+         queue = config["queue"]
+         require(isinstance(queue, dict) and QUEUE <= queue.keys() <= QUEUE | {"q2_variant"} and
+                 ("q2_variant" not in queue or queue["q2_variant"] == Q2_VARIANT) and
+@@ -70,6 +70,7 @@ def validate(config, allowed):
+                 "queue requires positive integer settings and uint64 seeds across all repeats")
+     require(isinstance(config["variants"], list) and config["variants"], "variants must be nonempty")
+     has_cooperative = False
++    has_context = False
+     for variant in config["variants"]:
+         optional_variant = {"cpus", "policy"} if mode == "queued" else {"cpus"}
+         require(isinstance(variant, dict) and {"workers", "warehouses"} <= variant.keys()
+@@ -78,8 +79,9 @@ def validate(config, allowed):
+         require(integer(workers) and integer(warehouses), "workers and warehouses must be positive integers")
+         if mode == "queued":
+             policy = variant.get("policy", config.get("policy", "wait"))
+-            require(policy in ("wait", "cooperative"), "queued policy must be wait or cooperative")
++            require(policy in ("wait", "cooperative", "linux-signal"), "queued policy must be wait, cooperative or linux-signal")
+             has_cooperative |= policy == "cooperative"
++            has_context |= policy != "wait"
+             require(workers == warehouses, "I06 queued mode requires one warehouse per worker")
+             batch = queue["batch_per_worker"] * workers
+             require(max(batch, queue["global_capacity_per_worker"] * workers) < 2**32,
+@@ -95,7 +97,7 @@ def validate(config, allowed):
+                     and len(set(cpus)) == len(cpus), "cpus must be a nonempty list of distinct CPU IDs")
+             require(allowed is not None and set(cpus) <= set(allowed),
+                     "explicit cpus require Linux and must belong to the inherited allocation")
+-    if has_cooperative:
++    if has_context:
+         require("q2_variant" in queue, "Cooperative requires a mixed Q2 workload")
+     if "yield_interval" in config:
+         require(has_cooperative and integer(config["yield_interval"], 1, 2**32 - 1),
+diff --git a/replication/experiments/validate-local.sh b/replication/experiments/validate-local.sh
+index a5fa84a..e1bc48d 100644
+--- a/replication/experiments/validate-local.sh
++++ b/replication/experiments/validate-local.sh
+@@ -56,7 +56,7 @@ out=out-perf.masstree.contexts
+ timeout 90s "./$out/replication/tests/tpcc_mixed_test"
+ timeout 90s "./$out/replication/tests/silo_context_test"
+ c++ -std=c++11 -O2 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS \
+-  benchmarks/request_driver.cc benchmarks/worker_context.cc replication/tests/request_driver_test.cc \
++  benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/request_driver_test.cc \
+   -o "$work/request_driver_test"
+ timeout 90s "$work/request_driver_test"
+ python3 -B -m unittest discover -s "$kit/../tests" -p 'test_i05_experiments.py' -v
+diff --git a/replication/results/mac07-batched-notifications/README.md b/replication/results/mac07-batched-notifications/README.md
+index ee9151e..16861d5 100644
+--- a/replication/results/mac07-batched-notifications/README.md
++++ b/replication/results/mac07-batched-notifications/README.md
+@@ -1,5 +1,10 @@
+ # MAC-07 controlled batched notifications
+ 
++**November 5 follow-up:** MAC-07's signal-backend repetition is now complete locally.
++The original collection below remains historical checkpoint evidence. Final
++signal cases, source hashes, retained failures and pressure results are in
++[MAC-09](../mac09-signal/README.md#actual-results). Native UINTR validation remains open.
++
+ November 5, 2026 · **Local software validation; checkpoint service** ·
+ `erin/local-replication-evidence`, source base
+ `bd557b2c358af7886ba1785c2022e5614b7ed741` plus the
+@@ -151,7 +156,7 @@ workspace. No experiment batch or performance measurement was collected for
+ MAC-07. The isolated test container was stopped after evidence collection;
+ earlier evidence containers remained stopped.
+ 
+-## Remaining acceptance
++## Original remaining acceptance (resolved locally by MAC-09)
+ 
+ MAC-07 remains **partial** until its integrated cases are repeated with MAC-09's
+ actual signal backend. These results establish the recorded queue/checkpoint
+diff --git a/replication/results/mac08-starvation/README.md b/replication/results/mac08-starvation/README.md
+index 77b1c18..265a377 100644
+--- a/replication/results/mac08-starvation/README.md
++++ b/replication/results/mac08-starvation/README.md
+@@ -1,5 +1,10 @@
+ # MAC-08 local starvation prevention
+ 
++**November 5 follow-up:** MAC-08's signal-backend repetition is now complete locally.
++The original collection below remains historical checkpoint evidence. Final
++signal cases, source hashes, retained failures and pressure results are in
++[MAC-09](../mac09-signal/README.md#actual-results). Native UINTR validation remains open.
++
+ November 5, 2026 · `erin/local-replication-evidence` · source base
+ `2bb11b94ed493f4c27c87abe8185573d3f077093` plus archived source changes.
+ **Local checkpoint scheduling in emulated x86-64 Linux.** MAC-09 signal repetition
+@@ -179,7 +184,7 @@ The corrected script's hash is saved separately. The Mac Python bytecode syntax
+ check initially hit its external cache-directory permission; an in-memory
+ compile check succeeded without writing that cache.
+ 
+-## Remaining acceptance
++## Original remaining acceptance (resolved locally by MAC-09)
+ 
+ MAC-08 remains **partial** until its cases repeat through MAC-09's actual
+ Linux-signal backend. This task implements no asynchronous handler and supplies
+diff --git a/replication/tests/batched_notification_cases.h b/replication/tests/batched_notification_cases.h
+index 9111b5d..d2c01d4 100644
+--- a/replication/tests/batched_notification_cases.h
++++ b/replication/tests/batched_notification_cases.h
+@@ -14,6 +14,9 @@
+ 
+ namespace notification_cases {
+ 
++inline bool &signal_backend() { static bool enabled = false; return enabled; }
++inline queued::Policy policy() { return signal_backend() ? queued::Policy::linux_signal : queued::Policy::notification_checkpoint; }
++
+ inline void check(bool value, int line) {
+   if (!value) {
+     std::cerr << "FAIL batched notification case at line " << line << '\n';
+@@ -32,7 +35,7 @@ inline void transition_case(queued::ServiceTransition target, unsigned mode,
+                             uint64_t expected_checksum, const char *label) {
+   using namespace queued;
+   Config config;
+-  config.policy = Policy::notification_checkpoint;
++  config.policy = policy();
+   config.low_kind = Kind::q2;
+   config.interval = 10;
+   config.batch_size = 2;
+@@ -142,7 +145,8 @@ inline void transition_case(queued::ServiceTransition target, unsigned mode,
+   const unsigned switches = target == ServiceTransition::high_entry ? 1 : 2;
+   BATCH_CHECK(initial_empty_checked && reads >= 2 && high_records == 4 && attempts == 5);
+   BATCH_CHECK(publications == 2 && stats.publication_passes == 2 && stats.admitted_high == 4);
+-  BATCH_CHECK(stats.deliveries == transport.deliveries && stats.deferrals == 2);
++  BATCH_CHECK(stats.deliveries == transport.deliveries + (signal_backend() ? publications : 0) && stats.deferrals == 2);
++  BATCH_CHECK(!signal_backend() || stats.signal_captures > 0);
+   BATCH_CHECK(stats.spurious_checks >= 1 && stats.queue_fallbacks >= 1 && !stats.pending_hint);
+   BATCH_CHECK(stats.switches == switches && stats.high_entries == switches &&
+               stats.empty_checks == switches && stats.low_resumes == switches);
+@@ -154,7 +158,8 @@ inline void transition_case(queued::ServiceTransition target, unsigned mode,
+             << " mode=" << mode << " clock=controlled_ns seed=" << config.seed
+             << " publications=" << publications << " admitted=4 sends=" << transport.sends
+             << " coalesced=" << transport.coalesced << " modeled_deliveries=" << transport.deliveries
+-            << " unsolicited=" << transport.unsolicited << " real_handlers=0 deferrals="
++            << " unsolicited=" << transport.unsolicited << " backend=" << (signal_backend() ? "linux-signal" : "checkpoint")
++            << " real_handlers=" << stats.signal_handlers << " async_captures=" << stats.signal_captures << " deferrals="
+             << stats.deferrals << " switches=" << stats.switches << " low_resumes="
+             << stats.low_resumes << " hints_consumed=" << stats.hints_consumed
+             << " queue_fallbacks=" << stats.queue_fallbacks << " spurious_checks="
+diff --git a/replication/tests/batched_notifications_test.cc b/replication/tests/batched_notifications_test.cc
+index 3313425..a35d075 100644
+--- a/replication/tests/batched_notifications_test.cc
++++ b/replication/tests/batched_notifications_test.cc
+@@ -4,6 +4,7 @@ static void partial_admission() {
+   using namespace queued;
+   using notification_cases::check;
+   Config config;
++  if (notification_cases::signal_backend()) { config.policy = Policy::linux_signal; config.low_kind = Kind::q2; }
+   config.workers = 2;
+   config.batch_size = 6;
+   config.global_capacity = 4;
+@@ -84,7 +85,7 @@ static void partial_admission() {
+     auto transport = model.stats(w);
+     check(publications[w] == 2 && served[w] == 4, __LINE__);
+     check(stats.publication_passes == 2 && stats.admitted_high == 4 &&
+-          stats.deliveries == 2 && stats.switches == 0, __LINE__);
++          stats.deliveries == (notification_cases::signal_backend() ? 4u : 2u) && stats.switches == 0, __LINE__);
+     check(transport.sends == 4 && transport.coalesced == 3 &&
+           transport.deliveries == 2 && transport.unsolicited == 1 && !transport.pending, __LINE__);
+   }
+@@ -100,6 +101,7 @@ static void drain_expiry() {
+   using namespace queued;
+   using notification_cases::check;
+   Config config;
++  if (notification_cases::signal_backend()) { config.policy = Policy::linux_signal; config.low_kind = Kind::q2; }
+   config.interval = 10;
+   config.batch_size = config.global_capacity = 4;
+   config.high_capacity = 1;
+@@ -142,7 +144,7 @@ static void drain_expiry() {
+   check(model.stats(0).pending && !model.stats(0).deliveries, __LINE__);
+   // A delayed delivery after join is a harmless stale hint while Driver lives.
+   check(model.deliver(0) && !model.deliver(0), __LINE__);
+-  check(driver.notification_stats(0).deliveries == 1 &&
++  check(driver.notification_stats(0).deliveries == (notification_cases::signal_backend() ? 2u : 1u) &&
+         driver.notification_stats(0).switches == 0, __LINE__);
+   std::cout << "CASE drain-expiry clock=controlled_ns seed=1 high_generated=4 admitted=1"
+                " cancelled_high=4 cancelled_low=1 safe_low_commits=1 sends=1"
+@@ -151,7 +153,8 @@ static void drain_expiry() {
+   write_results(driver, std::cout, std::cout, "drain-expiry", "controlled");
+ }
+ 
+-int main() {
++int main(int argc, char **) {
++  notification_cases::signal_backend() = argc > 1;
+   partial_admission();
+   drain_expiry();
+ #ifdef SILO_WORKER_CONTEXTS
+diff --git a/replication/tests/starvation_cases.h b/replication/tests/starvation_cases.h
+index 3c84f3d..e48d11b 100644
+--- a/replication/tests/starvation_cases.h
++++ b/replication/tests/starvation_cases.h
+@@ -12,7 +12,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+                        uint64_t oracle, bool expire, const char *label) {
+   using namespace queued;
+   Config config;
+-  config.policy = Policy::notification_checkpoint;
++  config.policy = notification_cases::policy();
+   config.low_kind = Kind::q2;
+   config.starvation_threshold = 50;
+   config.interval = 10;
+@@ -23,6 +23,8 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+     while (old < to && !time.compare_exchange_weak(old, to)) {}
+   };
+   std::promise<void> started, initial, overrun, checked, recovery, refill, done, producer_done;
++  std::promise<void> first_pass;
++  auto first_pass_f = first_pass.get_future();
+   auto started_f = started.get_future();
+   auto initial_f = initial.get_future();
+   auto overrun_f = overrun.get_future();
+@@ -37,7 +39,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+   NotificationModel model(1, [&](size_t w) { ptr->deliver_notification(w); });
+   Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
+     if (next == 110) { started_f.wait(); advance(110); }
+-    else if (next == 120) { overrun_f.wait(); advance(130); }
++    else if (next == 120) { first_pass.set_value(); overrun_f.wait(); advance(130); }
+     else if (waits++ == 0) {
+       // The producer has just observed the coherent over-budget snapshot.
+       checked.set_value();
+@@ -92,6 +94,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+         if (++reads == 1) {
+           started.set_value();
+           initial_f.wait();
++          first_pass_f.wait(); // The producer has queued the reset-check low.
+           driver.on_record_read(0);
+           STARVE_CHECK(high_commits == 2 && time == 130);
+           const auto b = driver.budget_snapshot(0);
+@@ -140,12 +143,13 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+   STARVE_CHECK(records[0].attempts == 2 && records[0].aborts == 1 && records[0].outcome == Outcome::committed);
+   STARVE_CHECK(!budget.low_active && (expire || (budget.high_cycles == 0 && stats.low_requests >= 2)));
+   STARVE_CHECK(highs == (expire ? 6 : 8) && low_commits >= 1 && cancelled == (expire ? 3 : 0));
++  STARVE_CHECK(!notification_cases::signal_backend() || notifications.signal_captures > 0);
+   std::cout << "CASE " << label << " expire=" << expire << " threshold=50 clock=controlled_ns seed=1"
+             << " exact_threshold_dispatch=1 retry_retained=1 high_generated=8 high_commits=" << highs
+             << " q2_commits=" << low_commits << " cancelled=" << cancelled
+             << " forced_returns=" << stats.forced_low_returns << " low_service_ns=" << stats.low_service_ns
+             << " high_service_ns=" << stats.high_service_ns << " switches=" << notifications.switches
+-            << " modeled_deliveries=" << model.stats(0).deliveries << " real_handlers=0 checksum=" << oracle << '\n';
++            << " modeled_deliveries=" << model.stats(0).deliveries << " real_handlers=" << notifications.signal_handlers << " async_captures=" << notifications.signal_captures << " checksum=" << oracle << '\n';
+   write_header(std::cout);
+   write_results(driver, std::cout, std::cout, label, "controlled");
+ }
+@@ -157,13 +161,15 @@ inline void limits(unsigned threshold, const LowRun &run_low, const HighCommit &
+                    uint64_t oracle, const char *label) {
+   using namespace queued;
+   Config config;
+-  config.policy = Policy::notification_checkpoint;
++  config.policy = notification_cases::policy();
+   config.low_kind = Kind::q2;
+   config.starvation_threshold = threshold;
+   config.batch_size = config.high_capacity = config.global_capacity = 4;
+   config.interval = 10;
+   std::atomic<Ns> time{100};
+   std::promise<void> started, published, done, closed;
++  std::promise<void> first_pass;
++  auto first_pass_f = first_pass.get_future();
+   auto started_f = started.get_future();
+   auto published_f = published.get_future();
+   auto done_f = done.get_future();
+@@ -171,7 +177,7 @@ inline void limits(unsigned threshold, const LowRun &run_low, const HighCommit &
+   unsigned highs = 0, active_highs = 0, reads = 0;
+   Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
+     if (next == 110) { started_f.wait(); time = 110; }
+-    else { done_f.wait(); time = 500; }
++    else { if (next == 120) first_pass.set_value(); done_f.wait(); time = 500; }
+   }, [&](size_t) { published.set_value(); });
+   std::thread producer([&] { driver.produce(20, 1000); closed.set_value(); });
+   driver.run_prepared_worker(0, [&](const Request &r) -> Driver::Prepared {
+@@ -184,7 +190,7 @@ inline void limits(unsigned threshold, const LowRun &run_low, const HighCommit &
+     return [&](uint64_t &checksum) {
+       const bool ok = run_low(checksum, [&] {
+         if (r.id == 0) {
+-          if (++reads == 1) { started.set_value(); published_f.wait(); }
++          if (++reads == 1) { started.set_value(); published_f.wait(); first_pass_f.wait(); }
+           time.fetch_add(10);
+           driver.on_record_read(0);
+         }
+@@ -202,14 +208,16 @@ inline void limits(unsigned threshold, const LowRun &run_low, const HighCommit &
+   producer.join();
+   driver.wait_for_drain();
+   const auto stats = driver.starvation_stats(0);
++  const auto notifications = driver.notification_stats(0);
+   notification_cases::check(!driver.failed() && highs == 4 && active_highs == (threshold ? 4 : 1), __LINE__);
++  notification_cases::check(!notification_cases::signal_backend() || notifications.signal_captures > 0, __LINE__);
+   notification_cases::check(stats.forced_low_returns == (threshold ? 0 : 1) &&
+                             (threshold || stats.checkpoint_blocks > 0), __LINE__);
+   const auto b = driver.budget_snapshot(0);
+   notification_cases::check(!b.low_active && b.high_cycles == 0 && stats.low_requests == 2, __LINE__);
+   std::cout << "CASE " << label << " threshold=" << threshold << " clock=controlled_ns seed=1 active_highs="
+             << active_highs << " high_commits=" << highs << " forced_returns=" << stats.forced_low_returns
+-            << " low_service_ns=" << stats.low_service_ns << " real_handlers=0 checksum=" << oracle << '\n';
++            << " low_service_ns=" << stats.low_service_ns << " real_handlers=" << notifications.signal_handlers << " async_captures=" << notifications.signal_captures << " checksum=" << oracle << '\n';
+   write_header(std::cout);
+   write_results(driver, std::cout, std::cout, label, "controlled");
+ }
+diff --git a/replication/tests/starvation_test.cc b/replication/tests/starvation_test.cc
+index f0ae19b..2048014 100644
+--- a/replication/tests/starvation_test.cc
++++ b/replication/tests/starvation_test.cc
+@@ -1,5 +1,6 @@
+ #include "starvation_cases.h"
+-int main() {
++int main(int argc, char **) {
++  notification_cases::signal_backend() = argc > 1;
+   for (unsigned threshold : {0u, 100u})
+     starvation_cases::limits(threshold, [](uint64_t &sum, const std::function<void()> &read) {
+       sum = 0;
+diff --git a/replication/tests/test_i05_experiments.py b/replication/tests/test_i05_experiments.py
+index b0a1e85..46fe1c5 100644
+--- a/replication/tests/test_i05_experiments.py
++++ b/replication/tests/test_i05_experiments.py
+@@ -218,7 +218,21 @@ class RunnerTests(unittest.TestCase):
+         self.assertEqual(planned["command"][option + 1], "wait")
+         self.assertEqual(planned["policy"], "wait")
+         config["policy"] = "invalid"
+-        with self.assertRaisesRegex(ValueError, "queued policy must be wait or cooperative"):
++        with self.assertRaisesRegex(ValueError, "queued policy must be wait, cooperative or linux-signal"):
++            run.validate(config, None)
++
++    def test_linux_signal_configuration_is_explicit_and_requires_q2(self):
++        config = json.loads((EXPERIMENTS / "configs" / "queued-signal-25.json").read_text())
++        run.validate(config, None)
++        planned = run.plan_run(config, config["variants"][0], 1, 1,
++                               Path("/tmp/batch"), Path("/tmp/dbtest"), None)
++        self.assertEqual(planned["policy"], "linux-signal")
++        option = planned["command"].index("--queued-policy")
++        self.assertEqual(planned["command"][option + 1], "linux-signal")
++        self.assertEqual(planned["starvation_threshold"], 25)
++        self.assertNotIn("--queued-yield-interval", planned["command"])
++        del config["queue"]["q2_variant"]
++        with self.assertRaisesRegex(ValueError, "mixed Q2"):
+             run.validate(config, None)
+ 
+     def test_paired_policy_configuration_preserves_inputs(self):
+diff --git a/replication/tests/tpcc_mixed_test.cc b/replication/tests/tpcc_mixed_test.cc
+index 7ad7467..c28a799 100644
+--- a/replication/tests/tpcc_mixed_test.cc
++++ b/replication/tests/tpcc_mixed_test.cc
+@@ -48,6 +48,9 @@ struct Fixture {
+   bench_txn_context state{1, db, 0};
+   map<string, abstract_ordered_index *> tables;
+   map<string, vector<abstract_ordered_index *>> partitions;
++  bool probe_signal_abort = false;
++  bool signal_low_live = false;
++  unsigned signal_abort_probes = 0;
+ 
+   Fixture()
+   {
+@@ -69,6 +72,27 @@ struct Fixture {
+   template<typename Key, typename Value>
+   void write(const char *table, const Key &key, const Value &value)
+   {
++    if (probe_signal_abort && signal_low_live && std::string(table) == "stock") {
++      // A real failed Silo write/abort on the high context, while the original
++      // Q2 attempt remains suspended. This is an extra engine cleanup probe,
++      // separate from the driver's scripted conflict/attempt counters.
++      Value before, after;
++      ALWAYS_ASSERT(read(table, key, before));
++      {
++        scoped_str_arena scope(state.arena);
++        void *txn = db.new_txn(0, state.arena, state.txn_buf(), abstract_db::HINT_DEFAULT);
++        tables.at(table)->put(txn, Encode(state.str(), key), Encode(state.str(), value));
++        db.fail_commit = true;
++        ALWAYS_ASSERT(!db.commit_txn(txn));
++        db.abort_txn(txn);
++      }
++      ALWAYS_ASSERT(!ScopedNonPreemptible::blocked() && read(table, key, after));
++      std::string before_encoded, after_encoded;
++      Encode(before_encoded, before);
++      Encode(after_encoded, after);
++      ALWAYS_ASSERT(before_encoded == after_encoded);
++      ++signal_abort_probes;
++    }
+     scoped_str_arena scope(state.arena);
+     void *txn = db.new_txn(0, state.arena, state.txn_buf(), abstract_db::HINT_DEFAULT);
+     tables.at(table)->put(txn, Encode(state.str(), key), Encode(state.str(), value));
+@@ -88,6 +112,19 @@ struct Fixture {
+     return found;
+   }
+ 
++#ifdef SILO_WORKER_CONTEXTS
++  bool run_signal_low(tpcc_q2::Tables &q2, uint64_t &result,
++                      const std::function<void()> &checkpoint) {
++    bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
++    struct Live {
++      bool &flag;
++      explicit Live(bool &value) : flag(value) { flag = true; }
++      ~Live() { flag = false; }
++    } live(signal_low_live);
++    return q2.run(&db, low, 0, result, checkpoint);
++  }
++#endif
++
+   void q2()
+   {
+     tpcc_q2::Tables q2(&db, partitions.at("stock"), tables.at("item"), 6, 9);
+@@ -156,6 +193,7 @@ struct Fixture {
+     }
+     ALWAYS_ASSERT(paused.reads == 18 && yields == 9 && paused.checksum == expected[0]);
+     std::cout << "PASS Q2 checkpoint count and snapshot checksum across nine write handoffs\n";
++    probe_signal_abort = notification_cases::signal_backend();
+     // Same controlled transition matrix as the standalone driver, now with a
+     // real Silo snapshot and intervening committed stock writes. Recompute the
+     // unpaused oracle before each case because previous cases update stock.
+@@ -167,8 +205,7 @@ struct Fixture {
+         ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
+         notification_cases::transition_case(point, mode,
+           [&](uint64_t &result, const std::function<void()> &checkpoint) {
+-            bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
+-            return q2.run(&db, low, 0, result, checkpoint);
++            return run_signal_low(q2, result, checkpoint);
+           }, [&](const queued::Request &request) {
+             write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
+           }, oracle, "silo-q2");
+@@ -180,8 +217,7 @@ struct Fixture {
+       ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
+       starvation_cases::limits(threshold,
+         [&](uint64_t &result, const std::function<void()> &checkpoint) {
+-          bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
+-          return q2.run(&db, low, 0, result, checkpoint);
++          return run_signal_low(q2, result, checkpoint);
+         }, [&](const queued::Request &request) {
+           write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
+         }, oracle, "silo-q2-limits");
+@@ -191,13 +227,17 @@ struct Fixture {
+       ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
+       starvation_cases::controlled(
+         [&](uint64_t &result, const std::function<void()> &checkpoint) {
+-          bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
+-          return q2.run(&db, low, 0, result, checkpoint);
++          return run_signal_low(q2, result, checkpoint);
+         }, [&](const queued::Request &request) {
+           write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
+         }, oracle, expire, "silo-q2-starvation");
+     }
+     std::cout << "PASS Silo Q2 starvation equality, recovery, retry, reset and drain cases\n";
++    if (probe_signal_abort) {
++      ALWAYS_ASSERT(signal_abort_probes == 53);
++      std::cout << "PASS 53 actual Silo failed-write rollback/cleanup probes while Q2 remains suspended in signal backend\n";
++      probe_signal_abort = false;
++    }
+ 
+ #endif
+   }
+@@ -315,8 +355,9 @@ struct Fixture {
+ 
+ } // namespace
+ 
+-int main()
++int main(int argc, char **)
+ {
++  notification_cases::signal_backend() = argc > 1;
+   nthreads = 2;
+   scale_factor = 2;
+   Fixture fixture;
+diff --git a/replication/tests/validate_batched_notifications.sh b/replication/tests/validate_batched_notifications.sh
+index 1b0e37e..3e3ef96 100644
+--- a/replication/tests/validate_batched_notifications.sh
++++ b/replication/tests/validate_batched_notifications.sh
+@@ -31,7 +31,7 @@ for build in debug optimized ubsan; do
+     ubsan) opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all) ;;
+   esac
+   c++ "${flags[@]}" "${opt[@]}" -DSILO_WORKER_CONTEXTS \
+-    benchmarks/request_driver.cc benchmarks/worker_context.cc \
++    benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc \
+     replication/tests/batched_notifications_test.cc -o "$evidence/batched-$build"
+   timeout 60s "$evidence/batched-$build" > "$evidence/batched-$build.log" 2>&1
+ done
+@@ -42,7 +42,7 @@ done
+ for build in wait cooperative; do
+   context=()
+   if [[ "$build" == cooperative ]]; then
+-    context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc)
++    context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/signal_backend.cc)
+   fi
+   c++ "${flags[@]}" -O2 "${context[@]}" benchmarks/request_driver.cc \
+     replication/tests/request_driver_test.cc -o "$evidence/driver-$build"
+diff --git a/replication/tests/validate_starvation.sh b/replication/tests/validate_starvation.sh
+index a41faec..a5bd19a 100644
+--- a/replication/tests/validate_starvation.sh
++++ b/replication/tests/validate_starvation.sh
+@@ -22,7 +22,7 @@ for build in debug optimized ubsan; do
+     optimized) opt=(-O3) ;;
+     ubsan) opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all) ;;
+   esac
+-  c++ "${flags[@]}" "${opt[@]}" -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc \
++  c++ "${flags[@]}" "${opt[@]}" -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc \
+     replication/tests/starvation_test.cc -o "$evidence/starvation-$build"
+   timeout 60s "$evidence/starvation-$build" > "$evidence/starvation-$build.log" 2>&1
+ done
+@@ -31,7 +31,7 @@ for repetition in {1..20}; do
+ done
+ for build in wait cooperative; do
+   context=()
+-  if [[ "$build" == cooperative ]]; then context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc); fi
++  if [[ "$build" == cooperative ]]; then context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/signal_backend.cc); fi
+   c++ "${flags[@]}" -O2 "${context[@]}" benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o "$evidence/driver-$build"
+   timeout 60s "$evidence/driver-$build" > "$evidence/driver-$build.log" 2>&1
+ done

@@ -1,0 +1,96 @@
+00000000001230c4 <SignalBackend::handler(int, siginfo_t*, void*)>:
+  1230c4:	f3 0f 1e fa          	endbr64 
+  1230c8:	55                   	push   %rbp
+  1230c9:	48 89 e5             	mov    %rsp,%rbp
+  1230cc:	41 56                	push   %r14
+  1230ce:	41 55                	push   %r13
+  1230d0:	41 54                	push   %r12
+  1230d2:	53                   	push   %rbx
+  1230d3:	64 48 8b 1c 25 f8 ff 	mov    %fs:0xfffffffffffffff8,%rbx
+  1230da:	ff ff 
+  1230dc:	48 85 db             	test   %rbx,%rbx
+  1230df:	74 4f                	je     123130 <SignalBackend::handler(int, siginfo_t*, void*)+0x6c>
+  1230e1:	49 89 d4             	mov    %rdx,%r12
+  1230e4:	48 8d bb 64 01 00 00 	lea    0x164(%rbx),%rdi
+  1230eb:	e8 c2 ff ff ff       	call   1230b2 <(anonymous namespace)::increment(int volatile&)>
+  1230f0:	4d 8b ac 24 a8 00 00 	mov    0xa8(%r12),%r13
+  1230f7:	00 
+  1230f8:	8b 83 60 01 00 00    	mov    0x160(%rbx),%eax
+  1230fe:	85 c0                	test   %eax,%eax
+  123100:	74 18                	je     12311a <SignalBackend::handler(int, siginfo_t*, void*)+0x56>
+  123102:	4c 8d 35 45 ff ff ff 	lea    -0xbb(%rip),%r14        # 12304e <silo_signal_begin>
+  123109:	4d 39 ee             	cmp    %r13,%r14
+  12310c:	77 0c                	ja     12311a <SignalBackend::handler(int, siginfo_t*, void*)+0x56>
+  12310e:	48 8d 15 56 ff ff ff 	lea    -0xaa(%rip),%rdx        # 12306b <silo_signal_end>
+  123115:	49 39 d5             	cmp    %rdx,%r13
+  123118:	72 1f                	jb     123139 <SignalBackend::handler(int, siginfo_t*, void*)+0x75>
+  12311a:	c7 83 78 01 00 00 01 	movl   $0x1,0x178(%rbx)
+  123121:	00 00 00 
+  123124:	48 8d bb 6c 01 00 00 	lea    0x16c(%rbx),%rdi
+  12312b:	e8 82 ff ff ff       	call   1230b2 <(anonymous namespace)::increment(int volatile&)>
+  123130:	5b                   	pop    %rbx
+  123131:	41 5c                	pop    %r12
+  123133:	41 5d                	pop    %r13
+  123135:	41 5e                	pop    %r14
+  123137:	5d                   	pop    %rbp
+  123138:	c3                   	ret    
+  123139:	48 8d bb 68 01 00 00 	lea    0x168(%rbx),%rdi
+  123140:	e8 6d ff ff ff       	call   1230b2 <(anonymous namespace)::increment(int volatile&)>
+  123145:	c7 83 78 01 00 00 00 	movl   $0x0,0x178(%rbx)
+  12314c:	00 00 00 
+  12314f:	4d 39 ee             	cmp    %r13,%r14
+  123152:	0f 82 f8 00 00 00    	jb     123250 <SignalBackend::handler(int, siginfo_t*, void*)+0x18c>
+  123158:	c7 83 60 01 00 00 00 	movl   $0x0,0x160(%rbx)
+  12315f:	00 00 00 
+  123162:	4c 89 a3 c0 00 00 00 	mov    %r12,0xc0(%rbx)
+  123169:	49 8b b4 24 a8 00 00 	mov    0xa8(%r12),%rsi
+  123170:	00 
+  123171:	48 89 b3 c8 00 00 00 	mov    %rsi,0xc8(%rbx)
+  123178:	49 8b bc 24 a0 00 00 	mov    0xa0(%r12),%rdi
+  12317f:	00 
+  123180:	48 89 bb d0 00 00 00 	mov    %rdi,0xd0(%rbx)
+  123187:	4d 8b 44 24 68       	mov    0x68(%r12),%r8
+  12318c:	4c 89 83 d8 00 00 00 	mov    %r8,0xd8(%rbx)
+  123193:	f3 41 0f 6f 84 24 28 	movdqu 0x128(%r12),%xmm0
+  12319a:	01 00 00 
+  12319d:	0f 11 83 e0 00 00 00 	movups %xmm0,0xe0(%rbx)
+  1231a4:	f3 41 0f 6f 8c 24 38 	movdqu 0x138(%r12),%xmm1
+  1231ab:	01 00 00 
+  1231ae:	0f 11 8b f0 00 00 00 	movups %xmm1,0xf0(%rbx)
+  1231b5:	f3 41 0f 6f 94 24 48 	movdqu 0x148(%r12),%xmm2
+  1231bc:	01 00 00 
+  1231bf:	0f 11 93 00 01 00 00 	movups %xmm2,0x100(%rbx)
+  1231c6:	f3 41 0f 6f 9c 24 58 	movdqu 0x158(%r12),%xmm3
+  1231cd:	01 00 00 
+  1231d0:	0f 11 9b 10 01 00 00 	movups %xmm3,0x110(%rbx)
+  1231d7:	f3 41 0f 6f a4 24 68 	movdqu 0x168(%r12),%xmm4
+  1231de:	01 00 00 
+  1231e1:	0f 11 a3 20 01 00 00 	movups %xmm4,0x120(%rbx)
+  1231e8:	f3 41 0f 6f ac 24 78 	movdqu 0x178(%r12),%xmm5
+  1231ef:	01 00 00 
+  1231f2:	0f 11 ab 30 01 00 00 	movups %xmm5,0x130(%rbx)
+  1231f9:	f3 41 0f 6f b4 24 88 	movdqu 0x188(%r12),%xmm6
+  123200:	01 00 00 
+  123203:	0f 11 b3 40 01 00 00 	movups %xmm6,0x140(%rbx)
+  12320a:	f3 41 0f 6f bc 24 98 	movdqu 0x198(%r12),%xmm7
+  123211:	01 00 00 
+  123214:	0f 11 bb 50 01 00 00 	movups %xmm7,0x150(%rbx)
+  12321b:	49 8d bc 24 28 01 00 	lea    0x128(%r12),%rdi
+  123222:	00 
+  123223:	e8 48 ac ee ff       	call   de70 <sigfillset@plt>
+  123228:	4c 8d 0d 43 00 00 00 	lea    0x43(%rip),%r9        # 123272 <SignalBackend::landing(SignalBackend*)>
+  12322f:	4d 89 8c 24 a8 00 00 	mov    %r9,0xa8(%r12)
+  123236:	00 
+  123237:	4c 8b 93 a8 00 00 00 	mov    0xa8(%rbx),%r10
+  12323e:	4d 89 94 24 a0 00 00 	mov    %r10,0xa0(%r12)
+  123245:	00 
+  123246:	49 89 5c 24 68       	mov    %rbx,0x68(%r12)
+  12324b:	e9 e0 fe ff ff       	jmp    123130 <SignalBackend::handler(int, siginfo_t*, void*)+0x6c>
+  123250:	48 8d 0d 00 fe ff ff 	lea    -0x200(%rip),%rcx        # 123057 <silo_signal_loop_end>
+  123257:	49 39 cd             	cmp    %rcx,%r13
+  12325a:	0f 83 f8 fe ff ff    	jae    123158 <SignalBackend::handler(int, siginfo_t*, void*)+0x94>
+  123260:	48 8d bb 74 01 00 00 	lea    0x174(%rbx),%rdi
+  123267:	e8 46 fe ff ff       	call   1230b2 <(anonymous namespace)::increment(int volatile&)>
+  12326c:	e9 e7 fe ff ff       	jmp    123158 <SignalBackend::handler(int, siginfo_t*, void*)+0x94>
+  123271:	90                   	nop
+

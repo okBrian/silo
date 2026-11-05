@@ -1,0 +1,160 @@
+wait_an_epoch(): consistent reads happening in e-1, but e=0 so special case
+PASS Q2 region 0 checksum 12860241382490130518
+PASS Q2 region 1 checksum 11649938069444573197
+PASS Q2 region 2 checksum 14695981039346656037
+PASS Q2 checkpoint count and snapshot checksum across nine write handoffs
+CASE silo-q2 transition=0 mode=0 clock=controlled_ns seed=1 publications=2 admitted=4 sends=2 coalesced=0 modeled_deliveries=3 unsolicited=1 backend=linux-signal real_handlers=3 async_captures=1 deferrals=2 switches=1 low_resumes=1 hints_consumed=3 queue_fallbacks=2 spurious_checks=2 transport_pending=0 scheduler_pending=0 high_attempts=5 high_commits=4 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	120	120	2	1	committed	0	null	0	0	0	0
+silo-q2	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	4	2	Payment	high	0	1	2185194620014831856	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	5	2	NewOrder	high	0	1	13232826040865663252	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	120	1	0	committed	0	12860241382490130518	0	0	0	20
+silo-q2	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	130	130	1	0	committed	0	12860241382490130518	0	0	0	0
+phase=controlled cutoff_ns=130 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=1 cutoff_running=0 cutoff_due_ungenerated=0 commits_in_window=5 drain_commits=1 failed=0
+notifications phase=controlled worker=0 signal_sends=4 real_handlers=3 async_captures=1 signal_deferred=2 signal_rearms=1 switches=1 low_resumes=1
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=20
+CASE silo-q2 transition=0 mode=1 clock=controlled_ns seed=1 publications=2 admitted=4 sends=2 coalesced=0 modeled_deliveries=5 unsolicited=3 backend=linux-signal real_handlers=3 async_captures=1 deferrals=2 switches=1 low_resumes=1 hints_consumed=3 queue_fallbacks=2 spurious_checks=2 transport_pending=0 scheduler_pending=0 high_attempts=5 high_commits=4 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	120	120	2	1	committed	0	null	0	0	0	0
+silo-q2	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	4	2	Payment	high	0	1	2185194620014831856	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	5	2	NewOrder	high	0	1	13232826040865663252	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	120	1	0	committed	0	12860241382490130518	0	0	0	10
+silo-q2	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	120	130	1	0	committed	0	12860241382490130518	0	0	0	10
+phase=controlled cutoff_ns=130 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=5 drain_commits=1 failed=0
+notifications phase=controlled worker=0 signal_sends=6 real_handlers=3 async_captures=1 signal_deferred=2 signal_rearms=1 switches=1 low_resumes=1
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=20
+CASE silo-q2 transition=0 mode=2 clock=controlled_ns seed=1 publications=2 admitted=4 sends=4 coalesced=3 modeled_deliveries=2 unsolicited=1 backend=linux-signal real_handlers=3 async_captures=1 deferrals=2 switches=1 low_resumes=1 hints_consumed=3 queue_fallbacks=2 spurious_checks=2 transport_pending=0 scheduler_pending=0 high_attempts=5 high_commits=4 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	120	120	2	1	committed	0	null	0	0	0	0
+silo-q2	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	4	2	Payment	high	0	1	2185194620014831856	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	5	2	NewOrder	high	0	1	13232826040865663252	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	120	1	0	committed	0	12860241382490130518	0	0	0	10
+silo-q2	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	120	130	1	0	committed	0	12860241382490130518	0	0	0	10
+phase=controlled cutoff_ns=130 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=5 drain_commits=1 failed=0
+notifications phase=controlled worker=0 signal_sends=3 real_handlers=3 async_captures=1 signal_deferred=2 signal_rearms=1 switches=1 low_resumes=1
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=20
+CASE silo-q2 transition=1 mode=0 clock=controlled_ns seed=1 publications=2 admitted=4 sends=2 coalesced=0 modeled_deliveries=3 unsolicited=1 backend=linux-signal real_handlers=4 async_captures=2 deferrals=2 switches=2 low_resumes=2 hints_consumed=3 queue_fallbacks=2 spurious_checks=1 transport_pending=0 scheduler_pending=0 high_attempts=5 high_commits=4 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	110	110	2	1	committed	0	null	0	0	0	0
+silo-q2	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	110	110	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	4	2	Payment	high	0	1	2185194620014831856	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	5	2	NewOrder	high	0	1	13232826040865663252	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	120	1	0	committed	0	12860241382490130518	0	0	0	10
+silo-q2	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	120	130	1	0	committed	0	12860241382490130518	0	0	0	10
+phase=controlled cutoff_ns=130 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=5 drain_commits=1 failed=0
+notifications phase=controlled worker=0 signal_sends=4 real_handlers=4 async_captures=2 signal_deferred=2 signal_rearms=2 switches=2 low_resumes=2
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=20
+CASE silo-q2 transition=1 mode=1 clock=controlled_ns seed=1 publications=2 admitted=4 sends=2 coalesced=0 modeled_deliveries=5 unsolicited=3 backend=linux-signal real_handlers=4 async_captures=2 deferrals=2 switches=2 low_resumes=2 hints_consumed=3 queue_fallbacks=2 spurious_checks=1 transport_pending=0 scheduler_pending=0 high_attempts=5 high_commits=4 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	110	110	2	1	committed	0	null	0	0	0	0
+silo-q2	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	110	110	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	4	2	Payment	high	0	1	2185194620014831856	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	5	2	NewOrder	high	0	1	13232826040865663252	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	120	1	0	committed	0	12860241382490130518	0	0	0	10
+silo-q2	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	120	130	1	0	committed	0	12860241382490130518	0	0	0	10
+phase=controlled cutoff_ns=130 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=5 drain_commits=1 failed=0
+notifications phase=controlled worker=0 signal_sends=6 real_handlers=4 async_captures=2 signal_deferred=2 signal_rearms=2 switches=2 low_resumes=2
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=20
+CASE silo-q2 transition=1 mode=2 clock=controlled_ns seed=1 publications=2 admitted=4 sends=4 coalesced=3 modeled_deliveries=2 unsolicited=1 backend=linux-signal real_handlers=4 async_captures=2 deferrals=2 switches=2 low_resumes=2 hints_consumed=3 queue_fallbacks=2 spurious_checks=1 transport_pending=0 scheduler_pending=0 high_attempts=5 high_commits=4 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	110	110	2	1	committed	0	null	0	0	0	0
+silo-q2	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	110	110	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	4	2	Payment	high	0	1	2185194620014831856	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	5	2	NewOrder	high	0	1	13232826040865663252	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	120	1	0	committed	0	12860241382490130518	0	0	0	10
+silo-q2	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	120	130	1	0	committed	0	12860241382490130518	0	0	0	10
+phase=controlled cutoff_ns=130 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=5 drain_commits=1 failed=0
+notifications phase=controlled worker=0 signal_sends=3 real_handlers=4 async_captures=2 signal_deferred=2 signal_rearms=2 switches=2 low_resumes=2
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=20
+CASE silo-q2 transition=2 mode=0 clock=controlled_ns seed=1 publications=2 admitted=4 sends=2 coalesced=0 modeled_deliveries=3 unsolicited=1 backend=linux-signal real_handlers=4 async_captures=2 deferrals=2 switches=2 low_resumes=2 hints_consumed=3 queue_fallbacks=2 spurious_checks=1 transport_pending=0 scheduler_pending=0 high_attempts=5 high_commits=4 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	110	110	2	1	committed	0	null	0	0	0	0
+silo-q2	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	110	110	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	4	2	Payment	high	0	1	2185194620014831856	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	5	2	NewOrder	high	0	1	13232826040865663252	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	120	1	0	committed	0	12860241382490130518	0	0	0	10
+silo-q2	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	120	130	1	0	committed	0	12860241382490130518	0	0	0	10
+phase=controlled cutoff_ns=130 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=5 drain_commits=1 failed=0
+notifications phase=controlled worker=0 signal_sends=4 real_handlers=4 async_captures=2 signal_deferred=2 signal_rearms=2 switches=2 low_resumes=2
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=20
+CASE silo-q2 transition=2 mode=1 clock=controlled_ns seed=1 publications=2 admitted=4 sends=2 coalesced=0 modeled_deliveries=5 unsolicited=3 backend=linux-signal real_handlers=4 async_captures=2 deferrals=2 switches=2 low_resumes=2 hints_consumed=3 queue_fallbacks=2 spurious_checks=1 transport_pending=0 scheduler_pending=0 high_attempts=5 high_commits=4 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	110	110	2	1	committed	0	null	0	0	0	0
+silo-q2	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	110	110	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	4	2	Payment	high	0	1	2185194620014831856	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	5	2	NewOrder	high	0	1	13232826040865663252	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	120	1	0	committed	0	12860241382490130518	0	0	0	10
+silo-q2	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	120	130	1	0	committed	0	12860241382490130518	0	0	0	10
+phase=controlled cutoff_ns=130 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=5 drain_commits=1 failed=0
+notifications phase=controlled worker=0 signal_sends=6 real_handlers=4 async_captures=2 signal_deferred=2 signal_rearms=2 switches=2 low_resumes=2
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=20
+CASE silo-q2 transition=2 mode=2 clock=controlled_ns seed=1 publications=2 admitted=4 sends=4 coalesced=3 modeled_deliveries=2 unsolicited=1 backend=linux-signal real_handlers=4 async_captures=2 deferrals=2 switches=2 low_resumes=2 hints_consumed=3 queue_fallbacks=2 spurious_checks=1 transport_pending=0 scheduler_pending=0 high_attempts=5 high_commits=4 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	110	110	2	1	committed	0	null	0	0	0	0
+silo-q2	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	110	110	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	4	2	Payment	high	0	1	2185194620014831856	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	5	2	NewOrder	high	0	1	13232826040865663252	120	120	120	120	120	1	0	committed	0	null	0	0	0	0
+silo-q2	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	120	1	0	committed	0	12860241382490130518	0	0	0	10
+silo-q2	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	120	130	1	0	committed	0	12860241382490130518	0	0	0	10
+phase=controlled cutoff_ns=130 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=0 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=5 drain_commits=1 failed=0
+notifications phase=controlled worker=0 signal_sends=3 real_handlers=4 async_captures=2 signal_deferred=2 signal_rearms=2 switches=2 low_resumes=2
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=20
+PASS nine Silo Q2 notification transition cases with committed writes
+CASE silo-q2-limits threshold=0 clock=controlled_ns seed=1 active_highs=1 high_commits=4 forced_returns=1 low_service_ns=395 real_handlers=1 async_captures=1 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2-limits	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	120	130	1	0	committed	0	null	0	0	0	0
+silo-q2-limits	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	500	1	0	committed	0	12860241382490130518	0	0	0	390
+silo-q2-limits	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	500	510	1	0	committed	0	null	0	0	0	0
+silo-q2-limits	controlled	3	1	Payment	high	0	1	2185194620014831856	110	110	110	510	520	1	0	committed	0	null	0	0	0	0
+silo-q2-limits	controlled	4	1	NewOrder	high	0	1	13232826040865663252	110	110	110	520	530	1	0	committed	0	null	0	0	0	0
+silo-q2-limits	controlled	5	null	Q2	low	0	1	13040959721820390457	110	110	110	530	535	1	0	committed	0	12860241382490130518	0	0	0	5
+phase=controlled cutoff_ns=120 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=5 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=6 failed=0
+notifications phase=controlled worker=0 signal_sends=1 real_handlers=1 async_captures=1 signal_deferred=0 signal_rearms=0 switches=1 low_resumes=1
+starvation phase=controlled worker=0 clock=driver_ns threshold=0 admission_blocks=0 checkpoint_blocks=17 forced_low_returns=1 low_requests=2 high_service_ns=10 low_service_ns=395
+CASE silo-q2-limits threshold=100 clock=controlled_ns seed=1 active_highs=4 high_commits=4 forced_returns=0 low_service_ns=365 real_handlers=1 async_captures=1 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2-limits	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	120	130	1	0	committed	0	null	0	0	0	0
+silo-q2-limits	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	130	140	1	0	committed	0	null	0	0	0	0
+silo-q2-limits	controlled	3	1	Payment	high	0	1	2185194620014831856	110	110	110	140	150	1	0	committed	0	null	0	0	0	0
+silo-q2-limits	controlled	4	1	NewOrder	high	0	1	13232826040865663252	110	110	110	150	160	1	0	committed	0	null	0	0	0	0
+silo-q2-limits	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	500	1	0	committed	0	12860241382490130518	0	0	0	360
+silo-q2-limits	controlled	5	null	Q2	low	0	1	13040959721820390457	110	110	110	500	505	1	0	committed	0	12860241382490130518	0	0	0	5
+phase=controlled cutoff_ns=120 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=5 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=6 failed=0
+notifications phase=controlled worker=0 signal_sends=1 real_handlers=1 async_captures=1 signal_deferred=0 signal_rearms=0 switches=1 low_resumes=1
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=40 low_service_ns=365
+CASE silo-q2-starvation expire=0 threshold=50 clock=controlled_ns seed=1 exact_threshold_dispatch=1 retry_retained=1 high_generated=8 high_commits=8 q2_commits=2 cancelled=0 forced_returns=5 low_service_ns=345 high_service_ns=60 switches=5 modeled_deliveries=3 real_handlers=2 async_captures=2 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2-starvation	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	110	120	2	1	committed	0	null	0	0	0	0
+silo-q2-starvation	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	120	130	1	0	committed	0	null	0	0	0	0
+silo-q2-starvation	controlled	3	1	Payment	high	0	1	2185194620014831856	110	110	110	140	150	1	0	committed	0	null	0	0	0	0
+silo-q2-starvation	controlled	4	1	NewOrder	high	0	1	13232826040865663252	110	110	110	160	170	1	0	committed	0	null	0	0	0	0
+silo-q2-starvation	controlled	6	2	NewOrder	high	0	1	13168350753275463132	120	130	140	180	190	1	0	committed	10	null	0	0	0	0
+silo-q2-starvation	controlled	7	2	NewOrder	high	0	1	15093541023163888492	120	130	140	200	210	1	0	committed	10	null	0	0	0	0
+silo-q2-starvation	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	500	2	1	committed	0	12860241382490130518	0	0	0	340
+silo-q2-starvation	controlled	8	2	Payment	high	0	1	1346066267577507604	120	130	500	500	510	1	0	committed	10	null	0	0	0	0
+silo-q2-starvation	controlled	9	2	NewOrder	high	0	1	15378420243238726120	120	130	500	510	520	1	0	committed	10	null	0	0	0	0
+silo-q2-starvation	controlled	5	null	Q2	low	0	1	13040959721820390457	110	110	110	520	525	1	0	committed	0	12860241382490130518	0	0	0	5
+phase=controlled cutoff_ns=130 generated=10 completed=10 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=3 cutoff_running=2 cutoff_due_ungenerated=4 commits_in_window=1 drain_commits=9 failed=0
+notifications phase=controlled worker=0 signal_sends=6 real_handlers=2 async_captures=2 signal_deferred=0 signal_rearms=0 switches=5 low_resumes=5
+starvation phase=controlled worker=0 clock=driver_ns threshold=50 admission_blocks=1 checkpoint_blocks=1 forced_low_returns=5 low_requests=2 high_service_ns=60 low_service_ns=345
+CASE silo-q2-starvation expire=1 threshold=50 clock=controlled_ns seed=1 exact_threshold_dispatch=1 retry_retained=1 high_generated=8 high_commits=6 q2_commits=1 cancelled=3 forced_returns=5 low_service_ns=970 high_service_ns=60 switches=5 modeled_deliveries=2 real_handlers=2 async_captures=2 checksum=12860241382490130518
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+silo-q2-starvation	controlled	8	2	Payment	high	0	1	1346066267577507604	120	130	null	null	1130	0	0	cancelled_shutdown	10	null	0	0	0	0
+silo-q2-starvation	controlled	9	2	NewOrder	high	0	1	15378420243238726120	120	130	null	null	1130	0	0	cancelled_shutdown	10	null	0	0	0	0
+silo-q2-starvation	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	110	120	2	1	committed	0	null	0	0	0	0
+silo-q2-starvation	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	120	130	1	0	committed	0	null	0	0	0	0
+silo-q2-starvation	controlled	3	1	Payment	high	0	1	2185194620014831856	110	110	110	140	150	1	0	committed	0	null	0	0	0	0
+silo-q2-starvation	controlled	4	1	NewOrder	high	0	1	13232826040865663252	110	110	110	160	170	1	0	committed	0	null	0	0	0	0
+silo-q2-starvation	controlled	6	2	NewOrder	high	0	1	13168350753275463132	120	130	140	180	190	1	0	committed	10	null	0	0	0	0
+silo-q2-starvation	controlled	7	2	NewOrder	high	0	1	15093541023163888492	120	130	140	200	210	1	0	committed	10	null	0	0	0	0
+silo-q2-starvation	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	1130	2	1	committed	0	12860241382490130518	0	0	0	970
+silo-q2-starvation	controlled	5	null	Q2	low	0	1	13040959721820390457	110	110	110	null	1130	0	0	cancelled_shutdown	0	null	0	0	0	0
+phase=controlled cutoff_ns=130 generated=10 completed=7 rejected=0 cancelled=3 dropped=0 cutoff_pending_global=0 cutoff_queued=3 cutoff_running=2 cutoff_due_ungenerated=4 commits_in_window=1 drain_commits=6 failed=0
+notifications phase=controlled worker=0 signal_sends=4 real_handlers=2 async_captures=2 signal_deferred=0 signal_rearms=0 switches=5 low_resumes=5
+starvation phase=controlled worker=0 clock=driver_ns threshold=50 admission_blocks=1 checkpoint_blocks=1 forced_low_returns=5 low_requests=2 high_service_ns=60 low_service_ns=970
+PASS Silo Q2 starvation equality, recovery, retry, reset and drain cases
+PASS queued New-Order rollback, retry, linked rows and remote stock changes
+PASS queued Payment rollback, retry, remote lower median, balances and history

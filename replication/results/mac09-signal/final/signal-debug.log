@@ -1,0 +1,3 @@
+PASS linux-signal corrupt=0 handlers=65 captures=64 interior_captures=62 switches=64 sender_requests=65 exact_continuation=1 cleanup=1
+PASS linux-signal corrupt=1 handlers=3 captures=1 interior_captures=0 switches=1 sender_requests=2 exact_continuation=0 cleanup=1
+PASS linux-signal corrupt=2 handlers=3 captures=1 interior_captures=0 switches=1 sender_requests=2 exact_continuation=0 cleanup=1

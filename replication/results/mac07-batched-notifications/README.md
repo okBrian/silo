@@ -1,5 +1,10 @@
 # MAC-07 controlled batched notifications
 
+**November 5 follow-up:** MAC-07's signal-backend repetition is now complete locally.
+The original collection below remains historical checkpoint evidence. Final
+signal cases, source hashes, retained failures and pressure results are in
+[MAC-09](../mac09-signal/README.md#actual-results). Native UINTR validation remains open.
+
 November 5, 2026 · **Local software validation; checkpoint service** ·
 `erin/local-replication-evidence`, source base
 `bd557b2c358af7886ba1785c2022e5614b7ed741` plus the
@@ -151,7 +156,7 @@ workspace. No experiment batch or performance measurement was collected for
 MAC-07. The isolated test container was stopped after evidence collection;
 earlier evidence containers remained stopped.
 
-## Remaining acceptance
+## Original remaining acceptance (resolved locally by MAC-09)
 
 MAC-07 remains **partial** until its integrated cases are repeated with MAC-09's
 actual signal backend. These results establish the recorded queue/checkpoint

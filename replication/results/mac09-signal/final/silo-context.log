@@ -1,0 +1,4 @@
+PASS live snapshot and isolated context state across a short commit
+PASS nested scan protection, deferred service, callback unwind and insert abort
+PASS conflict, abort cleanup and balanced worker guards
+PASS deferred reclamation after the snapshot ends

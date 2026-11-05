@@ -48,6 +48,9 @@ struct Fixture {
   bench_txn_context state{1, db, 0};
   map<string, abstract_ordered_index *> tables;
   map<string, vector<abstract_ordered_index *>> partitions;
+  bool probe_signal_abort = false;
+  bool signal_low_live = false;
+  unsigned signal_abort_probes = 0;
 
   Fixture()
   {
@@ -69,6 +72,27 @@ struct Fixture {
   template<typename Key, typename Value>
   void write(const char *table, const Key &key, const Value &value)
   {
+    if (probe_signal_abort && signal_low_live && std::string(table) == "stock") {
+      // A real failed Silo write/abort on the high context, while the original
+      // Q2 attempt remains suspended. This is an extra engine cleanup probe,
+      // separate from the driver's scripted conflict/attempt counters.
+      Value before, after;
+      ALWAYS_ASSERT(read(table, key, before));
+      {
+        scoped_str_arena scope(state.arena);
+        void *txn = db.new_txn(0, state.arena, state.txn_buf(), abstract_db::HINT_DEFAULT);
+        tables.at(table)->put(txn, Encode(state.str(), key), Encode(state.str(), value));
+        db.fail_commit = true;
+        ALWAYS_ASSERT(!db.commit_txn(txn));
+        db.abort_txn(txn);
+      }
+      ALWAYS_ASSERT(!ScopedNonPreemptible::blocked() && read(table, key, after));
+      std::string before_encoded, after_encoded;
+      Encode(before_encoded, before);
+      Encode(after_encoded, after);
+      ALWAYS_ASSERT(before_encoded == after_encoded);
+      ++signal_abort_probes;
+    }
     scoped_str_arena scope(state.arena);
     void *txn = db.new_txn(0, state.arena, state.txn_buf(), abstract_db::HINT_DEFAULT);
     tables.at(table)->put(txn, Encode(state.str(), key), Encode(state.str(), value));
@@ -87,6 +111,19 @@ struct Fixture {
     ALWAYS_ASSERT(db.commit_txn(txn));
     return found;
   }
+
+#ifdef SILO_WORKER_CONTEXTS
+  bool run_signal_low(tpcc_q2::Tables &q2, uint64_t &result,
+                      const std::function<void()> &checkpoint) {
+    bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
+    struct Live {
+      bool &flag;
+      explicit Live(bool &value) : flag(value) { flag = true; }
+      ~Live() { flag = false; }
+    } live(signal_low_live);
+    return q2.run(&db, low, 0, result, checkpoint);
+  }
+#endif
 
   void q2()
   {
@@ -156,6 +193,7 @@ struct Fixture {
     }
     ALWAYS_ASSERT(paused.reads == 18 && yields == 9 && paused.checksum == expected[0]);
     std::cout << "PASS Q2 checkpoint count and snapshot checksum across nine write handoffs\n";
+    probe_signal_abort = notification_cases::signal_backend();
     // Same controlled transition matrix as the standalone driver, now with a
     // real Silo snapshot and intervening committed stock writes. Recompute the
     // unpaused oracle before each case because previous cases update stock.
@@ -167,8 +205,7 @@ struct Fixture {
         ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
         notification_cases::transition_case(point, mode,
           [&](uint64_t &result, const std::function<void()> &checkpoint) {
-            bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
-            return q2.run(&db, low, 0, result, checkpoint);
+            return run_signal_low(q2, result, checkpoint);
           }, [&](const queued::Request &request) {
             write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
           }, oracle, "silo-q2");
@@ -180,8 +217,7 @@ struct Fixture {
       ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
       starvation_cases::limits(threshold,
         [&](uint64_t &result, const std::function<void()> &checkpoint) {
-          bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
-          return q2.run(&db, low, 0, result, checkpoint);
+          return run_signal_low(q2, result, checkpoint);
         }, [&](const queued::Request &request) {
           write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
         }, oracle, "silo-q2-limits");
@@ -191,13 +227,17 @@ struct Fixture {
       ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
       starvation_cases::controlled(
         [&](uint64_t &result, const std::function<void()> &checkpoint) {
-          bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
-          return q2.run(&db, low, 0, result, checkpoint);
+          return run_signal_low(q2, result, checkpoint);
         }, [&](const queued::Request &request) {
           write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
         }, oracle, expire, "silo-q2-starvation");
     }
     std::cout << "PASS Silo Q2 starvation equality, recovery, retry, reset and drain cases\n";
+    if (probe_signal_abort) {
+      ALWAYS_ASSERT(signal_abort_probes == 53);
+      std::cout << "PASS 53 actual Silo failed-write rollback/cleanup probes while Q2 remains suspended in signal backend\n";
+      probe_signal_abort = false;
+    }
 
 #endif
   }
@@ -315,8 +355,9 @@ struct Fixture {
 
 } // namespace
 
-int main()
+int main(int argc, char **)
 {
+  notification_cases::signal_backend() = argc > 1;
   nthreads = 2;
   scale_factor = 2;
   Fixture fixture;

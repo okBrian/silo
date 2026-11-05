@@ -22,7 +22,7 @@ for build in debug optimized ubsan; do
     optimized) opt=(-O3) ;;
     ubsan) opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all) ;;
   esac
-  c++ "${flags[@]}" "${opt[@]}" -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc \
+  c++ "${flags[@]}" "${opt[@]}" -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc \
     replication/tests/starvation_test.cc -o "$evidence/starvation-$build"
   timeout 60s "$evidence/starvation-$build" > "$evidence/starvation-$build.log" 2>&1
 done
@@ -31,7 +31,7 @@ for repetition in {1..20}; do
 done
 for build in wait cooperative; do
   context=()
-  if [[ "$build" == cooperative ]]; then context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc); fi
+  if [[ "$build" == cooperative ]]; then context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/signal_backend.cc); fi
   c++ "${flags[@]}" -O2 "${context[@]}" benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o "$evidence/driver-$build"
   timeout 60s "$evidence/driver-$build" > "$evidence/driver-$build.log" 2>&1
 done

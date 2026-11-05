@@ -218,7 +218,21 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(planned["command"][option + 1], "wait")
         self.assertEqual(planned["policy"], "wait")
         config["policy"] = "invalid"
-        with self.assertRaisesRegex(ValueError, "queued policy must be wait or cooperative"):
+        with self.assertRaisesRegex(ValueError, "queued policy must be wait, cooperative or linux-signal"):
+            run.validate(config, None)
+
+    def test_linux_signal_configuration_is_explicit_and_requires_q2(self):
+        config = json.loads((EXPERIMENTS / "configs" / "queued-signal-25.json").read_text())
+        run.validate(config, None)
+        planned = run.plan_run(config, config["variants"][0], 1, 1,
+                               Path("/tmp/batch"), Path("/tmp/dbtest"), None)
+        self.assertEqual(planned["policy"], "linux-signal")
+        option = planned["command"].index("--queued-policy")
+        self.assertEqual(planned["command"][option + 1], "linux-signal")
+        self.assertEqual(planned["starvation_threshold"], 25)
+        self.assertNotIn("--queued-yield-interval", planned["command"])
+        del config["queue"]["q2_variant"]
+        with self.assertRaisesRegex(ValueError, "mixed Q2"):
             run.validate(config, None)
 
     def test_paired_policy_configuration_preserves_inputs(self):

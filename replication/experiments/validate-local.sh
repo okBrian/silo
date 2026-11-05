@@ -56,7 +56,7 @@ out=out-perf.masstree.contexts
 timeout 90s "./$out/replication/tests/tpcc_mixed_test"
 timeout 90s "./$out/replication/tests/silo_context_test"
 c++ -std=c++11 -O2 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS \
-  benchmarks/request_driver.cc benchmarks/worker_context.cc replication/tests/request_driver_test.cc \
+  benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/request_driver_test.cc \
   -o "$work/request_driver_test"
 timeout 90s "$work/request_driver_test"
 python3 -B -m unittest discover -s "$kit/../tests" -p 'test_i05_experiments.py' -v

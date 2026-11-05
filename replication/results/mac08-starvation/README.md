@@ -1,5 +1,10 @@
 # MAC-08 local starvation prevention
 
+**November 5 follow-up:** MAC-08's signal-backend repetition is now complete locally.
+The original collection below remains historical checkpoint evidence. Final
+signal cases, source hashes, retained failures and pressure results are in
+[MAC-09](../mac09-signal/README.md#actual-results). Native UINTR validation remains open.
+
 November 5, 2026 · `erin/local-replication-evidence` · source base
 `2bb11b94ed493f4c27c87abe8185573d3f077093` plus archived source changes.
 **Local checkpoint scheduling in emulated x86-64 Linux.** MAC-09 signal repetition
@@ -179,7 +184,7 @@ The corrected script's hash is saved separately. The Mac Python bytecode syntax
 check initially hit its external cache-directory permission; an in-memory
 compile check succeeded without writing that cache.
 
-## Remaining acceptance
+## Original remaining acceptance (resolved locally by MAC-09)
 
 MAC-08 remains **partial** until its cases repeat through MAC-09's actual
 Linux-signal backend. This task implements no asynchronous handler and supplies
