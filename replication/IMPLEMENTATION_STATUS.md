@@ -1,6 +1,6 @@
 # Implementation status
 
-Last updated: November 4, 2026.
+Last updated: November 5, 2026.
 
 The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a9b1c310392519d9e3b`. The PACE job and staging instructions are in [pace-baseline](pace-baseline/README.md). Stock TPC-C built and completed all ten benchmark measurements in PACE job `6791465`. The upstream suite passed in separate PACE job `6791730` with CPU selection adapted for the Slurm allocation. The CSV matches the archived raw output, and the test exit status and pass marker were verified in [results/pace-runs](results/pace-runs/). Ownership is proposed.
 
@@ -22,8 +22,8 @@ The supplied Silo checkout was inspected and exported at `cc11ca1ea949ef266ee12a
 | I14 | Silo Preemptive scheduler | Brian / Erin | Publication hook prepared · integration pending | The driver can report newly published high work independently of idle wakes, attempts and terminal records. A qualified host and the I13 switch are required to test native mid-Q2 service and resumption. [Evidence and handoff](results/mac04-software-checks/README.md) |
 | I15 | Batched preemption | Brian | Software batching check passed · delivery races pending | Controlled time and two workers produced four callbacks across two admission passes, with six high commits and one retry. Hardware coalescing and the return-to-Q2 race remain open. [Evidence and handoff](results/mac04-software-checks/README.md) |
 | I16 | Starvation prevention | Brian | Budget calculation checked · policy integration pending | Controlled-cycle tests covered strict threshold, overrun, recovery and reset. The native policy still needs synchronized snapshots, admission and return-to-low wiring, and overload evidence. [Evidence and handoff](results/mac04-software-checks/README.md) |
-| I17 | Integrated validation | Everyone | Not started | |
-| I18 | Replication experiments | Erica / everyone | Not started | |
+| I17 | Integrated validation | Everyone | Local clean-build workflow exercised · full validation pending | MAC-05 clean-built three targets and passed both engine tests, the driver, 13 experiment-tool tests and eight paired smoke runs. Native I13–I16 integration, the full consistency/pressure/stress matrix and upstream suite remain pending. [Actual results and limits](results/mac05-workflow/README.md) |
+| I18 | Replication experiments | Erica / everyone | Collection workflow and run plan prepared · native experiments pending | MAC-05 archived/replayed eight Wait/Cooperative runs (7,910 measurement commits) and independently checked per-type percentiles/counts. Figure 10 target and five varied three-policy orders are documented; Preemptive, individual CPU placement and native performance collection remain pending. [Evidence](results/mac05-workflow/README.md) · [Run plan](experiments/HOST_WORKFLOW.md#figure-10-style-native-run-plan) |
 | M01 | Milestone evidence assessment | Everyone | In progress | Archived ten-run baseline, passing adapted stock suite, and I06–I08 functional evidence are ready to cite. Timeline assessment and hardware decision remain open |
 | M02 | Milestone report | Everyone | Not started | Original LaTeX source not supplied |
 | M03 | Milestone verification/package | Everyone | Not started | |

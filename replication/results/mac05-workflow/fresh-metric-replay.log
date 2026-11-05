@@ -1,0 +1,2 @@
+PASS independent per-type replay: 24 measurement rows; all five latency distributions, four quantiles, sample flags, throughput, attempts, aborts and exit accounting
+Measurement totals: commits=7910 shorts=432 cooperative_handoffs=40

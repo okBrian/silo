@@ -1,0 +1,9 @@
+run_id,policy,workers,repeat,status,reconciled,outstanding_at_cutoff,unaccounted_at_exit,issues
+queued-cooperative-smoke-_deb30he-r1-v1,wait,1,1,complete,True,2,0,
+queued-cooperative-smoke-_deb30he-r1-v2,cooperative,1,1,complete,True,1,0,
+queued-cooperative-smoke-_deb30he-r1-v3,wait,2,1,complete,True,4,0,
+queued-cooperative-smoke-_deb30he-r1-v4,cooperative,2,1,complete,True,4,0,
+queued-cooperative-smoke-_deb30he-r2-v4,cooperative,2,2,complete,True,3,0,
+queued-cooperative-smoke-_deb30he-r2-v3,wait,2,2,complete,True,3,0,
+queued-cooperative-smoke-_deb30he-r2-v2,cooperative,1,2,complete,True,1,0,
+queued-cooperative-smoke-_deb30he-r2-v1,wait,1,2,complete,True,1,0,

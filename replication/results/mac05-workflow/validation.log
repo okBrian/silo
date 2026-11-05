@@ -1,0 +1,151 @@
++ trap 'status=$?; printf "%s\n" "$status" > "$evidence/exit-status"' EXIT
+++ git -C /mac05-input/source rev-parse HEAD
++ revision=da4dcec0e86b9a6255f979157d268952ffde4d81
+++ git -C /mac05-input/source rev-parse HEAD:masstree
++ masstree_revision=1150824e6a10a0384ba4bfed6b916ce62f96315f
+++ git -C /mac05-input/source/masstree rev-parse HEAD
++ test 1150824e6a10a0384ba4bfed6b916ce62f96315f = 1150824e6a10a0384ba4bfed6b916ce62f96315f
+++ git -C /mac05-input/source/masstree status --porcelain
++ test -z ''
++ git -C /mac05-input/source diff --exit-code HEAD -- '*.cc' '*.h' '*.S' Makefile config/config-perf.mk
+++ mktemp -d
++ work=/tmp/tmp.aPMNg89iaR
++ git clone --no-local --no-checkout /mac05-input/source /tmp/tmp.aPMNg89iaR/source
+Cloning into '/tmp/tmp.aPMNg89iaR/source'...
++ git -C /tmp/tmp.aPMNg89iaR/source checkout --detach da4dcec0e86b9a6255f979157d268952ffde4d81
+HEAD is now at da4dcec mac04 software checks
++ git -C /tmp/tmp.aPMNg89iaR/source -c protocol.file.allow=always -c submodule.masstree.url=/mac05-input/source/masstree submodule update --init --checkout masstree
+Cloning into '/tmp/tmp.aPMNg89iaR/source/masstree'...
+done.
+Submodule path 'masstree': checked out '1150824e6a10a0384ba4bfed6b916ce62f96315f'
++ cd /tmp/tmp.aPMNg89iaR/source
+++ git -C masstree rev-parse HEAD
++ test 1150824e6a10a0384ba4bfed6b916ce62f96315f = 1150824e6a10a0384ba4bfed6b916ce62f96315f
+++ git status --porcelain
++ test -z ''
++ uname -a
++ cat /etc/os-release
++ c++ --version
++ getconf GNU_LIBC_VERSION
++ python3 --version
++ lscpu
++ taskset -pc 1806
++ git rev-parse HEAD
++ git submodule status
++ mkdir /mac05-evidence/tools
++ cp /mac05-input/source/replication/experiments/run.py /mac05-input/source/replication/experiments/analyze.py /mac05-input/source/replication/experiments/report.py /mac05-input/source/replication/experiments/validate-local.sh /mac05-evidence/tools/
++ cp /mac05-input/source/replication/experiments/configs/queued-cooperative-smoke.json /mac05-evidence/tools/
++ cp /mac05-input/source/replication/experiments/../tests/check_cooperative_batch.py /mac05-evidence/tools/
++ cp /mac05-input/source/replication/experiments/../tests/test_i05_experiments.py /mac05-evidence/tools/
++ sha256sum /mac05-evidence/tools/analyze.py /mac05-evidence/tools/check_cooperative_batch.py /mac05-evidence/tools/queued-cooperative-smoke.json /mac05-evidence/tools/report.py /mac05-evidence/tools/run.py /mac05-evidence/tools/test_i05_experiments.py /mac05-evidence/tools/validate-local.sh
++ git apply /mac05-input/source/replication/results/mac01-mac02/build-compatibility.diff
++ git diff --binary HEAD
++ make clean
++ make -j1 -C third-party/lz4 library
++ make -j1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 masstree/config.h
++ make -j2 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 dbtest tpcc_mixed_test silo_context_test
++ out=out-perf.masstree.contexts
++ timeout 90s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test
+wait_an_epoch(): consistent reads happening in e-1, but e=0 so special case
+PASS Q2 region 0 checksum 12860241382490130518
+PASS Q2 region 1 checksum 11649938069444573197
+PASS Q2 region 2 checksum 14695981039346656037
+PASS Q2 checkpoint count and snapshot checksum across nine write handoffs
+PASS queued New-Order rollback, retry, linked rows and remote stock changes
+PASS queued Payment rollback, retry, remote lower median, balances and history
++ timeout 90s ./out-perf.masstree.contexts/replication/tests/silo_context_test
+PASS live snapshot and isolated context state across a short commit
+PASS nested scan protection, deferred service, callback unwind and insert abort
+PASS conflict, abort cleanup and balanced worker guards
+PASS deferred reclamation after the snapshot ends
++ c++ -std=c++11 -O2 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc replication/tests/request_driver_test.cc -o /tmp/tmp.aPMNg89iaR/request_driver_test
++ timeout 90s /tmp/tmp.aPMNg89iaR/request_driver_test
+PASS delayed generation and overload: 8 high, 2 low, 5 rejected, 4 cancelled, 1 safe completion after deadline
+phase=measurement cutoff_ns=150 generated=10 completed=1 rejected=5 cancelled=4 dropped=0 cutoff_pending_global=2 cutoff_queued=2 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=1 failed=1
+PASS wake after drain deadline accounts for every pre-cutoff batch
+PASS stable retries, retry exhaustion, user abort, FIFO and duplicate notifications
+PASS high publication: 2 workers, 2 admission passes, 4 notifications, 6 high admissions, 7 high attempts, 6 high commits, 0 switches
+PASS notification failure: 4 published high requests cancelled, active low completed
+PASS starvation budget: inactive/zero time, strict threshold, retry charge, overshoot and recovery, per-low reset, full-width arithmetic
+PASS fatal adapter error stops new attempts and preserves terminal records
+PASS Wait: running low finishes, two shorts start in FIFO order after 7 and 8 us of local queueing, then queued low starts
+PASS Cooperative: empty interval, nested deferral, FIFO, repeated yields, high aborts and stable low retry
+PASS three-worker routing and ID reconciliation: high=2392 generated=2503 committed=433 rejected=2070
++ python3 -B -m unittest discover -s /mac05-input/source/replication/experiments/../tests -p test_i05_experiments.py -v
+test_i06_archives (test_i05_experiments.AnalysisTests) ... ok
+test_nearest_rank_and_tail_threshold (test_i05_experiments.AnalysisTests) ... ok
+test_pace_archive_matches_published_values (test_i05_experiments.AnalysisTests) ... ok
+test_queued_cohort (test_i05_experiments.AnalysisTests) ... ok
+test_stock_columns_and_units (test_i05_experiments.AnalysisTests) ... ok
+test_report_does_not_turn_partial_or_failed_runs_into_success (test_i05_experiments.ReportTests) ... ok
+test_report_keeps_outcomes_and_per_type_samples_separate (test_i05_experiments.ReportTests) ... ok
+test_matrix_continues_after_failure_and_retains_outputs (test_i05_experiments.RunnerTests) ... ok
+test_mixed_configuration_records_q2_dataset_and_profile (test_i05_experiments.RunnerTests) ... ok
+test_paired_policy_configuration_preserves_inputs (test_i05_experiments.RunnerTests) ... ok
+test_queued_configuration_passes_seed_and_phase_options (test_i05_experiments.RunnerTests) ... ok
+test_timeout_retains_run (test_i05_experiments.RunnerTests) ... ok
+test_wait_configuration_selects_policy_explicitly (test_i05_experiments.RunnerTests) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 1.742s
+
+OK
+++ c++ -dumpfullversion
+++ getconf GNU_LIBC_VERSION
++ build_info='11.4.0; glibc 2.35; MODE=perf MASSTREE=1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1; -O1 GCC pair formatter compatibility patch; emulated x86-64 Linux functional validation on Colima/QEMU; Ubuntu 22.04'
++ python3 -B /mac05-evidence/tools/run.py /mac05-evidence/tools/queued-cooperative-smoke.json --source /tmp/tmp.aPMNg89iaR/source --dbtest /tmp/tmp.aPMNg89iaR/source/out-perf.masstree.contexts/benchmarks/dbtest --output /mac05-evidence/batches --build-info '11.4.0; glibc 2.35; MODE=perf MASSTREE=1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1; -O1 GCC pair formatter compatibility patch; emulated x86-64 Linux functional validation on Colima/QEMU; Ubuntu 22.04'
+Experiment directory: /mac05-evidence/batches/queued-cooperative-smoke-_deb30he
+Running queued-cooperative-smoke-_deb30he-r1-v1
+Running queued-cooperative-smoke-_deb30he-r1-v2
+Running queued-cooperative-smoke-_deb30he-r1-v3
+Running queued-cooperative-smoke-_deb30he-r1-v4
+Running queued-cooperative-smoke-_deb30he-r2-v4
+Running queued-cooperative-smoke-_deb30he-r2-v3
+Running queued-cooperative-smoke-_deb30he-r2-v2
+Running queued-cooperative-smoke-_deb30he-r2-v1
++ batches=("$evidence"/batches/*)
++ test 1 -eq 1
++ batch=/mac05-evidence/batches/queued-cooperative-smoke-_deb30he
++ python3 -B /mac05-evidence/tools/analyze.py --output /mac05-evidence/analysis batch /mac05-evidence/batches/queued-cooperative-smoke-_deb30he
++ python3 -B /mac05-evidence/tools/report.py /mac05-evidence/analysis/analysis.json --output /mac05-evidence/analysis --label 'emulated x86-64 Linux functional validation on Colima/QEMU; Ubuntu 22.04; one-second smoke estimates' --require-complete
++ python3 -B /mac05-evidence/tools/check_cooperative_batch.py /mac05-evidence/batches/queued-cooperative-smoke-_deb30he
++ tee /mac05-evidence/reconciliation.log
+PASS repeat=1 workers=1 policy=wait phase=warmup high=36 Q2=691 checks=0 yields=0 high_during_q2=0
+PASS repeat=1 workers=1 policy=wait phase=measurement high=36 Q2=720 checks=0 yields=0 high_during_q2=0
+PASS repeat=1 workers=1 policy=cooperative phase=warmup high=36 Q2=635 checks=14372 yields=7 high_during_q2=28
+PASS repeat=1 workers=1 policy=cooperative phase=measurement high=36 Q2=670 checks=15031 yields=7 high_during_q2=28
+PASS repeat=1 workers=2 policy=wait phase=warmup high=72 Q2=1213 checks=0 yields=0 high_during_q2=0
+PASS repeat=1 workers=2 policy=wait phase=measurement high=72 Q2=1090 checks=0 yields=0 high_during_q2=0
+PASS repeat=1 workers=2 policy=cooperative phase=warmup high=72 Q2=1159 checks=28883 yields=11 high_during_q2=44
+PASS repeat=1 workers=2 policy=cooperative phase=measurement high=72 Q2=1188 checks=30035 yields=11 high_during_q2=44
+PASS repeat=2 workers=2 policy=cooperative phase=warmup high=72 Q2=1154 checks=29334 yields=14 high_during_q2=56
+PASS repeat=2 workers=2 policy=cooperative phase=measurement high=72 Q2=1156 checks=28962 yields=15 high_during_q2=60
+PASS repeat=2 workers=2 policy=wait phase=warmup high=72 Q2=1206 checks=0 yields=0 high_during_q2=0
+PASS repeat=2 workers=2 policy=wait phase=measurement high=72 Q2=1255 checks=0 yields=0 high_during_q2=0
+PASS repeat=2 workers=1 policy=cooperative phase=warmup high=36 Q2=685 checks=15548 yields=5 high_during_q2=20
+PASS repeat=2 workers=1 policy=cooperative phase=measurement high=36 Q2=690 checks=15480 yields=7 high_during_q2=28
+PASS repeat=2 workers=1 policy=wait phase=warmup high=36 Q2=703 checks=0 yields=0 high_during_q2=0
+PASS repeat=2 workers=1 policy=wait phase=measurement high=36 Q2=709 checks=0 yields=0 high_during_q2=0
+PASS repeat=1 workers=1 matching high arrivals and Q2 input prefixes
+PASS repeat=1 workers=2 matching high arrivals and Q2 input prefixes
+PASS repeat=2 workers=1 matching high arrivals and Q2 input prefixes
+PASS repeat=2 workers=2 matching high arrivals and Q2 input prefixes
+++ basename /mac05-evidence/batches/queued-cooperative-smoke-_deb30he
++ tar -czf /mac05-evidence/batch.tar.gz -C /mac05-evidence/batches queued-cooperative-smoke-_deb30he
++ mkdir /mac05-evidence/replay
++ tar -xzf /mac05-evidence/batch.tar.gz -C /mac05-evidence/replay
+++ basename /mac05-evidence/batches/queued-cooperative-smoke-_deb30he
++ python3 -B /mac05-evidence/tools/analyze.py --output /mac05-evidence/replay-analysis batch /mac05-evidence/replay/queued-cooperative-smoke-_deb30he
++ python3 -B /mac05-evidence/tools/report.py /mac05-evidence/replay-analysis/analysis.json --output /mac05-evidence/replay-analysis --label 'emulated x86-64 Linux functional validation on Colima/QEMU; Ubuntu 22.04; one-second smoke estimates' --require-complete
++ for table in queued-summary.csv per-type.csv run-health.csv report.md
++ cmp /mac05-evidence/analysis/queued-summary.csv /mac05-evidence/replay-analysis/queued-summary.csv
++ for table in queued-summary.csv per-type.csv run-health.csv report.md
++ cmp /mac05-evidence/analysis/per-type.csv /mac05-evidence/replay-analysis/per-type.csv
++ for table in queued-summary.csv per-type.csv run-health.csv report.md
++ cmp /mac05-evidence/analysis/run-health.csv /mac05-evidence/replay-analysis/run-health.csv
++ for table in queued-summary.csv per-type.csv run-health.csv report.md
++ cmp /mac05-evidence/analysis/report.md /mac05-evidence/replay-analysis/report.md
++ echo 'PASS saved batch regenerates identical analysis CSVs and report'
+PASS saved batch regenerates identical analysis CSVs and report
++ status=0
++ printf '%s\n' 0

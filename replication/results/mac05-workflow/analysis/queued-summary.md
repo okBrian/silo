@@ -1,0 +1,70 @@
+# Queued TPC-C
+
+Latency cells show n / p50 / p90 / p99 / p99.9. † p99.9 uses fewer than 1,000 samples.
+
+| Run | Status | Phase | Type | Generated | Committed | Rejected | Cancelled | Window commits | Drain completions | Drain commits | Queue delay (µs) | End-to-end latency (µs) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| queued-cooperative-smoke-_deb30he-r1-v1 | complete | warmup | All | 727 | 727 | 0 | 0 | 726 | 1 | 1 | 727 / 405.870 / 1,343.570 / 3,659.831 / 6,264.998† | 727 / 1,729.447 / 2,753.120 / 4,912.430 / 8,236.368† |
+| queued-cooperative-smoke-_deb30he-r1-v1 | complete | warmup | NewOrder | 24 | 24 | 0 | 0 | 24 | 0 | 0 | 24 / 930.703 / 3,659.831 / 5,973.092 / 5,973.092† | 24 / 1,097.649 / 3,810.783 / 6,274.995 / 6,274.995† |
+| queued-cooperative-smoke-_deb30he-r1-v1 | complete | warmup | Payment | 12 | 12 | 0 | 0 | 12 | 0 | 0 | 12 / 1,099.649 / 5,472.251 / 5,932.104 / 5,932.104† | 12 / 1,429.543 / 5,934.103 / 5,972.092 / 5,972.092† |
+| queued-cooperative-smoke-_deb30he-r1-v1 | complete | warmup | Q2 | 691 | 691 | 0 | 0 | 690 | 1 | 1 | 691 / 363.884 / 1,256.599 / 1,994.362 / 6,264.998† | 691 / 1,749.441 / 2,702.137 / 4,168.668 / 8,236.368† |
+| queued-cooperative-smoke-_deb30he-r1-v1 | complete | measurement | All | 756 | 756 | 0 | 0 | 754 | 2 | 2 | 756 / 322.897 / 1,181.626 / 1,786.435 / 2,307.270† | 756 / 1,625.486 / 2,583.182 / 3,343.941 / 4,551.559† |
+| queued-cooperative-smoke-_deb30he-r1-v1 | complete | measurement | NewOrder | 20 | 20 | 0 | 0 | 20 | 0 | 0 | 20 / 569.820 / 1,616.488 / 1,786.435 / 1,786.435† | 20 / 684.783 / 1,701.461 / 2,009.364 / 2,009.364† |
+| queued-cooperative-smoke-_deb30he-r1-v1 | complete | measurement | Payment | 16 | 16 | 0 | 0 | 16 | 0 | 0 | 16 / 555.824 / 1,577.501 / 1,684.467 / 1,684.467† | 16 / 614.805 / 1,696.463 / 1,785.435 / 1,785.435† |
+| queued-cooperative-smoke-_deb30he-r1-v1 | complete | measurement | Q2 | 720 | 720 | 0 | 0 | 718 | 2 | 2 | 720 / 312.901 / 1,107.649 / 1,775.438 / 2,307.270† | 720 / 1,650.478 / 2,600.177 / 3,343.941 / 4,551.559† |
+| queued-cooperative-smoke-_deb30he-r1-v2 | complete | warmup | All | 671 | 671 | 0 | 0 | 670 | 1 | 1 | 671 / 511.849 / 1,652.513 / 2,350.309 / 2,757.189† | 671 / 2,011.408 / 3,291.032 / 4,602.646 / 5,505.380† |
+| queued-cooperative-smoke-_deb30he-r1-v2 | complete | warmup | NewOrder | 24 | 24 | 0 | 0 | 24 | 0 | 0 | 24 / 344.898 / 663.805 / 770.773 / 770.773† | 24 / 552.837 / 777.771 / 897.736 / 897.736† |
+| queued-cooperative-smoke-_deb30he-r1-v2 | complete | warmup | Payment | 12 | 12 | 0 | 0 | 12 | 0 | 0 | 12 / 419.876 / 719.788 / 770.773 / 770.773† | 12 / 569.832 / 795.766 / 889.738 / 889.738† |
+| queued-cooperative-smoke-_deb30he-r1-v2 | complete | warmup | Q2 | 635 | 635 | 0 | 0 | 634 | 1 | 1 | 635 / 522.846 / 1,670.509 / 2,350.309 / 2,757.189† | 635 / 2,066.392 / 3,339.017 / 4,602.646 / 5,505.380† |
+| queued-cooperative-smoke-_deb30he-r1-v2 | complete | measurement | All | 706 | 706 | 0 | 0 | 705 | 1 | 1 | 706 / 441.871 / 1,419.586 / 2,020.411 / 3,397.009† | 706 / 1,848.461 / 2,976.133 / 4,133.796 / 5,082.519† |
+| queued-cooperative-smoke-_deb30he-r1-v2 | complete | measurement | NewOrder | 20 | 20 | 0 | 0 | 20 | 0 | 0 | 20 / 291.915 / 573.832 / 1,094.681 / 1,094.681† | 20 / 437.872 / 768.776 / 1,368.601 / 1,368.601† |
+| queued-cooperative-smoke-_deb30he-r1-v2 | complete | measurement | Payment | 16 | 16 | 0 | 0 | 16 | 0 | 0 | 16 / 375.890 / 624.818 / 870.746 / 870.746† | 16 / 434.873 / 654.809 / 1,090.682 / 1,090.682† |
+| queued-cooperative-smoke-_deb30he-r1-v2 | complete | measurement | Q2 | 670 | 670 | 0 | 0 | 669 | 1 | 1 | 670 / 458.866 / 1,424.585 / 2,041.405 / 3,397.009† | 670 / 1,915.442 / 2,978.132 / 4,164.786 / 5,082.519† |
+| queued-cooperative-smoke-_deb30he-r1-v3 | complete | warmup | All | 1,285 | 1,285 | 0 | 0 | 1,282 | 3 | 3 | 1,285 / 509.869 / 1,741.554 / 4,249.903 / 5,461.590 | 1,285 / 1,919.504 / 3,624.064 / 7,444.078 / 11,950.944 |
+| queued-cooperative-smoke-_deb30he-r1-v3 | complete | warmup | NewOrder | 43 | 43 | 0 | 0 | 43 | 0 | 0 | 43 / 713.815 / 1,790.537 / 1,967.492 / 1,967.492† | 43 / 853.782 / 1,862.519 / 2,115.454 / 2,115.454† |
+| queued-cooperative-smoke-_deb30he-r1-v3 | complete | warmup | Payment | 29 | 29 | 0 | 0 | 29 | 0 | 0 | 29 / 815.790 / 1,564.600 / 1,806.534 / 1,806.534† | 29 / 903.767 / 1,648.579 / 1,855.521 / 1,855.521† |
+| queued-cooperative-smoke-_deb30he-r1-v3 | complete | warmup | Q2 | 1,213 | 1,213 | 0 | 0 | 1,210 | 3 | 3 | 1,213 / 499.871 / 1,743.550 / 4,249.903 / 5,461.590 | 1,213 / 1,990.486 / 3,691.047 / 7,444.078 / 11,950.944 |
+| queued-cooperative-smoke-_deb30he-r1-v3 | complete | measurement | All | 1,162 | 1,162 | 0 | 0 | 1,158 | 4 | 4 | 1,162 / 632.839 / 2,060.478 / 4,651.810 / 6,422.358 | 1,162 / 2,201.437 / 4,432.866 / 9,065.704 / 12,075.912 |
+| queued-cooperative-smoke-_deb30he-r1-v3 | complete | measurement | NewOrder | 36 | 36 | 0 | 0 | 36 | 0 | 0 | 36 / 819.792 / 1,948.506 / 2,184.441 / 2,184.441† | 36 / 1,020.741 / 2,099.463 / 2,293.413 / 2,293.413† |
+| queued-cooperative-smoke-_deb30he-r1-v3 | complete | measurement | Payment | 36 | 36 | 0 | 0 | 36 | 0 | 0 | 36 / 683.825 / 2,098.464 / 2,347.400 / 2,347.400† | 36 / 778.801 / 2,180.442 / 2,404.386 / 2,404.386† |
+| queued-cooperative-smoke-_deb30he-r1-v3 | complete | measurement | Q2 | 1,090 | 1,090 | 0 | 0 | 1,086 | 4 | 4 | 1,090 / 627.839 / 2,104.462 / 4,652.811 / 6,422.358 | 1,090 / 2,286.415 / 4,498.850 / 9,229.640 / 12,075.912 |
+| queued-cooperative-smoke-_deb30he-r1-v4 | complete | warmup | All | 1,231 | 1,231 | 0 | 0 | 1,228 | 3 | 3 | 1,231 / 536.880 / 1,919.570 / 4,397.017 / 6,015.655 | 1,231 / 2,049.541 / 3,988.108 / 7,576.305 / 9,489.881 |
+| queued-cooperative-smoke-_deb30he-r1-v4 | complete | warmup | NewOrder | 43 | 43 | 0 | 0 | 43 | 0 | 0 | 43 / 329.926 / 813.818 / 1,628.636 / 1,628.636† | 43 / 429.904 / 909.797 / 1,744.610 / 1,744.610† |
+| queued-cooperative-smoke-_deb30he-r1-v4 | complete | warmup | Payment | 29 | 29 | 0 | 0 | 29 | 0 | 0 | 29 / 288.936 / 1,510.665 / 1,819.593 / 1,819.593† | 29 / 381.915 / 1,547.657 / 1,902.575 / 1,902.575† |
+| queued-cooperative-smoke-_deb30he-r1-v4 | complete | warmup | Q2 | 1,159 | 1,159 | 0 | 0 | 1,156 | 3 | 3 | 1,159 / 573.871 / 1,986.556 / 4,582.975 / 6,015.655 | 1,159 / 2,153.519 / 4,071.090 / 7,766.280 / 9,489.881 |
+| queued-cooperative-smoke-_deb30he-r1-v4 | complete | measurement | All | 1,260 | 1,260 | 0 | 0 | 1,256 | 4 | 4 | 1,260 / 556.877 / 1,816.597 / 4,369.033 / 5,394.805 | 1,260 / 2,176.518 / 3,679.185 / 7,333.376 / 8,905.028 |
+| queued-cooperative-smoke-_deb30he-r1-v4 | complete | measurement | NewOrder | 36 | 36 | 0 | 0 | 36 | 0 | 0 | 36 / 274.940 / 466.897 / 873.806 / 873.806† | 36 / 388.914 / 570.874 / 978.783 / 978.783† |
+| queued-cooperative-smoke-_deb30he-r1-v4 | complete | measurement | Payment | 36 | 36 | 0 | 0 | 36 | 0 | 0 | 36 / 305.932 / 443.903 / 509.888 / 509.888† | 36 / 390.913 / 508.889 / 536.882 / 536.882† |
+| queued-cooperative-smoke-_deb30he-r1-v4 | complete | measurement | Q2 | 1,188 | 1,188 | 0 | 0 | 1,184 | 4 | 4 | 1,188 / 607.866 / 1,846.591 / 4,544.994 / 5,394.805 | 1,188 / 2,278.495 / 3,731.173 / 7,342.374 / 8,905.028 |
+| queued-cooperative-smoke-_deb30he-r2-v4 | complete | warmup | All | 1,226 | 1,226 | 0 | 0 | 1,222 | 4 | 4 | 1,226 / 575.889 / 1,860.641 / 4,267.177 / 6,594.727 | 1,226 / 2,161.583 / 3,965.227 / 7,725.494 / 9,120.240 |
+| queued-cooperative-smoke-_deb30he-r2-v4 | complete | warmup | NewOrder | 43 | 43 | 0 | 0 | 43 | 0 | 0 | 43 / 339.934 / 763.851 / 2,755.462 / 2,755.462† | 43 / 459.911 / 948.815 / 2,837.446 / 2,837.446† |
+| queued-cooperative-smoke-_deb30he-r2-v4 | complete | warmup | Payment | 29 | 29 | 0 | 0 | 29 | 0 | 0 | 29 / 330.936 / 592.884 / 2,838.447 / 2,838.447† | 29 / 385.925 / 691.865 / 2,972.421 / 2,972.421† |
+| queued-cooperative-smoke-_deb30he-r2-v4 | complete | warmup | Q2 | 1,154 | 1,154 | 0 | 0 | 1,150 | 4 | 4 | 1,154 / 629.878 / 1,867.636 / 4,297.171 / 6,594.727 | 1,154 / 2,263.558 / 4,031.223 / 7,855.469 / 9,120.240 |
+| queued-cooperative-smoke-_deb30he-r2-v4 | complete | measurement | All | 1,228 | 1,228 | 0 | 0 | 1,225 | 3 | 3 | 1,228 / 579.890 / 1,882.636 / 4,182.193 / 5,232.000 | 1,228 / 2,146.590 / 4,097.217 / 7,251.601 / 9,949.099 |
+| queued-cooperative-smoke-_deb30he-r2-v4 | complete | measurement | NewOrder | 37 | 37 | 0 | 0 | 37 | 0 | 0 | 37 / 301.941 / 455.912 / 1,382.736 / 1,382.736† | 37 / 410.921 / 557.894 / 1,500.713 / 1,500.713† |
+| queued-cooperative-smoke-_deb30he-r2-v4 | complete | measurement | Payment | 35 | 35 | 0 | 0 | 35 | 0 | 0 | 35 / 293.944 / 520.901 / 1,565.701 / 1,565.701† | 35 / 344.934 / 651.876 / 1,587.696 / 1,587.696† |
+| queued-cooperative-smoke-_deb30he-r2-v4 | complete | measurement | Q2 | 1,156 | 1,156 | 0 | 0 | 1,153 | 3 | 3 | 1,156 / 635.877 / 1,902.633 / 4,305.170 / 5,232.000 | 1,156 / 2,237.568 / 4,160.205 / 7,753.518 / 9,949.099 |
+| queued-cooperative-smoke-_deb30he-r2-v3 | complete | warmup | All | 1,278 | 1,278 | 0 | 0 | 1,275 | 3 | 3 | 1,278 / 562.907 / 1,764.705 / 4,248.288 / 5,467.094 | 1,278 / 1,975.669 / 3,878.351 / 7,741.703 / 9,329.438 |
+| queued-cooperative-smoke-_deb30he-r2-v3 | complete | warmup | NewOrder | 43 | 43 | 0 | 0 | 43 | 0 | 0 | 43 / 876.854 / 1,754.706 / 3,895.348 / 3,895.348† | 43 / 973.837 / 1,904.681 / 4,037.324 / 4,037.324† |
+| queued-cooperative-smoke-_deb30he-r2-v3 | complete | warmup | Payment | 29 | 29 | 0 | 0 | 29 | 0 | 0 | 29 / 882.854 / 2,052.656 / 4,036.324 / 4,036.324† | 29 / 1,022.831 / 2,075.652 / 4,072.318 / 4,072.318† |
+| queued-cooperative-smoke-_deb30he-r2-v3 | complete | warmup | Q2 | 1,206 | 1,206 | 0 | 0 | 1,203 | 3 | 3 | 1,206 / 530.912 / 1,763.705 / 4,248.288 / 5,467.094 | 1,206 / 2,075.653 / 3,893.348 / 7,741.703 / 9,329.438 |
+| queued-cooperative-smoke-_deb30he-r2-v3 | complete | measurement | All | 1,327 | 1,327 | 0 | 0 | 1,324 | 3 | 3 | 1,327 / 466.923 / 1,718.715 / 4,023.340 / 5,283.124 | 1,327 / 1,849.694 / 3,465.432 / 6,128.995 / 9,504.425 |
+| queued-cooperative-smoke-_deb30he-r2-v3 | complete | measurement | NewOrder | 37 | 37 | 0 | 0 | 37 | 0 | 0 | 37 / 620.897 / 2,285.621 / 3,569.408 / 3,569.408† | 37 / 739.877 / 2,388.604 / 3,691.388 / 3,691.388† |
+| queued-cooperative-smoke-_deb30he-r2-v3 | complete | measurement | Payment | 35 | 35 | 0 | 0 | 35 | 0 | 0 | 35 / 563.907 / 1,718.715 / 3,478.423 / 3,478.423† | 35 / 672.889 / 1,743.711 / 3,571.408 / 3,571.408† |
+| queued-cooperative-smoke-_deb30he-r2-v3 | complete | measurement | Q2 | 1,255 | 1,255 | 0 | 0 | 1,252 | 3 | 3 | 1,255 / 459.925 / 1,675.723 / 4,080.323 / 5,283.124 | 1,255 / 1,903.688 / 3,493.421 / 6,200.973 / 9,504.425 |
+| queued-cooperative-smoke-_deb30he-r2-v2 | complete | warmup | All | 721 | 721 | 0 | 0 | 719 | 2 | 2 | 721 / 470.928 / 1,388.788 / 2,043.688 / 3,251.505† | 721 / 1,813.727 / 2,895.558 / 4,026.386 / 6,638.987† |
+| queued-cooperative-smoke-_deb30he-r2-v2 | complete | warmup | NewOrder | 23 | 23 | 0 | 0 | 23 | 0 | 0 | 23 / 352.947 / 516.921 / 642.903 / 642.903† | 23 / 480.926 / 654.901 / 747.887 / 747.887† |
+| queued-cooperative-smoke-_deb30he-r2-v2 | complete | warmup | Payment | 13 | 13 | 0 | 0 | 13 | 0 | 0 | 13 / 337.949 / 661.899 / 734.888 / 734.888† | 13 / 472.928 / 739.887 / 767.883 / 767.883† |
+| queued-cooperative-smoke-_deb30he-r2-v2 | complete | warmup | Q2 | 685 | 685 | 0 | 0 | 683 | 2 | 2 | 685 / 485.926 / 1,422.783 / 2,074.684 / 3,251.505† | 685 / 1,867.719 / 2,944.551 / 4,052.382 / 6,638.987† |
+| queued-cooperative-smoke-_deb30he-r2-v2 | complete | measurement | All | 726 | 726 | 0 | 0 | 725 | 1 | 1 | 726 / 355.946 / 1,339.798 / 2,014.696 / 4,322.348† | 726 / 1,701.743 / 2,845.575 / 4,124.385 / 8,505.717† |
+| queued-cooperative-smoke-_deb30he-r2-v2 | complete | measurement | NewOrder | 20 | 20 | 0 | 0 | 20 | 0 | 0 | 20 / 354.947 / 496.926 / 560.915 / 560.915† | 20 / 495.926 / 643.902 / 653.901 / 653.901† |
+| queued-cooperative-smoke-_deb30he-r2-v2 | complete | measurement | Payment | 16 | 16 | 0 | 0 | 16 | 0 | 0 | 16 / 291.956 / 556.917 / 595.911 / 595.911† | 16 / 360.946 / 588.912 / 627.906 / 627.906† |
+| queued-cooperative-smoke-_deb30he-r2-v2 | complete | measurement | Q2 | 690 | 690 | 0 | 0 | 689 | 1 | 1 | 690 / 361.945 / 1,374.793 / 2,068.688 / 4,322.348† | 690 / 1,759.737 / 2,854.574 / 4,515.319 / 8,505.717† |
+| queued-cooperative-smoke-_deb30he-r2-v1 | complete | warmup | All | 739 | 739 | 0 | 0 | 737 | 2 | 2 | 739 / 402.945 / 1,309.818 / 1,998.724 / 4,511.369† | 739 / 1,702.762 / 2,857.604 / 4,357.390 / 6,458.096† |
+| queued-cooperative-smoke-_deb30he-r2-v1 | complete | warmup | NewOrder | 23 | 23 | 0 | 0 | 23 | 0 | 0 | 23 / 517.928 / 1,469.794 / 1,989.721 / 1,989.721† | 23 / 660.908 / 1,722.759 / 2,074.709 / 2,074.709† |
+| queued-cooperative-smoke-_deb30he-r2-v1 | complete | warmup | Payment | 13 | 13 | 0 | 0 | 13 | 0 | 0 | 13 / 544.925 / 1,731.757 / 1,815.746 / 1,815.746† | 13 / 587.919 / 1,846.742 / 1,852.741 / 1,852.741† |
+| queued-cooperative-smoke-_deb30he-r2-v1 | complete | warmup | Q2 | 703 | 703 | 0 | 0 | 701 | 2 | 2 | 703 / 383.947 / 1,271.823 / 1,998.724 / 4,511.369† | 703 / 1,740.759 / 2,866.603 / 4,357.390 / 6,458.096† |
+| queued-cooperative-smoke-_deb30he-r2-v1 | complete | measurement | All | 745 | 745 | 0 | 0 | 744 | 1 | 1 | 745 / 334.954 / 1,162.839 / 1,895.740 / 3,313.546† | 745 / 1,636.776 / 2,691.631 / 3,743.481 / 4,891.330† |
+| queued-cooperative-smoke-_deb30he-r2-v1 | complete | measurement | NewOrder | 20 | 20 | 0 | 0 | 20 | 0 | 0 | 20 / 607.916 / 1,132.845 / 1,828.747 / 1,828.747† | 20 / 776.893 / 1,503.792 / 1,928.733 / 1,928.733† |
+| queued-cooperative-smoke-_deb30he-r2-v1 | complete | measurement | Payment | 16 | 16 | 0 | 0 | 16 | 0 | 0 | 16 / 621.915 / 907.874 / 1,506.791 / 1,506.791† | 16 / 697.905 / 931.871 / 1,669.768 / 1,669.768† |
+| queued-cooperative-smoke-_deb30he-r2-v1 | complete | measurement | Q2 | 709 | 709 | 0 | 0 | 708 | 1 | 1 | 709 / 315.957 / 1,163.839 / 1,895.740 / 3,313.546† | 709 / 1,664.772 / 2,710.625 / 3,743.481 / 4,891.330† |

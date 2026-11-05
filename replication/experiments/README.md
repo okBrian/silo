@@ -2,6 +2,12 @@
 
 The runner accepts a named JSON configuration and an already built `dbtest`. Use Python 3.8 or newer for the runner, analyzer, and tests. SVG plotting additionally uses ReportLab (`reportlab==4.4.9` was used for the saved plots). Run the examples from the Silo checkout root.
 
+For the MAC-05 clean-build and paired smoke commands, archive replay, and the planned
+native three-policy collection, use [the host workflow](HOST_WORKFLOW.md). The
+[Figure 10 target](plans/figure10.json) is a planning artifact: Preemptive execution,
+individual worker/sender pinning and the final policy-order schedule are pending.
+The [MAC-05 evidence](../results/mac05-workflow/README.md) records what actually ran.
+
 ## Reproduce the archived results
 
 These commands read the existing PACE and I06 archives.
@@ -49,6 +55,20 @@ Use the experiment directory printed by the runner to analyze the batch.
 python3 replication/experiments/analyze.py --output "$output_dir/batch" batch "$experiment_dir"
 python3 replication/experiments/plot.py "$output_dir/batch/analysis.json" --output "$output_dir/batch"
 ```
+
+For queued batches, `report.py` adds `per-type.csv`, `run-health.csv`, and `report.md`.
+
+```sh
+python3 replication/experiments/report.py "$output_dir/batch/analysis.json" \
+  --output "$output_dir/batch" --label 'Describe the actual host and smoke/performance scope' \
+  --require-complete
+```
+
+It preserves per-repetition metrics with policy/worker labels, all latency quantiles
+and sample counts, outcome/abort counts, outstanding work at cutoff and unaccounted
+work at exit. Unknown exit accounting stays blank/unknown. `--require-complete`
+returns nonzero after writing the report if any run failed or lacks reconciliation;
+the analyzer alone retains failures without enforcing a successful-batch gate.
 
 ## Read the tables
 

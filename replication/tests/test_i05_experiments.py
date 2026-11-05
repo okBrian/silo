@@ -15,6 +15,7 @@ FIXTURES = Path(__file__).parent / "fixtures" / "i05"
 RESULTS = REPLICATION / "results"
 sys.path.insert(0, str(EXPERIMENTS))
 import analyze
+import report
 import run
 
 
@@ -95,6 +96,46 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual([row["end_to_end_n"] for row in measured], [36, 72])
         self.assertTrue(all(row["end_to_end_p99_9_low_sample"] for row in measured))
         self.assertEqual(runs[0]["queued"]["phases"]["warmup"]["commits_in_window"], 36)
+
+
+class ReportTests(unittest.TestCase):
+    def test_report_keeps_outcomes_and_per_type_samples_separate(self):
+        manifest = {"format": "queued", "run_id": "fixture", "state": "finished", "exit_status": 0,
+                    "policy": "wait", "workers": 1, "repeat": 1, "phases_s": {"measurement": 1}}
+        measured = analyze.analyze_run(manifest, FIXTURES / "queued.tsv", FIXTURES / "queued.err")
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            self.assertTrue(report.report({"runs": [measured]}, output, "fixture only"))
+            with (output / "per-type.csv").open(newline="") as stream:
+                new_order, payment = list(csv.DictReader(stream))
+            self.assertEqual((new_order["end_to_end_n"], new_order["end_to_end_p90_us"],
+                              new_order["end_to_end_p99_us"], new_order["aborts"]), ("2", "18.0", "18.0", "1"))
+            self.assertEqual([payment[key] for key in ("not_committed", "rejected", "cancelled", "user_aborted")],
+                             ["3", "1", "1", "1"])
+            self.assertEqual(payment["end_to_end_n"], "0")
+            self.assertEqual(payment["end_to_end_p99_9_us"], "")
+            with (output / "run-health.csv").open(newline="") as stream:
+                health, = list(csv.DictReader(stream))
+            self.assertEqual((health["outstanding_at_cutoff"], health["unaccounted_at_exit"]), ("3", "0"))
+
+    def test_report_does_not_turn_partial_or_failed_runs_into_success(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp)
+            partial = output / "partial.tsv"
+            partial.write_text("\n".join((FIXTURES / "queued.tsv").read_text().splitlines()[:-1]))
+            manifest = {"format": "queued", "run_id": "fixture", "state": "finished", "exit_status": 0,
+                        "policy": "wait", "workers": 1, "repeat": 1, "phases_s": {"measurement": 1}}
+            measured = analyze.analyze_run(manifest, partial, FIXTURES / "queued.err")
+            self.assertFalse(report.report({"runs": [measured]}, output, "partial fixture"))
+            with (output / "run-health.csv").open(newline="") as stream:
+                health, = list(csv.DictReader(stream))
+            self.assertEqual(health["status"], "incomplete")
+            self.assertEqual(health["unaccounted_at_exit"], "")
+            self.assertIn("unknown", (output / "report.md").read_text())
+            manifest.update(state="timed_out", exit_status=-9)
+            measured = analyze.analyze_run(manifest, FIXTURES / "queued.tsv", FIXTURES / "queued.err")
+            self.assertFalse(report.report({"runs": [measured]}, output, "failed fixture"))
+            self.assertIn("failed", (output / "report.md").read_text())
 
 
 class RunnerTests(unittest.TestCase):

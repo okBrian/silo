@@ -1,0 +1,57 @@
+{
+  "name": "silo-figure10-target-v1",
+  "kind": "planning-only-not-a-runner-config",
+  "contract_version": 1,
+  "readiness": "blocked-on-I03-I12-I13-I14-I15-I16-I17-and-individual-CPU-placement",
+  "source_revision": null,
+  "binary_sha256": null,
+  "policies": ["wait", "cooperative", "preemptive"],
+  "order_by_repetition": [
+    ["wait", "cooperative", "preemptive"],
+    ["cooperative", "preemptive", "wait"],
+    ["preemptive", "wait", "cooperative"],
+    ["wait", "preemptive", "cooperative"],
+    ["preemptive", "cooperative", "wait"]
+  ],
+  "workers": 16,
+  "warehouses": 16,
+  "topology": {
+    "sockets": 1,
+    "physical_core_per_worker": true,
+    "smt_siblings_used": false,
+    "separate_physical_sender_core": true,
+    "worker_cpu_ids": null,
+    "sender_cpu_id": null,
+    "numa_memory_policy": null
+  },
+  "phases_s": {"warmup": 5, "measurement": 30, "drain_limit": 30},
+  "timeout_s": 900,
+  "queue": {
+    "first_seed": 1,
+    "interval_us": 1000,
+    "batch_per_worker": 4,
+    "global_capacity_per_worker": 4,
+    "worker_capacity": 4,
+    "low_pending_capacity_per_worker": 1,
+    "q2_variant": "q2_min_stock_v1"
+  },
+  "workload": {
+    "high": {"NewOrder": 0.5, "Payment": 0.5},
+    "low": {"Q2": 1.0},
+    "q2_supplier_scan_count": 100,
+    "supplier_rows": 10000,
+    "item_rows": 100000,
+    "stock_rows_per_warehouse": 100000,
+    "remote_payment_probability": 0.15,
+    "remote_new_order_item_probability": 0.01
+  },
+  "engine": "Silo ndb-proto2 with Masstree",
+  "logging": "disabled",
+  "retry_limit": 100,
+  "cooperative_yield_interval": 10000,
+  "preemptive_starvation_threshold_percent": 100,
+  "report_types": ["NewOrder", "Payment", "Q2"],
+  "latency_quantiles": [0.5, 0.9, 0.99, 0.999],
+  "quantile_method": "nearest-rank-per-repetition-committed-arrival-cohort-including-drain",
+  "environment": "qualified native Intel Linux only"
+}
