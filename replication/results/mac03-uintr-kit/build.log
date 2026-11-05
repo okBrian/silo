@@ -1,0 +1,33 @@
++ mkdir /final
++ tar -xf /kit.tar -C /final
++ cd /final/uintr
++ gcc --version
+gcc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
++ make --version
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
++ objdump --version
++ sed -n 1p
+GNU objdump (GNU Binutils for Ubuntu) 2.38
++ getconf GNU_LIBC_VERSION
+glibc 2.35
++ make CC=gcc
+gcc -O2 -g -std=gnu11 -Wall -Wextra -Werror cpuid.c -o cpuid
+gcc -O2 -g -std=gnu11 -Wall -Wextra -Werror -muintr -mno-red-zone -pthread uintr_delivery.c -o uintr_delivery
++ sha256sum Makefile README.md cpuid.c cpuid_uintr.h probe-host.sh uintr_delivery.c cpuid uintr_delivery
+89ed0db38adb14618722577c13033e98fb0ed170abb3197331c9c8a776e99efb  Makefile
+dbad0caea3beccb10c194c80dc9b07494e6b3bd4e0f65ca384a1b64ba1018bf3  README.md
+f7b795900bc1da05dab71c1ead6dcaa2e965b697ef854950a90be80dc46c2cde  cpuid.c
+504153f0f48a744ec7456c62d5c86f9499f23f0dc8113f23d411320cb75a5549  cpuid_uintr.h
+f8df3c38998ab61a0e5a0e69a573f9d418300acc0a64a3b70faf069dea21b0ce  probe-host.sh
+87e5cd614b15c749953a2452aa4c363f1ecc8b20e0b39f6890dfaacb46077a1f  uintr_delivery.c
+abf81e923dfbfec64da755479c2e3cd0f8a8069281f8a348ea9b853e4218fa29  cpuid
+697f73a2171838ada3302e1f01aaf7a8efaded68002673a6318ce5c245a169d9  uintr_delivery

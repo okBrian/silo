@@ -1,0 +1,111 @@
++ cd /final/uintr
++ bash -n probe-host.sh
++ awk '/^```bash$/{inside=1; next} /^```$/{inside=0} inside' README.md
++ bash -n
++ expect_exit 77 taskset -c 0 ./cpuid
++ local expected=77 status=0
++ shift
++ taskset -c 0 ./cpuid
+CPUID.7.0.EDX=0x00000010 UINTR=0
+exit=77 expected=77
++ status=77
++ printf 'exit=%s expected=%s\n' 77 77
++ test 77 -eq 77
++ expect_exit 77 taskset -c 1 ./cpuid
++ local expected=77 status=0
++ shift
++ taskset -c 1 ./cpuid
+CPUID.7.0.EDX=0x00000010 UINTR=0
+exit=77 expected=77
++ status=77
++ printf 'exit=%s expected=%s\n' 77 77
++ test 77 -eq 77
++ expect_exit 77 timeout --kill-after=2s 30s ./uintr_delivery --patched-kernel 0 1
++ local expected=77 status=0
++ shift
++ timeout --kill-after=2s 30s ./uintr_delivery --patched-kernel 0 1
+SKIP: CPUID UINTR unavailable. No UINTR instructions or syscalls attempted.
+exit=77 expected=77
++ status=77
++ printf 'exit=%s expected=%s\n' 77 77
++ test 77 -eq 77
++ expect_exit 2 ./uintr_delivery --patched-kernel 0 0
++ local expected=2 status=0
++ shift
++ ./uintr_delivery --patched-kernel 0 0
+Choose two distinct logical CPU IDs below CPU_SETSIZE.
+exit=2 expected=2
++ status=2
++ printf 'exit=%s expected=%s\n' 2 2
++ test 2 -eq 2
++ expect_exit 2 ./uintr_delivery --patched-kernel invalid 1
++ local expected=2 status=0
++ shift
++ ./uintr_delivery --patched-kernel invalid 1
+Choose two distinct logical CPU IDs below CPU_SETSIZE.
+exit=2 expected=2
++ status=2
++ printf 'exit=%s expected=%s\n' 2 2
++ test 2 -eq 2
++ expect_exit 2 ./uintr_delivery
++ local expected=2 status=0
++ shift
++ ./uintr_delivery
+Usage: ./uintr_delivery --patched-kernel RECEIVER_CPU SENDER_CPU
+exit=2 expected=2
++ status=2
++ printf 'exit=%s expected=%s\n' 2 2
++ test 2 -eq 2
++ expect_exit 2 bash probe-host.sh
++ local expected=2 status=0
++ shift
++ bash probe-host.sh
+Usage: bash probe-host.sh MACHINE_TYPE PATH_TO_CPUID
++ status=2
++ printf 'exit=%s expected=%s\n' 2 2
++ test 2 -eq 2
+exit=2 expected=2
++ objdump -d --disassemble=handle_uintr uintr_delivery
++ tee /tmp/mac03-handler.asm
+
+uintr_delivery:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+Disassembly of section .plt:
+
+Disassembly of section .plt.got:
+
+Disassembly of section .plt.sec:
+
+Disassembly of section .text:
+
+0000000000001950 <handle_uintr>:
+    1950:	f3 0f 1e fa          	endbr64
+    1954:	50                   	push   %rax
+    1955:	48 83 7c 24 08 2a    	cmpq   $0x2a,0x8(%rsp)
+    195b:	74 0a                	je     1967 <handle_uintr+0x17>
+    195d:	c7 05 f1 26 00 00 01 	movl   $0x1,0x26f1(%rip)        # 4058 <bad_vector>
+    1964:	00 00 00
+    1967:	8b 05 ef 26 00 00    	mov    0x26ef(%rip),%eax        # 405c <hits>
+    196d:	83 c0 01             	add    $0x1,%eax
+    1970:	89 05 e6 26 00 00    	mov    %eax,0x26e6(%rip)        # 405c <hits>
+    1976:	58                   	pop    %rax
+    1977:	48 83 c4 08          	add    $0x8,%rsp
+    197b:	f3 0f 01 ec          	uiret
+
+Disassembly of section .fini:
++ grep -qw uiret /tmp/mac03-handler.asm
++ grep -qw call /tmp/mac03-handler.asm
++ objdump -d uintr_delivery
++ for instruction in stui clui senduipi
++ grep -w stui /tmp/mac03-delivery.asm
+    1c70:	f3 0f 01 ef          	stui
++ for instruction in stui clui senduipi
++ grep -w clui /tmp/mac03-delivery.asm
+    1c03:	f3 0f 01 ee          	clui
+    1cb7:	f3 0f 01 ee          	clui
++ for instruction in stui clui senduipi
++ grep -w senduipi /tmp/mac03-delivery.asm
+    15d5:	f3 0f c7 f0          	senduipi %rax
