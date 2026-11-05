@@ -1,0 +1,468 @@
+diff --git a/Makefile b/Makefile
+index a43cbf0..8bfcfa1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -81,7 +81,7 @@ CXXFLAGS += -MD -Ithird-party/lz4 -DCONFIG_H=\"$(CONFIG_H)\"
+ ifeq ($(DEBUG_S),1)
+         CXXFLAGS += -fno-omit-frame-pointer -DDEBUG
+ else
+-        CXXFLAGS += -Werror -O2 -funroll-loops -fno-omit-frame-pointer
++        CXXFLAGS += -O1 -funroll-loops -fno-omit-frame-pointer
+ endif
+ ifeq ($(CHECK_INVARIANTS_S),1)
+ 	CXXFLAGS += -DCHECK_INVARIANTS
+diff --git a/benchmarks/dbtest.cc b/benchmarks/dbtest.cc
+index c5168a0..06aa79a 100644
+--- a/benchmarks/dbtest.cc
++++ b/benchmarks/dbtest.cc
+@@ -30,7 +30,7 @@ using namespace util;
+ 
+ enum {
+   QUEUED_RUN = 1000, QUEUED_BATCH, QUEUED_INTERVAL, QUEUED_GLOBAL, QUEUED_WORKER,
+-  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED, QUEUED_POLICY, QUEUED_YIELD_INTERVAL
++  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED, QUEUED_POLICY, QUEUED_YIELD_INTERVAL, QUEUED_STARVATION
+ };
+ 
+ static uint64_t
+@@ -101,6 +101,7 @@ main(int argc, char **argv)
+   bool saw_queue_setting = false;
+   bool queued_mixed = false;
+   bool saw_yield_interval = false;
++  bool saw_starvation = false;
+   while (1) {
+     static struct option long_options[] =
+     {
+@@ -140,6 +141,7 @@ main(int argc, char **argv)
+       {"queued-mixed"              , no_argument       , 0                          , QUEUED_MIXED},
+       {"queued-policy"             , required_argument , 0                          , QUEUED_POLICY},
+       {"queued-yield-interval"     , required_argument , 0                          , QUEUED_YIELD_INTERVAL},
++      {"queued-starvation-threshold", required_argument, 0, QUEUED_STARVATION},
+       {0, 0, 0, 0}
+     };
+     int option_index = 0;
+@@ -147,7 +149,7 @@ main(int argc, char **argv)
+     if (c == -1)
+       break;
+ 
+-    if (c > QUEUED_RUN && c <= QUEUED_YIELD_INTERVAL)
++    if (c > QUEUED_RUN && c <= QUEUED_STARVATION)
+       saw_queue_setting = true;
+     switch (c) {
+     case QUEUED_RUN:
+@@ -194,6 +196,10 @@ main(int argc, char **argv)
+         return 1;
+       }
+       break;
++    case QUEUED_STARVATION:
++      saw_starvation = true;
++      queued_config.starvation_threshold = queued_number(optarg, long_options[option_index].name, 0, 100);
++      break;
+     case QUEUED_YIELD_INTERVAL:
+       saw_yield_interval = true;
+       queued_config.yield_interval = queued_number(optarg, long_options[option_index].name,
+@@ -287,6 +293,10 @@ main(int argc, char **argv)
+     return 1;
+   }
+   if (!queued_run_id.empty()) {
++    if (saw_starvation && !queued_mixed) {
++      cerr << "[ERROR] starvation threshold requires --queued-mixed" << endl;
++      return 1;
++    }
+     if (queued_config.policy == queued::Policy::cooperative) {
+ #ifndef SILO_WORKER_CONTEXTS
+       cerr << "[ERROR] Cooperative requires a WORKER_CONTEXTS=1 build" << endl;
+diff --git a/benchmarks/request_driver.cc b/benchmarks/request_driver.cc
+index fa4ffb3..250ad56 100644
+--- a/benchmarks/request_driver.cc
++++ b/benchmarks/request_driver.cc
+@@ -90,6 +90,15 @@ struct Worker {
+   NotificationStats notifications;
+   std::atomic<uint64_t> deliveries{0};
+   std::atomic<bool> notification_pending{false};
++  StarvationBudget budget; // Worker-owned; publish coherent copies to producer.
++  std::mutex budget_mutex;
++  StarvationBudget published_budget;
++  StarvationStats starvation;
++
++  void publish_budget() {
++    std::lock_guard<std::mutex> lock(budget_mutex);
++    published_budget = budget;
++  }
+ #ifdef SILO_WORKER_CONTEXTS
+   Cooperative *cooperative = nullptr; // Owned by the worker's original stack.
+ #endif
+@@ -177,7 +186,8 @@ Driver::Driver(const Config &config, Clock clock, Wait wait_until, HighPublished
+                     std::move(transition))) {
+   if (!config.workers || !config.batch_size || !config.interval ||
+       !config.global_capacity || !config.high_capacity ||
+-      config.high_capacity == SIZE_MAX || !config.attempt_limit || !config.yield_interval)
++      config.high_capacity == SIZE_MAX || !config.attempt_limit || !config.yield_interval ||
++      config.starvation_threshold > 100)
+     throw std::invalid_argument("invalid queued request driver configuration");
+   if (config.policy != Policy::wait) {
+ #ifdef SILO_WORKER_CONTEXTS
+@@ -193,6 +203,19 @@ Driver::Driver(const Config &config, Clock clock, Wait wait_until, HighPublished
+ 
+ Driver::~Driver() = default;
+ 
++StarvationBudget Driver::budget_snapshot(size_t worker) const {
++  Worker &w = *state->workers.at(worker);
++  std::lock_guard<std::mutex> lock(w.budget_mutex);
++  return w.published_budget;
++}
++
++StarvationStats Driver::starvation_stats(size_t worker) const {
++  return state->workers.at(worker)->starvation;
++}
++
++size_t Driver::worker_count() const { return state->config.workers; }
++unsigned Driver::budget_threshold() const { return state->config.starvation_threshold; }
++
+ void Driver::deliver_notification(size_t worker) {
+   Worker &w = *state->workers.at(worker);
+   w.deliveries.fetch_add(1, std::memory_order_relaxed);
+@@ -278,6 +301,10 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id, uint64_t first_hi
+       if (admitted >= deadline)
+         break;
+       Request &request = s.global.front();
++      if (budget_snapshot(request.worker).starved(admitted, config.starvation_threshold)) {
++        ++s.workers[request.worker]->starvation.admission_blocks;
++        break; // Preserve the fixed-routing global FIFO and its documented HOL delay.
++      }
+       request.admitted = admitted;
+       if (!s.workers[request.worker]->high.push(request)) {
+         request.admitted = 0;
+@@ -359,6 +386,10 @@ void Driver::on_record_read(size_t worker) {
+   Worker &w = *s.workers[worker];
+   Cooperative &scheduler = *w.cooperative;
+   Request &request = *scheduler.low;
++  if (!w.high.empty() && w.budget.starved(s.clock(), s.config.starvation_threshold)) {
++    ++w.starvation.checkpoint_blocks;
++    return;
++  }
+   if (s.config.policy == Policy::notification_checkpoint) {
+     // Clear the hint BEFORE checking the authoritative queue. A delayed or
+     // coalesced hint cannot hide work published at high-empty/low-resume.
+@@ -408,6 +439,7 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
+   State &s = *state;
+   Worker &w = *s.workers[worker];
+   const auto execute_request = [&](Request &request) {
++    const Ns high_start = request.batch ? s.clock() : 0;
+     const Ns deadline = s.drain_deadline.load(std::memory_order_acquire);
+     Prepared execute;
+     // Run the request on this worker through completion, including retries.
+@@ -458,7 +490,16 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
+         break;
+       }
+     }
+-    w.records.push_back(request);
++    if (request.batch && w.budget.low_active) {
++      const Ns finish = s.clock();
++      w.budget.charge_high(high_start, finish);
++      w.starvation.high_service_ns += finish - high_start;
++      w.publish_budget();
++    }
++    // Low records are stored after the context returns so service time includes
++    // its last slice. Accounting spans the request, never individual retries.
++    if (request.batch)
++      w.records.push_back(request);
+   };
+ #ifdef SILO_WORKER_CONTEXTS
+   std::unique_ptr<Cooperative> cooperative;
+@@ -494,11 +535,20 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
+       }
+     }
+ 
++    if (!request.batch) {
++      w.budget.begin_low(s.clock());
++      ++w.starvation.low_requests;
++      w.publish_budget();
++    }
+ #ifdef SILO_WORKER_CONTEXTS
+     if (cooperative && !request.batch) {
+       cooperative->low = &request;
+       do {
++        const Ns low_start = s.clock();
+         cooperative->context.resume();
++        const Ns service = s.clock() - low_start;
++        request.low_service_ns += service;
++        w.starvation.low_service_ns += service;
+         if (cooperative->low) {
+           // The Q2 is paused at an audited read. Only consume high work
+           // before returning to its live transaction on the alternate stack.
+@@ -508,6 +558,8 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
+             s.transition(worker, ServiceTransition::high_entry);
+           while (!s.fatal.load(std::memory_order_acquire) &&
+                  s.clock() < s.drain_deadline.load(std::memory_order_acquire)) {
++            if (w.budget.starved(s.clock(), s.config.starvation_threshold))
++              break;
+             if (!w.high.pop(high)) {
+               ++w.notifications.empty_checks;
+               if (s.transition)
+@@ -515,16 +567,31 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
+               break;
+             }
+             execute_request(high);
++            if (w.budget.starved(s.clock(), s.config.starvation_threshold)) {
++              ++w.starvation.forced_low_returns;
++              break; // Finish the whole high request (including retries) first.
++            }
+           }
+           if (s.transition)
+             s.transition(worker, ServiceTransition::before_low_resume);
+           ++w.notifications.low_resumes;
+         }
+       } while (cooperative->low);
++      w.budget.end_low();
++      w.publish_budget();
++      w.records.push_back(request);
+       continue;
+     }
+ #endif
++    const Ns service_start = s.clock();
+     execute_request(request);
++    if (!request.batch) {
++      request.low_service_ns = s.clock() - service_start;
++      w.starvation.low_service_ns += request.low_service_ns;
++      w.budget.end_low();
++      w.publish_budget();
++      w.records.push_back(request);
++    }
+   }
+ #ifdef SILO_WORKER_CONTEXTS
+   if (cooperative) {
+@@ -562,7 +629,7 @@ void write_header(std::ostream &out) {
+   out << "run_id\tphase\trequest_id\tbatch_id\ttype\tpriority\tworker\thome_warehouse"
+       "\tinput_seed\tscheduled_ns\tgenerated_ns\tadmitted_ns\tfirst_start_ns"
+       "\tfinished_ns\tattempts\taborts\toutcome\tgeneration_delay_ns\tq2_checksum"
+-      "\tcooperative_reads\tcooperative_checks\tcooperative_yields\n";
++      "\tcooperative_reads\tcooperative_checks\tcooperative_yields\tlow_service_ns\n";
+ }
+ 
+ void write_results(const Driver &driver, std::ostream &out, std::ostream &summary,
+@@ -589,7 +656,7 @@ void write_results(const Driver &driver, std::ostream &out, std::ostream &summar
+     else
+       out << "null";
+     out << '\t' << r.cooperative_reads << '\t' << r.cooperative_checks
+-        << '\t' << r.cooperative_yields << '\n';
++        << '\t' << r.cooperative_yields << '\t' << r.low_service_ns << '\n';
+ 
+     if (r.outcome == Outcome::rejected_queue_full)
+       ++rejected;
+@@ -619,6 +686,17 @@ void write_results(const Driver &driver, std::ostream &out, std::ostream &summar
+           << " cutoff_running=" << running << " cutoff_due_ungenerated=" << due_ungenerated
+           << " commits_in_window=" << commits_in_window << " drain_commits=" << drain_commits
+           << " failed=" << driver.failed() << '\n';
++  for (size_t i = 0; i < driver.worker_count(); ++i) {
++    const StarvationStats stats = driver.starvation_stats(i);
++    summary << "starvation phase=" << phase << " worker=" << i
++            << " clock=driver_ns threshold=" << driver.budget_threshold()
++            << " admission_blocks=" << stats.admission_blocks
++            << " checkpoint_blocks=" << stats.checkpoint_blocks
++            << " forced_low_returns=" << stats.forced_low_returns
++            << " low_requests=" << stats.low_requests
++            << " high_service_ns=" << stats.high_service_ns
++            << " low_service_ns=" << stats.low_service_ns << '\n';
++  }
+ }
+ 
+ } // namespace queued
+diff --git a/benchmarks/request_driver.h b/benchmarks/request_driver.h
+index 85eec4a..f8bb161 100644
+--- a/benchmarks/request_driver.h
++++ b/benchmarks/request_driver.h
+@@ -7,6 +7,7 @@
+ #include <iosfwd>
+ #include <memory>
+ #include <string>
++#include "starvation_budget.h"
+ 
+ namespace queued {
+ 
+@@ -20,6 +21,16 @@ enum class Kind { new_order, payment, synthetic_low, q2 };
+ enum class Policy { wait, cooperative, notification_checkpoint };
+ enum class ServiceTransition { high_entry, high_empty, before_low_resume };
+ 
++// Counters read after join; budget_snapshot() is the synchronized live API.
++struct StarvationStats {
++  uint64_t admission_blocks = 0;
++  uint64_t checkpoint_blocks = 0;
++  uint64_t forced_low_returns = 0;
++  uint64_t low_requests = 0;
++  uint64_t high_service_ns = 0;
++  uint64_t low_service_ns = 0;
++};
++
+ // Read only after producer and workers join. Notifications are hints; queue
+ // admission, attempts and terminal outcomes remain independent record counts.
+ struct NotificationStats {
+@@ -60,6 +71,7 @@ struct Request {
+   uint64_t cooperative_reads = 0;
+   uint64_t cooperative_checks = 0;
+   uint64_t cooperative_yields = 0;
++  uint64_t low_service_ns = 0; // Context execution, excludes high-service pauses.
+ };
+ 
+ struct Config {
+@@ -74,6 +86,7 @@ struct Config {
+   uint64_t seed = 1;
+   Policy policy = Policy::wait;
+   uint32_t yield_interval = 10000;
++  unsigned starvation_threshold = 100; // Strict greater-than, monotonic ns locally.
+ };
+ 
+ Ns monotonic_now();
+@@ -112,6 +125,10 @@ public:
+   // Ordinary-thread modeled delivery; not an async-signal-safe handler API.
+   void deliver_notification(size_t worker);
+   NotificationStats notification_stats(size_t worker) const;
++  StarvationBudget budget_snapshot(size_t worker) const;
++  StarvationStats starvation_stats(size_t worker) const;
++  size_t worker_count() const;
++  unsigned budget_threshold() const;
+   void visit_records(const Visit &visit) const;
+ 
+   uint64_t generated() const;
+diff --git a/masstree b/masstree
+--- a/masstree
++++ b/masstree
+@@ -1 +1 @@
+-Subproject commit 1150824e6a10a0384ba4bfed6b916ce62f96315f
++Subproject commit 1150824e6a10a0384ba4bfed6b916ce62f96315f-dirty
+diff --git a/replication/experiments/run.py b/replication/experiments/run.py
+index 97df5c0..bd30dc9 100644
+--- a/replication/experiments/run.py
++++ b/replication/experiments/run.py
+@@ -43,7 +43,7 @@ def validate(config, allowed):
+     require(mode in ("stock", "queued"), "format must be stock or queued")
+     fields = {"name", "format", "variants", "repeats", "phases_s", "timeout_s"}
+     required = fields | ({"queue"} if mode == "queued" else set())
+-    optional = {"policy", "yield_interval"} if mode == "queued" else set()
++    optional = {"policy", "yield_interval", "starvation_threshold"} if mode == "queued" else set()
+     require(required <= config.keys() <= required | optional,
+             "unexpected or missing config keys")
+     require(isinstance(config["name"], str) and re.fullmatch(r"[A-Za-z0-9_-]+", config["name"]),
+@@ -101,6 +101,11 @@ def validate(config, allowed):
+         require(has_cooperative and integer(config["yield_interval"], 1, 2**32 - 1),
+                 "yield_interval requires Cooperative and a positive uint32")
+ 
++    if "starvation_threshold" in config:
++        require(mode == "queued" and "q2_variant" in queue and
++                integer(config["starvation_threshold"], 0, 100),
++                "starvation_threshold requires mixed Q2 and an integer in [0, 100]")
++
+ 
+ def write_json(path, data):
+     # A killed runner leaves the last complete manifest readable.
+@@ -159,6 +164,7 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
+     q2_variant = None
+     policy = "stock"
+     yield_interval = None
++    starvation_threshold = None
+     if config["format"] == "queued":
+         settings = config["queue"]
+         seed = settings["first_seed"] + repeat - 1
+@@ -171,6 +177,9 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
+             "worker-capacity": settings["worker_capacity"],
+             "warmup": phases["warmup"], "drain": phases["drain_limit"], "seed": seed,
+         }
++        starvation_threshold = config.get("starvation_threshold", 100)
++        if "starvation_threshold" in config:
++            benchmark += ["--queued-starvation-threshold", str(starvation_threshold)]
+         benchmark += ["--queued", run_id]
+         policy = variant.get("policy", config.get("policy", "wait"))
+         if "policy" in variant or "policy" in config:
+@@ -207,7 +216,8 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
+                           "worker_cpu_ids": None, "sender_cpu_id": None},
+         "policy": policy,
+         "q2_variant": q2_variant, "logging": "disabled", "workload": workload,
+-        "yield_interval": yield_interval, "starvation_threshold": None,
++        "yield_interval": yield_interval, "starvation_threshold": starvation_threshold,
++        "starvation_clock": "CLOCK_MONOTONIC nanoseconds" if queue else None,
+         "retry_limit": 100 if queue else None, "batch_metadata": "../batch.json",
+         "state": "planned", "exit_status": None,
+     }
+diff --git a/replication/tests/test_i05_experiments.py b/replication/tests/test_i05_experiments.py
+index 4276118..b0a1e85 100644
+--- a/replication/tests/test_i05_experiments.py
++++ b/replication/tests/test_i05_experiments.py
+@@ -244,6 +244,22 @@ class RunnerTests(unittest.TestCase):
+         with self.assertRaisesRegex(ValueError, "mixed Q2"):
+             run.validate(config, None)
+ 
++    def test_starvation_threshold_and_clock_are_reproducible(self):
++        config = json.loads((EXPERIMENTS / "configs" / "queued-cooperative-smoke.json").read_text())
++        for threshold in (0, 25, 100):
++            config["starvation_threshold"] = threshold
++            run.validate(config, None)
++            planned = run.plan_run(config, config["variants"][1], 1, 2,
++                                   Path("/tmp/batch"), Path("/tmp/dbtest"), None)
++            self.assertEqual(planned["starvation_threshold"], threshold)
++            self.assertEqual(planned["starvation_clock"], "CLOCK_MONOTONIC nanoseconds")
++            option = planned["command"].index("--queued-starvation-threshold")
++            self.assertEqual(planned["command"][option + 1], str(threshold))
++        for threshold in (-1, 101, True, 25.5):
++            config["starvation_threshold"] = threshold
++            with self.assertRaisesRegex(ValueError, "starvation_threshold"):
++                run.validate(config, None)
++
+     def test_timeout_retains_run(self):
+         with tempfile.TemporaryDirectory() as temp:
+             directory = Path(temp)
+diff --git a/replication/tests/tpcc_mixed_test.cc b/replication/tests/tpcc_mixed_test.cc
+index d2e804b..7ad7467 100644
+--- a/replication/tests/tpcc_mixed_test.cc
++++ b/replication/tests/tpcc_mixed_test.cc
+@@ -4,6 +4,7 @@
+ #ifdef SILO_WORKER_CONTEXTS
+ #include "../../benchmarks/worker_context.h"
+ #include "batched_notification_cases.h"
++#include "starvation_cases.h"
+ #endif
+ 
+ namespace {
+@@ -174,6 +175,30 @@ struct Fixture {
+       }
+     }
+     std::cout << "PASS nine Silo Q2 notification transition cases with committed writes\n";
++    for (unsigned threshold : {0u, 100u}) {
++      uint64_t oracle = 0;
++      ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
++      starvation_cases::limits(threshold,
++        [&](uint64_t &result, const std::function<void()> &checkpoint) {
++          bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
++          return q2.run(&db, low, 0, result, checkpoint);
++        }, [&](const queued::Request &request) {
++          write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
++        }, oracle, "silo-q2-limits");
++    }
++    for (bool expire : {false, true}) {
++      uint64_t oracle = 0;
++      ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
++      starvation_cases::controlled(
++        [&](uint64_t &result, const std::function<void()> &checkpoint) {
++          bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
++          return q2.run(&db, low, 0, result, checkpoint);
++        }, [&](const queued::Request &request) {
++          write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
++        }, oracle, expire, "silo-q2-starvation");
++    }
++    std::cout << "PASS Silo Q2 starvation equality, recovery, retry, reset and drain cases\n";
++
+ #endif
+   }
+ 
+diff --git a/util.h b/util.h
+index a63f7ae..bb134ef 100644
+--- a/util.h
++++ b/util.h
+@@ -21,6 +21,9 @@
+ #include "macros.h"
+ #include "small_vector.h"
+ 
++template <typename A, typename B>
++std::ostream &operator<<(std::ostream &o, const std::pair<A, B> &p);
++
+ namespace util {
+ 
+ // padded, aligned primitives

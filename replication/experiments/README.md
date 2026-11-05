@@ -75,3 +75,22 @@ the analyzer alone retains failures without enforcing a successful-batch gate.
 - **Stock.** The five fields are committed throughput, reported persistence throughput, average latency of timed successful attempts in milliseconds, reported persistence latency in milliseconds, and aborts per second. The table converts attempt latency to microseconds and averages the available run means with equal weight. The CSV includes counts of contributing runs. The persistence columns are raw stock fields for the logging-disabled configuration. Individual attempt samples are unavailable.
 - **Queued.** Total queue delay is first start minus generation. The CSV and JSON also separate global queue time (admission minus generation) and local queue time (first start minus admission). End-to-end latency is finish minus generation. Scheduled latency is finish minus scheduled arrival. Each distribution uses committed requests for the phase and transaction type, including commits during drain. Window throughput uses only commits strictly before the cutoff, divided by the configured measurement duration. Drain completions count terminal results at or after cutoff that were neither rejected nor cancelled. Drain commits are the committed subset.
 - **Tails and failures.** Percentiles use nearest rank. Empty distributions have zero samples and null percentiles. Each p99.9 estimate with 1–999 samples is flagged. Run-level CSVs and JSON keep failed and incomplete runs. CSV metrics without evidence are blank. With a missing I06 phase summary, valid terminal rows are reported as observed and cutoff-dependent metrics are null. A summary that disagrees with its TSV is retained for diagnosis and excluded from cohort statistics. Stock aggregates and plots use completed runs. Queued plots use complete or phase-verified measurement cohorts and display p50 and p99.
+
+### Local starvation checks (MAC-08)
+
+The optional queued config field `starvation_threshold` selects a strict integer
+percentage in `[0, 100]` (default 100). It requires the mixed Q2 workload and maps
+to `--queued-starvation-threshold`. Manifests record the effective threshold and
+`CLOCK_MONOTONIC nanoseconds`; this is a local elapsed-time budget, not native
+cycle-cost evidence. Raw TSVs include `low_service_ns`, elapsed execution on the
+low context excluding high pauses. Per-worker stderr counters show blocked
+admission/checkpoints, forced low returns and charged service. Queue rejections
+and cancellations retain their ordinary terminal records.
+
+`configs/queued-starvation-25.json` and `configs/queued-starvation-100.json` are
+three-second functional pressure configurations, using Cooperative with 64-read
+checkpoints and four shorts per worker every millisecond. They do not expose the
+notification checkpoint test backend or implement the MAC-09 signal backend.
+See [the contract](../docs/experiment-contract.md) for enforcement, overshoot and
+fixed-FIFO limits and [the validation script](../tests/validate_starvation.sh)
+for a disposable Linux build and test recipe.

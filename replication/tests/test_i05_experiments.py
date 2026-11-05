@@ -244,6 +244,22 @@ class RunnerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "mixed Q2"):
             run.validate(config, None)
 
+    def test_starvation_threshold_and_clock_are_reproducible(self):
+        config = json.loads((EXPERIMENTS / "configs" / "queued-cooperative-smoke.json").read_text())
+        for threshold in (0, 25, 100):
+            config["starvation_threshold"] = threshold
+            run.validate(config, None)
+            planned = run.plan_run(config, config["variants"][1], 1, 2,
+                                   Path("/tmp/batch"), Path("/tmp/dbtest"), None)
+            self.assertEqual(planned["starvation_threshold"], threshold)
+            self.assertEqual(planned["starvation_clock"], "CLOCK_MONOTONIC nanoseconds")
+            option = planned["command"].index("--queued-starvation-threshold")
+            self.assertEqual(planned["command"][option + 1], str(threshold))
+        for threshold in (-1, 101, True, 25.5):
+            config["starvation_threshold"] = threshold
+            with self.assertRaisesRegex(ValueError, "starvation_threshold"):
+                run.validate(config, None)
+
     def test_timeout_retains_run(self):
         with tempfile.TemporaryDirectory() as temp:
             directory = Path(temp)

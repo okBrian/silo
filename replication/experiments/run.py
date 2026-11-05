@@ -43,7 +43,7 @@ def validate(config, allowed):
     require(mode in ("stock", "queued"), "format must be stock or queued")
     fields = {"name", "format", "variants", "repeats", "phases_s", "timeout_s"}
     required = fields | ({"queue"} if mode == "queued" else set())
-    optional = {"policy", "yield_interval"} if mode == "queued" else set()
+    optional = {"policy", "yield_interval", "starvation_threshold"} if mode == "queued" else set()
     require(required <= config.keys() <= required | optional,
             "unexpected or missing config keys")
     require(isinstance(config["name"], str) and re.fullmatch(r"[A-Za-z0-9_-]+", config["name"]),
@@ -100,6 +100,11 @@ def validate(config, allowed):
     if "yield_interval" in config:
         require(has_cooperative and integer(config["yield_interval"], 1, 2**32 - 1),
                 "yield_interval requires Cooperative and a positive uint32")
+
+    if "starvation_threshold" in config:
+        require(mode == "queued" and "q2_variant" in queue and
+                integer(config["starvation_threshold"], 0, 100),
+                "starvation_threshold requires mixed Q2 and an integer in [0, 100]")
 
 
 def write_json(path, data):
@@ -159,6 +164,7 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
     q2_variant = None
     policy = "stock"
     yield_interval = None
+    starvation_threshold = None
     if config["format"] == "queued":
         settings = config["queue"]
         seed = settings["first_seed"] + repeat - 1
@@ -171,6 +177,9 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
             "worker-capacity": settings["worker_capacity"],
             "warmup": phases["warmup"], "drain": phases["drain_limit"], "seed": seed,
         }
+        starvation_threshold = config.get("starvation_threshold", 100)
+        if "starvation_threshold" in config:
+            benchmark += ["--queued-starvation-threshold", str(starvation_threshold)]
         benchmark += ["--queued", run_id]
         policy = variant.get("policy", config.get("policy", "wait"))
         if "policy" in variant or "policy" in config:
@@ -207,7 +216,8 @@ def plan_run(config, variant, repeat, variant_index, batch, binary, allowed):
                           "worker_cpu_ids": None, "sender_cpu_id": None},
         "policy": policy,
         "q2_variant": q2_variant, "logging": "disabled", "workload": workload,
-        "yield_interval": yield_interval, "starvation_threshold": None,
+        "yield_interval": yield_interval, "starvation_threshold": starvation_threshold,
+        "starvation_clock": "CLOCK_MONOTONIC nanoseconds" if queue else None,
         "retry_limit": 100 if queue else None, "batch_metadata": "../batch.json",
         "state": "planned", "exit_status": None,
     }

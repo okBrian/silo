@@ -1,0 +1,2 @@
+PASS original validation script preserved; corrected script matches its separate hash
+PASS 11 tested runtime/config/fixture files match workspace source hashes

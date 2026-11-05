@@ -7,6 +7,7 @@
 #include <iosfwd>
 #include <memory>
 #include <string>
+#include "starvation_budget.h"
 
 namespace queued {
 
@@ -19,6 +20,16 @@ enum class Kind { new_order, payment, synthetic_low, q2 };
 // reads. It is deliberately not exposed as the native Preemptive policy.
 enum class Policy { wait, cooperative, notification_checkpoint };
 enum class ServiceTransition { high_entry, high_empty, before_low_resume };
+
+// Counters read after join; budget_snapshot() is the synchronized live API.
+struct StarvationStats {
+  uint64_t admission_blocks = 0;
+  uint64_t checkpoint_blocks = 0;
+  uint64_t forced_low_returns = 0;
+  uint64_t low_requests = 0;
+  uint64_t high_service_ns = 0;
+  uint64_t low_service_ns = 0;
+};
 
 // Read only after producer and workers join. Notifications are hints; queue
 // admission, attempts and terminal outcomes remain independent record counts.
@@ -60,6 +71,7 @@ struct Request {
   uint64_t cooperative_reads = 0;
   uint64_t cooperative_checks = 0;
   uint64_t cooperative_yields = 0;
+  uint64_t low_service_ns = 0; // Context execution, excludes high-service pauses.
 };
 
 struct Config {
@@ -74,6 +86,7 @@ struct Config {
   uint64_t seed = 1;
   Policy policy = Policy::wait;
   uint32_t yield_interval = 10000;
+  unsigned starvation_threshold = 100; // Strict greater-than, monotonic ns locally.
 };
 
 Ns monotonic_now();
@@ -112,6 +125,10 @@ public:
   // Ordinary-thread modeled delivery; not an async-signal-safe handler API.
   void deliver_notification(size_t worker);
   NotificationStats notification_stats(size_t worker) const;
+  StarvationBudget budget_snapshot(size_t worker) const;
+  StarvationStats starvation_stats(size_t worker) const;
+  size_t worker_count() const;
+  unsigned budget_threshold() const;
   void visit_records(const Visit &visit) const;
 
   uint64_t generated() const;

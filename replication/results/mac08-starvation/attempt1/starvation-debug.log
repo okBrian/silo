@@ -1,0 +1,2 @@
+FAIL batched notification case at line 137
+timeout: the monitored command dumped core

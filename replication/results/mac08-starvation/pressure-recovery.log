@@ -1,0 +1,27 @@
++ trap 'status=$?; printf "%s\n" "$status" > "$evidence/pressure-exit-status"' EXIT
++ cp /mac08-evidence/exit-status /mac08-evidence/validation-attempt1-exit-status
++ cp replication/tests/validate_starvation.sh /mac08-evidence/validation-attempt1.sh
++ for threshold in 25 100
++ [[ 25 = 100 ]]
++ batches=("$evidence/pressure-$threshold"/*/batch.json)
++ test 1 = 1
++ batch=/mac08-evidence/pressure-25/queued-starvation-25-bfo13vtz
++ python3 -B replication/experiments/analyze.py --output /mac08-evidence/analysis-25 batch /mac08-evidence/pressure-25/queued-starvation-25-bfo13vtz
++ python3 -B replication/experiments/report.py /mac08-evidence/analysis-25/analysis.json --output /mac08-evidence/report-25 --label 'MAC-08 emulated x86-64 Linux functional pressure test; monotonic ns budget' --require-complete
++ for threshold in 25 100
++ [[ 100 = 100 ]]
++ python3 -B replication/experiments/run.py replication/experiments/configs/queued-starvation-100.json --source /mac08-source --dbtest out-perf.masstree.contexts/benchmarks/dbtest --output /mac08-evidence/pressure-100 --build-info 'GCC 11.4; WORKER_CONTEXTS=1; MYSQL=0; USE_MALLOC_MODE=0; archived MAC-01 -O1 compatibility patch'
+Experiment directory: /mac08-evidence/pressure-100/queued-starvation-100-eu99eesv
+Running queued-starvation-100-eu99eesv-r1-v1
+Running queued-starvation-100-eu99eesv-r1-v2
++ batches=("$evidence/pressure-$threshold"/*/batch.json)
++ test 1 = 1
++ batch=/mac08-evidence/pressure-100/queued-starvation-100-eu99eesv
++ python3 -B replication/experiments/analyze.py --output /mac08-evidence/analysis-100 batch /mac08-evidence/pressure-100/queued-starvation-100-eu99eesv
++ python3 -B replication/experiments/report.py /mac08-evidence/analysis-100/analysis.json --output /mac08-evidence/report-100 --label 'MAC-08 emulated x86-64 Linux functional pressure test; monotonic ns budget' --require-complete
++ out=out-perf.masstree.contexts
++ sha256sum out-perf.masstree.contexts/benchmarks/dbtest out-perf.masstree.contexts/replication/tests/tpcc_mixed_test out-perf.masstree.contexts/replication/tests/silo_context_test /mac08-evidence/starvation-debug /mac08-evidence/starvation-optimized /mac08-evidence/starvation-ubsan
++ echo 'PASS all MAC-08 runtime checks and four pressure runs; corrected analysis commands; signal repeat pending MAC-09'
+PASS all MAC-08 runtime checks and four pressure runs; corrected analysis commands; signal repeat pending MAC-09
++ status=0
++ printf '%s\n' 0

@@ -90,6 +90,15 @@ struct Worker {
   NotificationStats notifications;
   std::atomic<uint64_t> deliveries{0};
   std::atomic<bool> notification_pending{false};
+  StarvationBudget budget; // Worker-owned; publish coherent copies to producer.
+  std::mutex budget_mutex;
+  StarvationBudget published_budget;
+  StarvationStats starvation;
+
+  void publish_budget() {
+    std::lock_guard<std::mutex> lock(budget_mutex);
+    published_budget = budget;
+  }
 #ifdef SILO_WORKER_CONTEXTS
   Cooperative *cooperative = nullptr; // Owned by the worker's original stack.
 #endif
@@ -177,7 +186,8 @@ Driver::Driver(const Config &config, Clock clock, Wait wait_until, HighPublished
                     std::move(transition))) {
   if (!config.workers || !config.batch_size || !config.interval ||
       !config.global_capacity || !config.high_capacity ||
-      config.high_capacity == SIZE_MAX || !config.attempt_limit || !config.yield_interval)
+      config.high_capacity == SIZE_MAX || !config.attempt_limit || !config.yield_interval ||
+      config.starvation_threshold > 100)
     throw std::invalid_argument("invalid queued request driver configuration");
   if (config.policy != Policy::wait) {
 #ifdef SILO_WORKER_CONTEXTS
@@ -192,6 +202,19 @@ Driver::Driver(const Config &config, Clock clock, Wait wait_until, HighPublished
 }
 
 Driver::~Driver() = default;
+
+StarvationBudget Driver::budget_snapshot(size_t worker) const {
+  Worker &w = *state->workers.at(worker);
+  std::lock_guard<std::mutex> lock(w.budget_mutex);
+  return w.published_budget;
+}
+
+StarvationStats Driver::starvation_stats(size_t worker) const {
+  return state->workers.at(worker)->starvation;
+}
+
+size_t Driver::worker_count() const { return state->config.workers; }
+unsigned Driver::budget_threshold() const { return state->config.starvation_threshold; }
 
 void Driver::deliver_notification(size_t worker) {
   Worker &w = *state->workers.at(worker);
@@ -278,6 +301,10 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id, uint64_t first_hi
       if (admitted >= deadline)
         break;
       Request &request = s.global.front();
+      if (budget_snapshot(request.worker).starved(admitted, config.starvation_threshold)) {
+        ++s.workers[request.worker]->starvation.admission_blocks;
+        break; // Preserve the fixed-routing global FIFO and its documented HOL delay.
+      }
       request.admitted = admitted;
       if (!s.workers[request.worker]->high.push(request)) {
         request.admitted = 0;
@@ -359,6 +386,10 @@ void Driver::on_record_read(size_t worker) {
   Worker &w = *s.workers[worker];
   Cooperative &scheduler = *w.cooperative;
   Request &request = *scheduler.low;
+  if (!w.high.empty() && w.budget.starved(s.clock(), s.config.starvation_threshold)) {
+    ++w.starvation.checkpoint_blocks;
+    return;
+  }
   if (s.config.policy == Policy::notification_checkpoint) {
     // Clear the hint BEFORE checking the authoritative queue. A delayed or
     // coalesced hint cannot hide work published at high-empty/low-resume.
@@ -408,6 +439,7 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
   State &s = *state;
   Worker &w = *s.workers[worker];
   const auto execute_request = [&](Request &request) {
+    const Ns high_start = request.batch ? s.clock() : 0;
     const Ns deadline = s.drain_deadline.load(std::memory_order_acquire);
     Prepared execute;
     // Run the request on this worker through completion, including retries.
@@ -458,7 +490,16 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
         break;
       }
     }
-    w.records.push_back(request);
+    if (request.batch && w.budget.low_active) {
+      const Ns finish = s.clock();
+      w.budget.charge_high(high_start, finish);
+      w.starvation.high_service_ns += finish - high_start;
+      w.publish_budget();
+    }
+    // Low records are stored after the context returns so service time includes
+    // its last slice. Accounting spans the request, never individual retries.
+    if (request.batch)
+      w.records.push_back(request);
   };
 #ifdef SILO_WORKER_CONTEXTS
   std::unique_ptr<Cooperative> cooperative;
@@ -494,11 +535,20 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
       }
     }
 
+    if (!request.batch) {
+      w.budget.begin_low(s.clock());
+      ++w.starvation.low_requests;
+      w.publish_budget();
+    }
 #ifdef SILO_WORKER_CONTEXTS
     if (cooperative && !request.batch) {
       cooperative->low = &request;
       do {
+        const Ns low_start = s.clock();
         cooperative->context.resume();
+        const Ns service = s.clock() - low_start;
+        request.low_service_ns += service;
+        w.starvation.low_service_ns += service;
         if (cooperative->low) {
           // The Q2 is paused at an audited read. Only consume high work
           // before returning to its live transaction on the alternate stack.
@@ -508,6 +558,8 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
             s.transition(worker, ServiceTransition::high_entry);
           while (!s.fatal.load(std::memory_order_acquire) &&
                  s.clock() < s.drain_deadline.load(std::memory_order_acquire)) {
+            if (w.budget.starved(s.clock(), s.config.starvation_threshold))
+              break;
             if (!w.high.pop(high)) {
               ++w.notifications.empty_checks;
               if (s.transition)
@@ -515,16 +567,31 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
               break;
             }
             execute_request(high);
+            if (w.budget.starved(s.clock(), s.config.starvation_threshold)) {
+              ++w.starvation.forced_low_returns;
+              break; // Finish the whole high request (including retries) first.
+            }
           }
           if (s.transition)
             s.transition(worker, ServiceTransition::before_low_resume);
           ++w.notifications.low_resumes;
         }
       } while (cooperative->low);
+      w.budget.end_low();
+      w.publish_budget();
+      w.records.push_back(request);
       continue;
     }
 #endif
+    const Ns service_start = s.clock();
     execute_request(request);
+    if (!request.batch) {
+      request.low_service_ns = s.clock() - service_start;
+      w.starvation.low_service_ns += request.low_service_ns;
+      w.budget.end_low();
+      w.publish_budget();
+      w.records.push_back(request);
+    }
   }
 #ifdef SILO_WORKER_CONTEXTS
   if (cooperative) {
@@ -562,7 +629,7 @@ void write_header(std::ostream &out) {
   out << "run_id\tphase\trequest_id\tbatch_id\ttype\tpriority\tworker\thome_warehouse"
       "\tinput_seed\tscheduled_ns\tgenerated_ns\tadmitted_ns\tfirst_start_ns"
       "\tfinished_ns\tattempts\taborts\toutcome\tgeneration_delay_ns\tq2_checksum"
-      "\tcooperative_reads\tcooperative_checks\tcooperative_yields\n";
+      "\tcooperative_reads\tcooperative_checks\tcooperative_yields\tlow_service_ns\n";
 }
 
 void write_results(const Driver &driver, std::ostream &out, std::ostream &summary,
@@ -589,7 +656,7 @@ void write_results(const Driver &driver, std::ostream &out, std::ostream &summar
     else
       out << "null";
     out << '\t' << r.cooperative_reads << '\t' << r.cooperative_checks
-        << '\t' << r.cooperative_yields << '\n';
+        << '\t' << r.cooperative_yields << '\t' << r.low_service_ns << '\n';
 
     if (r.outcome == Outcome::rejected_queue_full)
       ++rejected;
@@ -619,6 +686,17 @@ void write_results(const Driver &driver, std::ostream &out, std::ostream &summar
           << " cutoff_running=" << running << " cutoff_due_ungenerated=" << due_ungenerated
           << " commits_in_window=" << commits_in_window << " drain_commits=" << drain_commits
           << " failed=" << driver.failed() << '\n';
+  for (size_t i = 0; i < driver.worker_count(); ++i) {
+    const StarvationStats stats = driver.starvation_stats(i);
+    summary << "starvation phase=" << phase << " worker=" << i
+            << " clock=driver_ns threshold=" << driver.budget_threshold()
+            << " admission_blocks=" << stats.admission_blocks
+            << " checkpoint_blocks=" << stats.checkpoint_blocks
+            << " forced_low_returns=" << stats.forced_low_returns
+            << " low_requests=" << stats.low_requests
+            << " high_service_ns=" << stats.high_service_ns
+            << " low_service_ns=" << stats.low_service_ns << '\n';
+  }
 }
 
 } // namespace queued

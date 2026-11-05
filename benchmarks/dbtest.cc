@@ -30,7 +30,7 @@ using namespace util;
 
 enum {
   QUEUED_RUN = 1000, QUEUED_BATCH, QUEUED_INTERVAL, QUEUED_GLOBAL, QUEUED_WORKER,
-  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED, QUEUED_POLICY, QUEUED_YIELD_INTERVAL
+  QUEUED_SEED, QUEUED_WARMUP, QUEUED_DRAIN, QUEUED_MIXED, QUEUED_POLICY, QUEUED_YIELD_INTERVAL, QUEUED_STARVATION
 };
 
 static uint64_t
@@ -101,6 +101,7 @@ main(int argc, char **argv)
   bool saw_queue_setting = false;
   bool queued_mixed = false;
   bool saw_yield_interval = false;
+  bool saw_starvation = false;
   while (1) {
     static struct option long_options[] =
     {
@@ -140,6 +141,7 @@ main(int argc, char **argv)
       {"queued-mixed"              , no_argument       , 0                          , QUEUED_MIXED},
       {"queued-policy"             , required_argument , 0                          , QUEUED_POLICY},
       {"queued-yield-interval"     , required_argument , 0                          , QUEUED_YIELD_INTERVAL},
+      {"queued-starvation-threshold", required_argument, 0, QUEUED_STARVATION},
       {0, 0, 0, 0}
     };
     int option_index = 0;
@@ -147,7 +149,7 @@ main(int argc, char **argv)
     if (c == -1)
       break;
 
-    if (c > QUEUED_RUN && c <= QUEUED_YIELD_INTERVAL)
+    if (c > QUEUED_RUN && c <= QUEUED_STARVATION)
       saw_queue_setting = true;
     switch (c) {
     case QUEUED_RUN:
@@ -193,6 +195,10 @@ main(int argc, char **argv)
         cerr << "[ERROR] --queued-policy must be wait or cooperative" << endl;
         return 1;
       }
+      break;
+    case QUEUED_STARVATION:
+      saw_starvation = true;
+      queued_config.starvation_threshold = queued_number(optarg, long_options[option_index].name, 0, 100);
       break;
     case QUEUED_YIELD_INTERVAL:
       saw_yield_interval = true;
@@ -287,6 +293,10 @@ main(int argc, char **argv)
     return 1;
   }
   if (!queued_run_id.empty()) {
+    if (saw_starvation && !queued_mixed) {
+      cerr << "[ERROR] starvation threshold requires --queued-mixed" << endl;
+      return 1;
+    }
     if (queued_config.policy == queued::Policy::cooperative) {
 #ifndef SILO_WORKER_CONTEXTS
       cerr << "[ERROR] Cooperative requires a WORKER_CONTEXTS=1 build" << endl;

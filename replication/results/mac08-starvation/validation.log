@@ -1,0 +1,98 @@
++ trap 'status=$?; printf "%s\n" "$status" > "$evidence/exit-status"' EXIT
+++ git rev-parse --show-toplevel
++ test /mac08-source = /mac08-source
++ git rev-parse HEAD
++ uname -a
++ cat /etc/os-release
++ c++ --version
++ getconf GNU_LIBC_VERSION
++ lscpu
++ taskset -pc 97
+++ git -C masstree rev-parse HEAD
++ test 1150824e6a10a0384ba4bfed6b916ce62f96315f = 1150824e6a10a0384ba4bfed6b916ce62f96315f
++ sha256sum benchmarks/request_driver.cc benchmarks/request_driver.h benchmarks/starvation_budget.h benchmarks/dbtest.cc replication/experiments/run.py replication/tests/starvation_cases.h replication/tests/starvation_test.cc replication/tests/tpcc_mixed_test.cc replication/tests/validate_starvation.sh replication/tests/test_i05_experiments.py replication/experiments/configs/queued-starvation-100.json replication/experiments/configs/queued-starvation-25.json
++ flags=(-std=c++11 -Wall -Wextra -Werror -pedantic -pthread)
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O0 -g)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O0 -g -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc replication/tests/starvation_test.cc -o /mac08-evidence/starvation-debug
++ timeout 60s /mac08-evidence/starvation-debug
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O3)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O3 -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc replication/tests/starvation_test.cc -o /mac08-evidence/starvation-optimized
++ timeout 60s /mac08-evidence/starvation-optimized
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 -fsanitize=undefined -fno-sanitize-recover=all -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc replication/tests/starvation_test.cc -o /mac08-evidence/starvation-ubsan
++ timeout 60s /mac08-evidence/starvation-ubsan
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for repetition in {1..20}
++ timeout 60s /mac08-evidence/starvation-optimized
++ for build in wait cooperative
++ context=()
++ [[ wait == cooperative ]]
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /mac08-evidence/driver-wait
++ timeout 60s /mac08-evidence/driver-wait
++ for build in wait cooperative
++ context=()
++ [[ cooperative == cooperative ]]
++ context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 -DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /mac08-evidence/driver-cooperative
++ timeout 60s /mac08-evidence/driver-cooperative
++ python3 -B -m unittest discover -s replication/tests -p test_i05_experiments.py -v
++ git apply replication/results/mac01-mac02/build-compatibility.diff
++ make -j1 -C third-party/lz4 library
++ make -j1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 masstree/config.h
++ make -j2 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 dbtest tpcc_mixed_test silo_context_test
++ out=out-perf.masstree.contexts
++ timeout 120s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test
++ timeout 120s ./out-perf.masstree.contexts/replication/tests/silo_context_test
++ for threshold in 25 100
++ python3 -B replication/experiments/run.py replication/experiments/configs/queued-starvation-25.json --source /mac08-source --dbtest out-perf.masstree.contexts/benchmarks/dbtest --output /mac08-evidence/pressure-25 --build-info 'GCC 11.4; WORKER_CONTEXTS=1; MYSQL=0; USE_MALLOC_MODE=0; archived MAC-01 -O1 compatibility patch'
+Experiment directory: /mac08-evidence/pressure-25/queued-starvation-25-bfo13vtz
+Running queued-starvation-25-bfo13vtz-r1-v1
+Running queued-starvation-25-bfo13vtz-r1-v2
++ python3 -B replication/experiments/analyze.py batch /mac08-evidence/pressure-25 --output /mac08-evidence/analysis-25
+usage: analyze.py [-h] --output OUTPUT {batch,pace,queued} ...
+analyze.py: error: the following arguments are required: --output
++ status=2
++ printf '%s\n' 2

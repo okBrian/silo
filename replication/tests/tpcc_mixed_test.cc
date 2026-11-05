@@ -4,6 +4,7 @@
 #ifdef SILO_WORKER_CONTEXTS
 #include "../../benchmarks/worker_context.h"
 #include "batched_notification_cases.h"
+#include "starvation_cases.h"
 #endif
 
 namespace {
@@ -174,6 +175,30 @@ struct Fixture {
       }
     }
     std::cout << "PASS nine Silo Q2 notification transition cases with committed writes\n";
+    for (unsigned threshold : {0u, 100u}) {
+      uint64_t oracle = 0;
+      ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
+      starvation_cases::limits(threshold,
+        [&](uint64_t &result, const std::function<void()> &checkpoint) {
+          bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
+          return q2.run(&db, low, 0, result, checkpoint);
+        }, [&](const queued::Request &request) {
+          write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
+        }, oracle, "silo-q2-limits");
+    }
+    for (bool expire : {false, true}) {
+      uint64_t oracle = 0;
+      ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
+      starvation_cases::controlled(
+        [&](uint64_t &result, const std::function<void()> &checkpoint) {
+          bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
+          return q2.run(&db, low, 0, result, checkpoint);
+        }, [&](const queued::Request &request) {
+          write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
+        }, oracle, expire, "silo-q2-starvation");
+    }
+    std::cout << "PASS Silo Q2 starvation equality, recovery, retry, reset and drain cases\n";
+
 #endif
   }
 

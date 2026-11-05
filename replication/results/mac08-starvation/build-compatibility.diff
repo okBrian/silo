@@ -1,0 +1,27 @@
+diff --git a/Makefile b/Makefile
+index a43cbf0..8bfcfa1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -81,7 +81,7 @@ CXXFLAGS += -MD -Ithird-party/lz4 -DCONFIG_H=\"$(CONFIG_H)\"
+ ifeq ($(DEBUG_S),1)
+         CXXFLAGS += -fno-omit-frame-pointer -DDEBUG
+ else
+-        CXXFLAGS += -Werror -O2 -funroll-loops -fno-omit-frame-pointer
++        CXXFLAGS += -O1 -funroll-loops -fno-omit-frame-pointer
+ endif
+ ifeq ($(CHECK_INVARIANTS_S),1)
+ 	CXXFLAGS += -DCHECK_INVARIANTS
+diff --git a/util.h b/util.h
+index a63f7ae..bb134ef 100644
+--- a/util.h
++++ b/util.h
+@@ -21,6 +21,9 @@
+ #include "macros.h"
+ #include "small_vector.h"
+ 
++template <typename A, typename B>
++std::ostream &operator<<(std::ostream &o, const std::pair<A, B> &p);
++
+ namespace util {
+ 
+ // padded, aligned primitives

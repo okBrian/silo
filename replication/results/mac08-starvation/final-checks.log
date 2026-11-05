@@ -1,0 +1,4 @@
+PASS 126 local Markdown targets exist
+PASS git diff --check
+PASS corrected validation script Bash syntax
+PASS verifier Python syntax (in memory)

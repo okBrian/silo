@@ -1,0 +1,123 @@
+{
+  "contract_version": 1,
+  "run_id": "queued-starvation-100-eu99eesv-r1-v2",
+  "config": "queued-starvation-100",
+  "format": "queued",
+  "repeat": 1,
+  "variant": 2,
+  "workers": 2,
+  "warehouses": 2,
+  "seeds": {
+    "tpcc_serial_loaders": {
+      "warehouse": 9324,
+      "item": 235443,
+      "stock": 89785943,
+      "district": 129856349,
+      "customer": 923587856425,
+      "order": 2343352
+    },
+    "tpcc_worker_seed_generator": 23984543,
+    "queued_measurement": 1,
+    "queued_warmup": null,
+    "q2_supplier_loader": 51271928
+  },
+  "queue": {
+    "interval-us": 1000,
+    "batch-size": 8,
+    "global-capacity": 8,
+    "worker-capacity": 4,
+    "warmup": 0,
+    "drain": 10,
+    "seed": 1
+  },
+  "phases_s": {
+    "warmup": 0,
+    "measurement": 3,
+    "drain_limit": 10
+  },
+  "timeout_s": 210,
+  "command": [
+    "/mac08-source/out-perf.masstree.contexts/benchmarks/dbtest",
+    "--db-type",
+    "ndb-proto2",
+    "--bench",
+    "tpcc",
+    "--scale-factor",
+    "2",
+    "--num-threads",
+    "2",
+    "--runtime",
+    "3",
+    "--verbose",
+    "--queued-starvation-threshold",
+    "100",
+    "--queued",
+    "queued-starvation-100-eu99eesv-r1-v2",
+    "--queued-policy",
+    "cooperative",
+    "--queued-yield-interval",
+    "64",
+    "--queued-mixed",
+    "--queued-interval-us",
+    "1000",
+    "--queued-batch-size",
+    "8",
+    "--queued-global-capacity",
+    "8",
+    "--queued-worker-capacity",
+    "4",
+    "--queued-warmup",
+    "0",
+    "--queued-drain",
+    "10",
+    "--queued-seed",
+    "1"
+  ],
+  "cpu_placement": {
+    "inherited_allowed": [
+      0,
+      1
+    ],
+    "process_mask": [
+      0,
+      1
+    ],
+    "worker_cpu_ids": null,
+    "sender_cpu_id": null
+  },
+  "policy": "cooperative",
+  "q2_variant": "q2_min_stock_v1",
+  "logging": "disabled",
+  "workload": {
+    "high": {
+      "NewOrder": 0.5,
+      "Payment": 0.5
+    },
+    "low": {
+      "Q2": 1.0,
+      "pending_capacity_per_worker": 1
+    },
+    "rows": {
+      "regions": 5,
+      "nations": 62,
+      "suppliers": 10000,
+      "items": 100000,
+      "stock_per_warehouse": 100000
+    },
+    "q2_supplier_scan_count": 100,
+    "q2_region_selection": "uniform",
+    "remote_payment_probability": 0.15,
+    "remote_new_order_item_probability": 0.01,
+    "new_order_item_distribution": "Silo NURand"
+  },
+  "yield_interval": 64,
+  "starvation_threshold": 100,
+  "starvation_clock": "CLOCK_MONOTONIC nanoseconds",
+  "retry_limit": 100,
+  "batch_metadata": "../batch.json",
+  "state": "finished",
+  "exit_status": 0,
+  "started_at_utc": "2026-11-05T18:55:53+00:00",
+  "finished_at_utc": "2026-11-05T18:56:09+00:00",
+  "wall_elapsed_s": 16.209091074000753
+}
