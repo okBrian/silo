@@ -1,0 +1,189 @@
+note: Running TeX ...
+note: downloading acmart.cls
+note: downloading xkeyval.sty
+note: downloading xkeyval.tex
+note: downloading xkvutils.tex
+note: downloading keyval.tex
+note: downloading xstring.sty
+note: downloading xstring.tex
+note: downloading amsart.cls
+note: downloading lmroman9-regular.otf
+note: downloading totpages.sty
+note: downloading everyshi.sty
+note: downloading textcase.sty
+note: downloading natbib.sty
+note: downloading hyperxmp.sty
+note: downloading ifmtarg.sty
+note: downloading ifthen.sty
+note: downloading ifdraft.sty
+note: downloading ifluatex.sty
+note: downloading manyfoot.sty
+note: downloading nccfoots.sty
+note: downloading libertine.sty
+note: downloading zi4.sty
+note: downloading newtxmath.sty
+note: downloading ifxetex.sty
+note: downloading centernot.sty
+note: downloading binhex.tex
+note: downloading textcomp.sty
+note: downloading fontspec.sty
+note: downloading fontspec-xetex.sty
+note: downloading fontspec.cfg
+note: downloading lmroman9-bold.otf
+warning: libertine.sty:308: 
+Requested font "[LinLibertine_R.otf]/OT" at 8.99997pt
+note: downloading LinLibertine_R.otf
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinLibertine_RB.otf
+warning: libertine.sty:308: Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinLibertine_RI.otf
+warning: libertine.sty:308: Requested font "[LinLibertine_RBI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinLibertine_RBI.otf
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 9.0pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT" at 8.99997pt
+note: downloading LinBiolinum_R.otf
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_RB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinBiolinum_RB.otf
+warning: libertine.sty:319: Requested font "[LinBiolinum_RI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinBiolinum_RI.otf
+warning: libertine.sty:319: Requested font "[LinBiolinum_RBO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinBiolinum_RBO.otf
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT" at 8.99997pt
+note: downloading LinLibertine_RZ.otf
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinLibertine_RZI.otf
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT" at 8.99997pt
+note: downloading LinLibertine_DR.otf
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT" at 9.00003pt
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT" at 8.99997pt
+note: downloading LinLibertine_M.otf
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_MB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinLibertine_MB.otf
+warning: libertine.sty:435: Requested font "[LinLibertine_MO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinLibertine_MO.otf
+warning: libertine.sty:435: Requested font "[LinLibertine_MBO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinLibertine_MBO.otf
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT" at 8.99997pt
+note: downloading LinBiolinum_K.otf
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT" at 9.00003pt
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT" at 8.99997pt
+note: downloading LinLibertine_I.otf
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT" at 9.00003pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading LinLibertine_R.tex
+note: downloading LinBiolinum_R.tex
+note: downloading LinBiolinum_K.tex
+note: downloading LinLibertine_I.tex
+note: downloading LKey.tex
+note: downloading inconsolata.fontspec
+warning: acmart.cls:815: 
+Requested font "[Inconsolatazi4-Regular.otf]/OT" at 8.99997pt
+note: downloading Inconsolatazi4-Regular.otf
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Regular.otf]/OT" at 9.00003pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Regular.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Bold.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+note: downloading Inconsolatazi4-Bold.otf
+note: downloading caption.sty
+note: downloading caption3.sty
+note: downloading caption-ams-smf.sto
+note: downloading float.sty
+note: downloading comment.sty
+note: downloading changes.sty
+note: downloading ulem.sty
+note: downloading truncate.sty
+warning: ulem.sty:243: Requested font "lasy6" scaled 1000
+note: downloading lasy6.tfm
+warning: ulem.sty:243:  -> lasy6
+note: downloading todonotes.sty
+error: changes.sty:783: Package changes Error: Command comment is already defined..
+
+See the changes package documentation for explanation.
+Type  H <return>  for immediate help
+note: Writing `../../output/pdf/project_milestone.log` (54.673828125 KiB)
+error: something bad happened inside XeTeX; its output follows:
+
+===============================================================================
+(project_milestone.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-02-24> (acmart.cls
+Document Class: acmart 2022/02/19 v1.83 Typesetting articles for the Associatio
+n for Computing Machinery
+(xkeyval.sty (xkeyval (xkvutils (keyval)))) (xstring.sty (xstring.tex))
+(iftex.sty) (amsart.cls
+Document Class: amsart 2020/05/29 v2.20.6
+(amsmath.sty
+For additional information on amsmath, use the `?' option.
+(amstext.sty (amsgen.sty)) (amsbsy.sty) (amsopn.sty)) (umsa.fd) (amsfonts.sty))
+ (microtype.sty (etoolbox.sty) (microtype-xetex.def) (microtype.cfg))
+(booktabs.sty) (refcount.sty (ltxcmds.sty) (infwarerr.sty)) (totpages.sty
+(everyshi.sty)) (environ.sty (trimspaces.sty)) (textcase.sty) (natbib.sty)
+(hyperxmp.sty (kvoptions.sty (kvsetkeys.sty)) (pdfescape.sty (pdftexcmds.sty))
+(stringenc.sty) (intcalc.sty) (ifmtarg.sty) (ifthen.sty) (ifdraft.sty)
+(ifluatex.sty)) (hyperref.sty (kvdefinekeys.sty) (hycolor.sty) (letltxmacro.sty
+) (auxhook.sty) (pd1enc.def) (etexcmds.sty) (puenc.def) (url.sty) (bitset.sty
+(bigintcalc.sty)) (atbegshi-ltx.sty)) (hxetex.def (rerunfilecheck.sty
+(atveryend-ltx.sty) (uniquecounter.sty))) (graphicx.sty (graphics.sty (trig.sty
+) (graphics.cfg) (xetex.def))) (xcolor.sty (color.cfg)) (geometry.sty
+(ifvtex.sty)) (manyfoot.sty (nccfoots.sty)) (fontenc.sty (t1lmr.fd))
+(newtxmath.sty
+`newtxmath' v1.71, 2022/01/16 Math macros based originally on txfonts (msharpe)
+(ifxetex.sty) (centernot.sty) (binhex)
+amsthm NOT loaded
+) (libertine.sty (textcomp.sty) (fontspec.sty (xparse.sty (expl3.sty
+(l3backend-xetex.def))) (fontspec-xetex.sty (fontenc.sty) (fontspec.cfg)))
+(LinLibertine_R) (LinBiolinum_R) (LinBiolinum_K) (LinLibertine_I) (LKey))
+(inconsolata.fontspec) (caption.sty (caption3.sty (caption-ams-smf.sto)))
+(float.sty) (comment.sty Excluding comment 'comment')
+Excluding comment 'CCSXML' (fancyhdr.sty) Special comment 'acks') (changes.sty
+*** changes package 2021/07/15 v4.2.1 ***
+ulem-option 'normalem,normalbf', passed to package ulem
+truncate-option 'breakall,fit', passed to package truncate
+(ulem.sty) (todonotes.sty (tikz.sty (pgf.sty (pgfrcs.sty (pgfutil-common.tex
+(pgfutil-common-lists.tex)) (pgfutil-latex.def) (pgfrcs.code.tex
+(pgf.revision.tex))) (pgfcore.sty (pgfsys.sty (pgfsys.code.tex
+(pgfkeys.code.tex (pgfkeysfiltered.code.tex)) (pgf.cfg) (pgfsys-xetex.def
+(pgfsys-dvipdfmx.def (pgfsys-common-pdf.def)))) (pgfsyssoftpath.code.tex)
+(pgfsysprotocol.code.tex)) (pgfcore.code.tex (pgfmath.code.tex
+(pgfmathcalc.code.tex (pgfmathutil.code.tex) (pgfmathparser.code.tex)
+(pgfmathfunctions.code.tex (pgfmathfunctions.basic.code.tex)
+(pgfmathfunctions.trigonometric.code.tex) (pgfmathfunctions.random.code.tex)
+(pgfmathfunctions.comparison.code.tex) (pgfmathfunctions.base.code.tex)
+(pgfmathfunctions.round.code.tex) (pgfmathfunctions.misc.code.tex)
+(pgfmathfunctions.integerarithmetics.code.tex))) (pgfmathfloat.code.tex))
+(pgfint.code.tex) (pgfcorepoints.code.tex) (pgfcorepathconstruct.code.tex)
+(pgfcorepathusage.code.tex) (pgfcorescopes.code.tex)
+(pgfcoregraphicstate.code.tex) (pgfcoretransformations.code.tex)
+(pgfcorequick.code.tex) (pgfcoreobjects.code.tex)
+(pgfcorepathprocessing.code.tex) (pgfcorearrows.code.tex)
+(pgfcoreshade.code.tex) (pgfcoreimage.code.tex (pgfcoreexternal.code.tex))
+(pgfcorelayers.code.tex) (pgfcoretransparency.code.tex)
+(pgfcorepatterns.code.tex) (pgfcorerdf.code.tex))) (pgfmoduleshapes.code.tex)
+(pgfmoduleplot.code.tex) (pgfcomp-version-0-65.sty) (pgfcomp-version-1-18.sty))
+ (pgffor.sty (pgfkeys.sty (pgfkeys.code.tex)) (pgfmath.sty (pgfmath.code.tex))
+(pgffor.code.tex (pgfmath.code.tex))) (tikz.code.tex
+(pgflibraryplothandlers.code.tex) (pgfmodulematrix.code.tex)
+(tikzlibrarytopaths.code.tex))) (tikzlibrarypositioning.code.tex) (calc.sty))
+
+! Package changes Error: Command comment is already defined..
+
+See the changes package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.783 \Changes@set@commandname{comment}
+                                       
+No pages of output.
+Transcript written on project_milestone.log.
+===============================================================================
+error: the XeTeX engine had an unrecoverable error
+caused by: halted on potentially-recoverable error as specified

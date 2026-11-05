@@ -1,0 +1,9 @@
+run,policy,workers,repeat,commits,shorts,q2,window,drain,handoffs
+queued-cooperative-smoke-_deb30he-r1-v1,wait,1,1,756,36,720,754,2,0
+queued-cooperative-smoke-_deb30he-r1-v2,cooperative,1,1,706,36,670,705,1,7
+queued-cooperative-smoke-_deb30he-r1-v3,wait,2,1,1162,72,1090,1158,4,0
+queued-cooperative-smoke-_deb30he-r1-v4,cooperative,2,1,1260,72,1188,1256,4,11
+queued-cooperative-smoke-_deb30he-r2-v1,wait,1,2,745,36,709,744,1,0
+queued-cooperative-smoke-_deb30he-r2-v2,cooperative,1,2,726,36,690,725,1,7
+queued-cooperative-smoke-_deb30he-r2-v3,wait,2,2,1327,72,1255,1324,3,0
+queued-cooperative-smoke-_deb30he-r2-v4,cooperative,2,2,1228,72,1156,1225,3,15

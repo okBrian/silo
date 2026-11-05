@@ -1,0 +1,94 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{4}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Huang et~al\mbox{.}(2025)]%
+        {huang2025preemptdb}
+\bibfield{author}{\bibinfo{person}{Kaisong Huang}, \bibinfo{person}{Jiatang
+  Zhou}, \bibinfo{person}{Zhuoyue Zhao}, \bibinfo{person}{Dong Xie}, {and}
+  \bibinfo{person}{Tianzheng Wang}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Low-Latency Transaction Scheduling via Userspace
+  Interrupts: Why Wait or Yield When You Can Preempt?}
+\newblock \bibinfo{journal}{\emph{Proceedings of the ACM on Management of
+  Data}} \bibinfo{volume}{3}, \bibinfo{number}{3}, Article
+  \bibinfo{articleno}{182} (\bibinfo{year}{2025}).
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/3725319}
+\showDOI{\tempurl}
+
+
+\bibitem[{PreemptDB authors}(2025)]%
+        {preemptcode}
+\bibfield{author}{\bibinfo{person}{{PreemptDB authors}}.}
+  \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{PreemptDB public implementation and setup}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/sfu-dis/preemptdb}}.
+\newblock
+\newblock
+\shownote{Inspected reference revision
+  55823979233ecd833f1f4e10848de5e9bc0af667}.
+
+
+\bibitem[{Silo contributors}(2026)]%
+        {silocode}
+\bibfield{author}{\bibinfo{person}{{Silo contributors}}.}
+  \bibinfo{year}{2026}\natexlab{}.
+\newblock \bibinfo{title}{Silo source code}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/stephentu/silo}}.
+\newblock
+\newblock
+\shownote{Project freeze 7319ba6; upstream attribution and license retained}.
+
+
+\bibitem[Tu et~al\mbox{.}(2013)]%
+        {Tu2013Silo}
+\bibfield{author}{\bibinfo{person}{Stephen Tu}, \bibinfo{person}{Wenting
+  Zheng}, \bibinfo{person}{Eddie Kohler}, \bibinfo{person}{Barbara Liskov},
+  {and} \bibinfo{person}{Samuel Madden}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Speedy Transactions in Multicore In-Memory
+  Databases}. In \bibinfo{booktitle}{\emph{Proceedings of the Twenty-Fourth ACM
+  Symposium on Operating Systems Principles}}.
+\newblock
+\urldef\tempurl%
+\url{https://read.seas.harvard.edu/~kohler/pubs/tu13speedy.pdf}
+\showURL{%
+\tempurl}
+
+
+\end{thebibliography}

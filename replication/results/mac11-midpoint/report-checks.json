@@ -1,0 +1,12 @@
+{
+  "pages": 5,
+  "extracted_package_rebuild_text_identical": true,
+  "required_numeric_and_author_text": true,
+  "required_sections": 4,
+  "remaining_risks": 2,
+  "citations_resolved": true,
+  "change_markings": true,
+  "visual_review": "All five final 110-dpi page renders inspected: readable, no clipping/overlap/missing glyphs.",
+  "layout_note": "TeX retains underfull spacing notices and a 1.50447pt final balancing vbox notice; no visible defect.",
+  "pdf_sha256": "dcd0dd0c9f7d1feff301a1b916e0744ad329e45dd5ac26672041fbc2ac7c022d"
+}

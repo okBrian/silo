@@ -1,0 +1,645 @@
+note: using only cached resource files
+note: Running TeX ...
+warning: libertine.sty:308: 
+Requested font "[LinLibertine_R.otf]/OT" at 8.99997pt
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_RBI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 9.0pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT" at 8.99997pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_RB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_RI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_RBO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT" at 8.99997pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT" at 8.99997pt
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT" at 9.00003pt
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT" at 8.99997pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_MB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_MO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_MBO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT" at 8.99997pt
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT" at 9.00003pt
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT" at 8.99997pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT" at 9.00003pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: acmart.cls:815: 
+Requested font "[Inconsolatazi4-Regular.otf]/OT" at 8.99997pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Regular.otf]/OT" at 9.00003pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Regular.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Bold.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: ulem.sty:243: Requested font "lasy6" scaled 1000
+warning: ulem.sty:243:  -> lasy6
+warning: project_milestone.tex:20: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 7.0pt
+warning: project_milestone.tex:20: 
+Requested font "MinLibReg-ot1" at 7.3pt
+warning: project_milestone.tex:20:  -> MinLibReg-ot1
+warning: project_milestone.tex:20: Requested font "MinLibReg-ot1" at 5.5pt
+warning: project_milestone.tex:20:  -> MinLibReg-ot1
+warning: project_milestone.tex:20: Requested font "nxlmi7" at 7.3pt
+warning: project_milestone.tex:20:  -> nxlmi7
+warning: project_milestone.tex:20: Requested font "nxlmi5" at 5.5pt
+warning: project_milestone.tex:20:  -> nxlmi5
+warning: project_milestone.tex:20: Requested font "ntxsy7" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxsy7
+warning: project_milestone.tex:20: Requested font "ntxsy5" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxsy5
+warning: project_milestone.tex:20: Requested font "ntxexx" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxexx
+warning: project_milestone.tex:20: Requested font "ntxexx" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxexx
+warning: project_milestone.tex:20: 
+Requested font "msam7" at 7.3pt
+warning: project_milestone.tex:20:  -> msam7
+warning: project_milestone.tex:20: Requested font "msam5" at 5.5pt
+warning: project_milestone.tex:20:  -> msam5
+warning: project_milestone.tex:20: 
+Requested font "msbm7" at 7.3pt
+warning: project_milestone.tex:20:  -> msbm7
+warning: project_milestone.tex:20: Requested font "msbm5" at 5.5pt
+warning: project_milestone.tex:20:  -> msbm5
+warning: project_milestone.tex:20: 
+Requested font "nxlmia" at 7.3pt
+warning: project_milestone.tex:20:  -> nxlmia
+warning: project_milestone.tex:20: Requested font "nxlmia" at 5.5pt
+warning: project_milestone.tex:20:  -> nxlmia
+warning: project_milestone.tex:20: 
+Requested font "ntxsym" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxsym
+warning: project_milestone.tex:20: Requested font "ntxsym" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxsym
+warning: project_milestone.tex:20: 
+Requested font "ntxsyc" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxsyc
+warning: project_milestone.tex:20: Requested font "ntxsyc" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxsyc
+warning: project_milestone.tex:20: Requested font "ntxexa" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxexa
+warning: project_milestone.tex:20: Requested font "ntxexa" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxexa
+warning: project_milestone.tex:44: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 17.28pt
+warning: project_milestone.tex:44: Requested font "[LinBiolinum_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 17.28pt
+warning: project_milestone.tex:44: Requested font "[LinBiolinum_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 17.28pt
+warning: project_milestone.tex:44: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 12.0pt
+warning: project_milestone.tex:44: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 10.0pt
+warning: project_milestone.tex:44: Requested font "MinLibReg-ot1" at 10.0pt
+warning: project_milestone.tex:44:  -> MinLibReg-ot1
+warning: project_milestone.tex:44: Requested font "nxlmi" at 10.0pt
+warning: project_milestone.tex:44:  -> nxlmi
+warning: project_milestone.tex:44: Requested font "ntxsy" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxsy
+warning: project_milestone.tex:44: Requested font "ntxexx" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxexx
+warning: project_milestone.tex:44: Requested font "msam10" at 10.0pt
+warning: project_milestone.tex:44:  -> msam10
+warning: project_milestone.tex:44: 
+Requested font "msbm10" at 10.0pt
+warning: project_milestone.tex:44:  -> msbm10
+warning: project_milestone.tex:44: 
+Requested font "nxlmia" at 10.0pt
+warning: project_milestone.tex:44:  -> nxlmia
+warning: project_milestone.tex:44: Requested font "ntxsym" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxsym
+warning: project_milestone.tex:44: Requested font "ntxsyc" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxsyc
+warning: project_milestone.tex:44: Requested font "ntxexa" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxexa
+warning: project_milestone.tex:44: Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 9.0pt
+warning: project_milestone.tex:44: Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 10.95pt
+warning: project_milestone.tex:44: Underfull \hbox (badness 1888) in paragraph at lines 44--44
+warning: project_milestone.tex:44: Underfull \hbox (badness 1163) in paragraph at lines 44--44
+warning: project_milestone.tex:62: Requested font "[Inconsolatazi4-Regular.otf]/OT:script=latn;language=dflt;+ss03;" at 9.0pt
+warning: project_milestone.tex:93: Underfull \hbox (badness 1325) in paragraph at lines 86--93
+warning: project_milestone.tex:108: Requested font "MinLibReg-ot1" at 9.0pt
+warning: project_milestone.tex:108:  -> MinLibReg-ot1
+warning: project_milestone.tex:108: Requested font "nxlmi" at 9.0pt
+warning: project_milestone.tex:108:  -> nxlmi
+warning: project_milestone.tex:108: Requested font "ntxsy" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxsy
+warning: project_milestone.tex:108: Requested font "ntxexx" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxexx
+warning: project_milestone.tex:108: Requested font "msam10" at 9.0pt
+warning: project_milestone.tex:108:  -> msam10
+warning: project_milestone.tex:108: Requested font "msbm10" at 9.0pt
+warning: project_milestone.tex:108:  -> msbm10
+warning: project_milestone.tex:108: Requested font "nxlmia" at 9.0pt
+warning: project_milestone.tex:108:  -> nxlmia
+warning: project_milestone.tex:108: Requested font "ntxsym" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxsym
+warning: project_milestone.tex:108: Requested font "ntxsyc" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxsyc
+warning: project_milestone.tex:108: Requested font "ntxexa" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxexa
+warning: project_milestone.tex:114: Underfull \hbox (badness 2837) in paragraph at lines 110--114
+warning: project_milestone.tex:117: Underfull \hbox (badness 2103) in paragraph at lines 114--117
+warning: project_milestone.tex:144: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 8.0pt
+warning: project_milestone.tex:145: Requested font "MinLibReg-ot1" at 8.0pt
+warning: project_milestone.tex:145:  -> MinLibReg-ot1
+warning: project_milestone.tex:145: Requested font "MinLibReg-ot1" at 6.2pt
+warning: project_milestone.tex:145:  -> MinLibReg-ot1
+warning: project_milestone.tex:145: Requested font "nxlmi7" at 8.0pt
+warning: project_milestone.tex:145:  -> nxlmi7
+warning: project_milestone.tex:145: Requested font "nxlmi5" at 6.2pt
+warning: project_milestone.tex:145:  -> nxlmi5
+warning: project_milestone.tex:145: Requested font "ntxsy7" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxsy7
+warning: project_milestone.tex:145: Requested font "ntxsy5" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxsy5
+warning: project_milestone.tex:145: Requested font "ntxexx" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxexx
+warning: project_milestone.tex:145: Requested font "ntxexx" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxexx
+warning: project_milestone.tex:145: Requested font "msam10" at 8.0pt
+warning: project_milestone.tex:145:  -> msam10
+warning: project_milestone.tex:145: Requested font "msam7" at 6.2pt
+warning: project_milestone.tex:145:  -> msam7
+warning: project_milestone.tex:145: Requested font "msbm10" at 8.0pt
+warning: project_milestone.tex:145:  -> msbm10
+warning: project_milestone.tex:145: Requested font "msbm7" at 6.2pt
+warning: project_milestone.tex:145:  -> msbm7
+warning: project_milestone.tex:145: Requested font "nxlmia" at 8.0pt
+warning: project_milestone.tex:145:  -> nxlmia
+warning: project_milestone.tex:145: Requested font "nxlmia" at 6.2pt
+warning: project_milestone.tex:145:  -> nxlmia
+warning: project_milestone.tex:145: Requested font "ntxsym" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxsym
+warning: project_milestone.tex:145: Requested font "ntxsym" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxsym
+warning: project_milestone.tex:145: Requested font "ntxsyc" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxsyc
+warning: project_milestone.tex:145: Requested font "ntxsyc" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxsyc
+warning: project_milestone.tex:145: Requested font "ntxexa" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxexa
+warning: project_milestone.tex:145: Requested font "ntxexa" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxexa
+warning: project_milestone.tex:153: Underfull \hbox (badness 10000) in paragraph at lines 151--153
+warning: project_milestone.tex:153: Underfull \hbox (badness 5622) in paragraph at lines 151--153
+warning: project_milestone.tex:157: Underfull \hbox (badness 10000) in paragraph at lines 155--157
+warning: project_milestone.tex:157: Underfull \hbox (badness 10000) in paragraph at lines 155--157
+warning: project_milestone.tex:163: Underfull \hbox (badness 4660) in paragraph at lines 162--163
+warning: project_milestone.tex:163: Underfull \hbox (badness 10000) in paragraph at lines 162--163
+warning: project_milestone.tex:165: Underfull \hbox (badness 1661) in paragraph at lines 164--165
+warning: project_milestone.tex:169: Underfull \hbox (badness 4036) in paragraph at lines 168--169
+warning: project_milestone.tex:170: Underfull \hbox (badness 3746) in paragraph at lines 169--170
+warning: project_milestone.tex:173: Requested font "[Inconsolatazi4-Regular.otf]/OT:script=latn;language=dflt;+ss03;" at 8.0pt
+warning: project_milestone.tex:190: Underfull \hbox (badness 1062) in paragraph at lines 180--190
+warning: project_milestone.tex:210: Underfull \hbox (badness 1286) in paragraph at lines 199--210
+warning: project_milestone.tex:265: Underfull \hbox (badness 1701) in paragraph at lines 254--265
+warning: project_milestone.tex:265: Underfull \hbox (badness 1028) in paragraph at lines 254--265
+warning: project_milestone.tex:275: Underfull \hbox (badness 1077) in paragraph at lines 266--275
+warning: project_milestone.tex:275: Underfull \hbox (badness 1406) in paragraph at lines 266--275
+warning: project_milestone.tex:294: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 6.0pt
+warning: project_milestone.tex:301: Underfull \hbox (badness 3547) in paragraph at lines 298--301
+warning: project_milestone.tex:309: Underfull \hbox (badness 2197) in paragraph at lines 306--309
+warning: project_milestone.tex:309: Underfull \hbox (badness 2368) in paragraph at lines 306--309
+warning: project_milestone.tex:314: Underfull \hbox (badness 1259) in paragraph at lines 309--314
+warning: project_milestone.tex:319: Underfull \hbox (badness 1178) in paragraph at lines 314--319
+warning: project_milestone.tex:319: Underfull \hbox (badness 1062) in paragraph at lines 314--319
+warning: project_milestone.tex:331: Underfull \hbox (badness 2181) in paragraph at lines 322--331
+note: Running BibTeX on project_milestone.aux ...
+note: warnings were issued by BibTeX; use --print and/or --keep-logs for details.
+note: Rerunning TeX because bibtex was run ...
+warning: libertine.sty:308: 
+Requested font "[LinLibertine_R.otf]/OT" at 8.99997pt
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_RBI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 9.0pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT" at 8.99997pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_RB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_RI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_RBO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT" at 8.99997pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT" at 8.99997pt
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT" at 9.00003pt
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT" at 8.99997pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_MB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_MO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_MBO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT" at 8.99997pt
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT" at 9.00003pt
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT" at 8.99997pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT" at 9.00003pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: acmart.cls:815: 
+Requested font "[Inconsolatazi4-Regular.otf]/OT" at 8.99997pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Regular.otf]/OT" at 9.00003pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Regular.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Bold.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: ulem.sty:243: Requested font "lasy6" scaled 1000
+warning: ulem.sty:243:  -> lasy6
+warning: project_milestone.tex:20: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 7.0pt
+warning: project_milestone.tex:20: 
+Requested font "MinLibReg-ot1" at 7.3pt
+warning: project_milestone.tex:20:  -> MinLibReg-ot1
+warning: project_milestone.tex:20: Requested font "MinLibReg-ot1" at 5.5pt
+warning: project_milestone.tex:20:  -> MinLibReg-ot1
+warning: project_milestone.tex:20: Requested font "nxlmi7" at 7.3pt
+warning: project_milestone.tex:20:  -> nxlmi7
+warning: project_milestone.tex:20: Requested font "nxlmi5" at 5.5pt
+warning: project_milestone.tex:20:  -> nxlmi5
+warning: project_milestone.tex:20: Requested font "ntxsy7" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxsy7
+warning: project_milestone.tex:20: Requested font "ntxsy5" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxsy5
+warning: project_milestone.tex:20: Requested font "ntxexx" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxexx
+warning: project_milestone.tex:20: Requested font "ntxexx" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxexx
+warning: project_milestone.tex:20: 
+Requested font "msam7" at 7.3pt
+warning: project_milestone.tex:20:  -> msam7
+warning: project_milestone.tex:20: Requested font "msam5" at 5.5pt
+warning: project_milestone.tex:20:  -> msam5
+warning: project_milestone.tex:20: 
+Requested font "msbm7" at 7.3pt
+warning: project_milestone.tex:20:  -> msbm7
+warning: project_milestone.tex:20: Requested font "msbm5" at 5.5pt
+warning: project_milestone.tex:20:  -> msbm5
+warning: project_milestone.tex:20: 
+Requested font "nxlmia" at 7.3pt
+warning: project_milestone.tex:20:  -> nxlmia
+warning: project_milestone.tex:20: Requested font "nxlmia" at 5.5pt
+warning: project_milestone.tex:20:  -> nxlmia
+warning: project_milestone.tex:20: 
+Requested font "ntxsym" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxsym
+warning: project_milestone.tex:20: Requested font "ntxsym" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxsym
+warning: project_milestone.tex:20: 
+Requested font "ntxsyc" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxsyc
+warning: project_milestone.tex:20: Requested font "ntxsyc" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxsyc
+warning: project_milestone.tex:20: Requested font "ntxexa" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxexa
+warning: project_milestone.tex:20: Requested font "ntxexa" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxexa
+warning: project_milestone.tex:44: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 17.28pt
+warning: project_milestone.tex:44: Requested font "[LinBiolinum_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 17.28pt
+warning: project_milestone.tex:44: Requested font "[LinBiolinum_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 17.28pt
+warning: project_milestone.tex:44: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 12.0pt
+warning: project_milestone.tex:44: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 10.0pt
+warning: project_milestone.tex:44: Requested font "MinLibReg-ot1" at 10.0pt
+warning: project_milestone.tex:44:  -> MinLibReg-ot1
+warning: project_milestone.tex:44: Requested font "nxlmi" at 10.0pt
+warning: project_milestone.tex:44:  -> nxlmi
+warning: project_milestone.tex:44: Requested font "ntxsy" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxsy
+warning: project_milestone.tex:44: Requested font "ntxexx" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxexx
+warning: project_milestone.tex:44: Requested font "msam10" at 10.0pt
+warning: project_milestone.tex:44:  -> msam10
+warning: project_milestone.tex:44: 
+Requested font "msbm10" at 10.0pt
+warning: project_milestone.tex:44:  -> msbm10
+warning: project_milestone.tex:44: 
+Requested font "nxlmia" at 10.0pt
+warning: project_milestone.tex:44:  -> nxlmia
+warning: project_milestone.tex:44: Requested font "ntxsym" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxsym
+warning: project_milestone.tex:44: Requested font "ntxsyc" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxsyc
+warning: project_milestone.tex:44: Requested font "ntxexa" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxexa
+warning: project_milestone.tex:44: Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 9.0pt
+warning: project_milestone.tex:44: Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 10.95pt
+warning: project_milestone.tex:44: Underfull \hbox (badness 1888) in paragraph at lines 44--44
+warning: project_milestone.tex:44: Underfull \hbox (badness 1163) in paragraph at lines 44--44
+warning: project_milestone.tex:62: Requested font "[Inconsolatazi4-Regular.otf]/OT:script=latn;language=dflt;+ss03;" at 9.0pt
+warning: project_milestone.tex:93: Underfull \hbox (badness 1325) in paragraph at lines 86--93
+warning: project_milestone.tex:108: Requested font "MinLibReg-ot1" at 9.0pt
+warning: project_milestone.tex:108:  -> MinLibReg-ot1
+warning: project_milestone.tex:108: Requested font "nxlmi" at 9.0pt
+warning: project_milestone.tex:108:  -> nxlmi
+warning: project_milestone.tex:108: Requested font "ntxsy" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxsy
+warning: project_milestone.tex:108: Requested font "ntxexx" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxexx
+warning: project_milestone.tex:108: Requested font "msam10" at 9.0pt
+warning: project_milestone.tex:108:  -> msam10
+warning: project_milestone.tex:108: Requested font "msbm10" at 9.0pt
+warning: project_milestone.tex:108:  -> msbm10
+warning: project_milestone.tex:108: Requested font "nxlmia" at 9.0pt
+warning: project_milestone.tex:108:  -> nxlmia
+warning: project_milestone.tex:108: Requested font "ntxsym" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxsym
+warning: project_milestone.tex:108: Requested font "ntxsyc" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxsyc
+warning: project_milestone.tex:108: Requested font "ntxexa" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxexa
+warning: project_milestone.tex:114: Underfull \hbox (badness 2837) in paragraph at lines 110--114
+warning: project_milestone.tex:117: Underfull \hbox (badness 2103) in paragraph at lines 114--117
+warning: project_milestone.tex:144: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 8.0pt
+warning: project_milestone.tex:145: Requested font "MinLibReg-ot1" at 8.0pt
+warning: project_milestone.tex:145:  -> MinLibReg-ot1
+warning: project_milestone.tex:145: Requested font "MinLibReg-ot1" at 6.2pt
+warning: project_milestone.tex:145:  -> MinLibReg-ot1
+warning: project_milestone.tex:145: Requested font "nxlmi7" at 8.0pt
+warning: project_milestone.tex:145:  -> nxlmi7
+warning: project_milestone.tex:145: Requested font "nxlmi5" at 6.2pt
+warning: project_milestone.tex:145:  -> nxlmi5
+warning: project_milestone.tex:145: Requested font "ntxsy7" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxsy7
+warning: project_milestone.tex:145: Requested font "ntxsy5" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxsy5
+warning: project_milestone.tex:145: Requested font "ntxexx" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxexx
+warning: project_milestone.tex:145: Requested font "ntxexx" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxexx
+warning: project_milestone.tex:145: Requested font "msam10" at 8.0pt
+warning: project_milestone.tex:145:  -> msam10
+warning: project_milestone.tex:145: Requested font "msam7" at 6.2pt
+warning: project_milestone.tex:145:  -> msam7
+warning: project_milestone.tex:145: Requested font "msbm10" at 8.0pt
+warning: project_milestone.tex:145:  -> msbm10
+warning: project_milestone.tex:145: Requested font "msbm7" at 6.2pt
+warning: project_milestone.tex:145:  -> msbm7
+warning: project_milestone.tex:145: Requested font "nxlmia" at 8.0pt
+warning: project_milestone.tex:145:  -> nxlmia
+warning: project_milestone.tex:145: Requested font "nxlmia" at 6.2pt
+warning: project_milestone.tex:145:  -> nxlmia
+warning: project_milestone.tex:145: Requested font "ntxsym" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxsym
+warning: project_milestone.tex:145: Requested font "ntxsym" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxsym
+warning: project_milestone.tex:145: Requested font "ntxsyc" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxsyc
+warning: project_milestone.tex:145: Requested font "ntxsyc" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxsyc
+warning: project_milestone.tex:145: Requested font "ntxexa" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxexa
+warning: project_milestone.tex:145: Requested font "ntxexa" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxexa
+warning: project_milestone.tex:153: Underfull \hbox (badness 10000) in paragraph at lines 151--153
+warning: project_milestone.tex:153: Underfull \hbox (badness 5622) in paragraph at lines 151--153
+warning: project_milestone.tex:157: Underfull \hbox (badness 10000) in paragraph at lines 155--157
+warning: project_milestone.tex:157: Underfull \hbox (badness 10000) in paragraph at lines 155--157
+warning: project_milestone.tex:163: Underfull \hbox (badness 4660) in paragraph at lines 162--163
+warning: project_milestone.tex:163: Underfull \hbox (badness 10000) in paragraph at lines 162--163
+warning: project_milestone.tex:165: Underfull \hbox (badness 1661) in paragraph at lines 164--165
+warning: project_milestone.tex:169: Underfull \hbox (badness 4036) in paragraph at lines 168--169
+warning: project_milestone.tex:170: Underfull \hbox (badness 3746) in paragraph at lines 169--170
+warning: project_milestone.tex:173: Requested font "[Inconsolatazi4-Regular.otf]/OT:script=latn;language=dflt;+ss03;" at 8.0pt
+warning: project_milestone.tex:190: Underfull \hbox (badness 1062) in paragraph at lines 180--190
+warning: project_milestone.tex:210: Underfull \hbox (badness 1286) in paragraph at lines 199--210
+warning: project_milestone.tex:265: Underfull \hbox (badness 1701) in paragraph at lines 254--265
+warning: project_milestone.tex:265: Underfull \hbox (badness 1028) in paragraph at lines 254--265
+warning: project_milestone.tex:275: Underfull \hbox (badness 1077) in paragraph at lines 266--275
+warning: project_milestone.tex:275: Underfull \hbox (badness 1406) in paragraph at lines 266--275
+warning: project_milestone.tex:294: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 6.0pt
+warning: project_milestone.tex:301: Underfull \hbox (badness 3547) in paragraph at lines 298--301
+warning: project_milestone.tex:309: Underfull \hbox (badness 2197) in paragraph at lines 306--309
+warning: project_milestone.tex:309: Underfull \hbox (badness 2368) in paragraph at lines 306--309
+warning: project_milestone.tex:314: Underfull \hbox (badness 1259) in paragraph at lines 309--314
+warning: project_milestone.tex:319: Underfull \hbox (badness 1178) in paragraph at lines 314--319
+warning: project_milestone.tex:319: Underfull \hbox (badness 1062) in paragraph at lines 314--319
+warning: project_milestone.tex:331: Underfull \hbox (badness 2181) in paragraph at lines 322--331
+warning: project_milestone.bbl:48: Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 7.0pt
+warning: project_milestone.bbl:66: Underfull \hbox (badness 1708) in paragraph at lines 58--66
+warning: project_milestone.bbl:66: Underfull \hbox (badness 10000) in paragraph at lines 58--66
+warning: project_milestone.tex:361: Overfull \vbox (1.50447pt too high) has occurred while \output is active
+note: Rerunning TeX because "project_milestone.out" changed ...
+warning: libertine.sty:308: 
+Requested font "[LinLibertine_R.otf]/OT" at 8.99997pt
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_RBI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:308: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 9.0pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT" at 8.99997pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_R.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_RB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_RI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:319: Requested font "[LinBiolinum_RBO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT" at 8.99997pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZ.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:338: Requested font "[LinLibertine_RZI.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT" at 8.99997pt
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT" at 9.00003pt
+warning: libertine.sty:361: Requested font "[LinLibertine_DR.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT" at 8.99997pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_M.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_MB.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_MO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:435: Requested font "[LinLibertine_MBO.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT" at 8.99997pt
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT" at 9.00003pt
+warning: libertine.sty:436: Requested font "[LinBiolinum_K.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT" at 8.99997pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT" at 9.00003pt
+warning: libertine.sty:437: Requested font "[LinLibertine_I.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: acmart.cls:815: 
+Requested font "[Inconsolatazi4-Regular.otf]/OT" at 8.99997pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Regular.otf]/OT" at 9.00003pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Regular.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: acmart.cls:815: Requested font "[Inconsolatazi4-Bold.otf]/OT:script=latn;language=dflt;" at 9.00003pt
+warning: ulem.sty:243: Requested font "lasy6" scaled 1000
+warning: ulem.sty:243:  -> lasy6
+warning: project_milestone.tex:20: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 7.0pt
+warning: project_milestone.tex:20: 
+Requested font "MinLibReg-ot1" at 7.3pt
+warning: project_milestone.tex:20:  -> MinLibReg-ot1
+warning: project_milestone.tex:20: Requested font "MinLibReg-ot1" at 5.5pt
+warning: project_milestone.tex:20:  -> MinLibReg-ot1
+warning: project_milestone.tex:20: Requested font "nxlmi7" at 7.3pt
+warning: project_milestone.tex:20:  -> nxlmi7
+warning: project_milestone.tex:20: Requested font "nxlmi5" at 5.5pt
+warning: project_milestone.tex:20:  -> nxlmi5
+warning: project_milestone.tex:20: Requested font "ntxsy7" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxsy7
+warning: project_milestone.tex:20: Requested font "ntxsy5" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxsy5
+warning: project_milestone.tex:20: Requested font "ntxexx" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxexx
+warning: project_milestone.tex:20: Requested font "ntxexx" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxexx
+warning: project_milestone.tex:20: 
+Requested font "msam7" at 7.3pt
+warning: project_milestone.tex:20:  -> msam7
+warning: project_milestone.tex:20: Requested font "msam5" at 5.5pt
+warning: project_milestone.tex:20:  -> msam5
+warning: project_milestone.tex:20: 
+Requested font "msbm7" at 7.3pt
+warning: project_milestone.tex:20:  -> msbm7
+warning: project_milestone.tex:20: Requested font "msbm5" at 5.5pt
+warning: project_milestone.tex:20:  -> msbm5
+warning: project_milestone.tex:20: 
+Requested font "nxlmia" at 7.3pt
+warning: project_milestone.tex:20:  -> nxlmia
+warning: project_milestone.tex:20: Requested font "nxlmia" at 5.5pt
+warning: project_milestone.tex:20:  -> nxlmia
+warning: project_milestone.tex:20: 
+Requested font "ntxsym" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxsym
+warning: project_milestone.tex:20: Requested font "ntxsym" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxsym
+warning: project_milestone.tex:20: 
+Requested font "ntxsyc" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxsyc
+warning: project_milestone.tex:20: Requested font "ntxsyc" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxsyc
+warning: project_milestone.tex:20: Requested font "ntxexa" at 7.3pt
+warning: project_milestone.tex:20:  -> ntxexa
+warning: project_milestone.tex:20: Requested font "ntxexa" at 5.5pt
+warning: project_milestone.tex:20:  -> ntxexa
+warning: project_milestone.tex:44: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 17.28pt
+warning: project_milestone.tex:44: Requested font "[LinBiolinum_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 17.28pt
+warning: project_milestone.tex:44: Requested font "[LinBiolinum_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 17.28pt
+warning: project_milestone.tex:44: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 12.0pt
+warning: project_milestone.tex:44: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 10.0pt
+warning: project_milestone.tex:44: Requested font "MinLibReg-ot1" at 10.0pt
+warning: project_milestone.tex:44:  -> MinLibReg-ot1
+warning: project_milestone.tex:44: Requested font "nxlmi" at 10.0pt
+warning: project_milestone.tex:44:  -> nxlmi
+warning: project_milestone.tex:44: Requested font "ntxsy" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxsy
+warning: project_milestone.tex:44: Requested font "ntxexx" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxexx
+warning: project_milestone.tex:44: Requested font "msam10" at 10.0pt
+warning: project_milestone.tex:44:  -> msam10
+warning: project_milestone.tex:44: 
+Requested font "msbm10" at 10.0pt
+warning: project_milestone.tex:44:  -> msbm10
+warning: project_milestone.tex:44: 
+Requested font "nxlmia" at 10.0pt
+warning: project_milestone.tex:44:  -> nxlmia
+warning: project_milestone.tex:44: Requested font "ntxsym" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxsym
+warning: project_milestone.tex:44: Requested font "ntxsyc" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxsyc
+warning: project_milestone.tex:44: Requested font "ntxexa" at 10.0pt
+warning: project_milestone.tex:44:  -> ntxexa
+warning: project_milestone.tex:44: Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 9.0pt
+warning: project_milestone.tex:44: Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 10.95pt
+warning: project_milestone.tex:44: Underfull \hbox (badness 1888) in paragraph at lines 44--44
+warning: project_milestone.tex:44: Underfull \hbox (badness 1163) in paragraph at lines 44--44
+warning: project_milestone.tex:62: Requested font "[Inconsolatazi4-Regular.otf]/OT:script=latn;language=dflt;+ss03;" at 9.0pt
+warning: project_milestone.tex:93: Underfull \hbox (badness 1325) in paragraph at lines 86--93
+warning: project_milestone.tex:108: Requested font "MinLibReg-ot1" at 9.0pt
+warning: project_milestone.tex:108:  -> MinLibReg-ot1
+warning: project_milestone.tex:108: Requested font "nxlmi" at 9.0pt
+warning: project_milestone.tex:108:  -> nxlmi
+warning: project_milestone.tex:108: Requested font "ntxsy" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxsy
+warning: project_milestone.tex:108: Requested font "ntxexx" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxexx
+warning: project_milestone.tex:108: Requested font "msam10" at 9.0pt
+warning: project_milestone.tex:108:  -> msam10
+warning: project_milestone.tex:108: Requested font "msbm10" at 9.0pt
+warning: project_milestone.tex:108:  -> msbm10
+warning: project_milestone.tex:108: Requested font "nxlmia" at 9.0pt
+warning: project_milestone.tex:108:  -> nxlmia
+warning: project_milestone.tex:108: Requested font "ntxsym" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxsym
+warning: project_milestone.tex:108: Requested font "ntxsyc" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxsyc
+warning: project_milestone.tex:108: Requested font "ntxexa" at 9.0pt
+warning: project_milestone.tex:108:  -> ntxexa
+warning: project_milestone.tex:114: Underfull \hbox (badness 2837) in paragraph at lines 110--114
+warning: project_milestone.tex:117: Underfull \hbox (badness 2103) in paragraph at lines 114--117
+warning: project_milestone.tex:144: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 8.0pt
+warning: project_milestone.tex:145: Requested font "MinLibReg-ot1" at 8.0pt
+warning: project_milestone.tex:145:  -> MinLibReg-ot1
+warning: project_milestone.tex:145: Requested font "MinLibReg-ot1" at 6.2pt
+warning: project_milestone.tex:145:  -> MinLibReg-ot1
+warning: project_milestone.tex:145: Requested font "nxlmi7" at 8.0pt
+warning: project_milestone.tex:145:  -> nxlmi7
+warning: project_milestone.tex:145: Requested font "nxlmi5" at 6.2pt
+warning: project_milestone.tex:145:  -> nxlmi5
+warning: project_milestone.tex:145: Requested font "ntxsy7" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxsy7
+warning: project_milestone.tex:145: Requested font "ntxsy5" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxsy5
+warning: project_milestone.tex:145: Requested font "ntxexx" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxexx
+warning: project_milestone.tex:145: Requested font "ntxexx" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxexx
+warning: project_milestone.tex:145: Requested font "msam10" at 8.0pt
+warning: project_milestone.tex:145:  -> msam10
+warning: project_milestone.tex:145: Requested font "msam7" at 6.2pt
+warning: project_milestone.tex:145:  -> msam7
+warning: project_milestone.tex:145: Requested font "msbm10" at 8.0pt
+warning: project_milestone.tex:145:  -> msbm10
+warning: project_milestone.tex:145: Requested font "msbm7" at 6.2pt
+warning: project_milestone.tex:145:  -> msbm7
+warning: project_milestone.tex:145: Requested font "nxlmia" at 8.0pt
+warning: project_milestone.tex:145:  -> nxlmia
+warning: project_milestone.tex:145: Requested font "nxlmia" at 6.2pt
+warning: project_milestone.tex:145:  -> nxlmia
+warning: project_milestone.tex:145: Requested font "ntxsym" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxsym
+warning: project_milestone.tex:145: Requested font "ntxsym" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxsym
+warning: project_milestone.tex:145: Requested font "ntxsyc" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxsyc
+warning: project_milestone.tex:145: Requested font "ntxsyc" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxsyc
+warning: project_milestone.tex:145: Requested font "ntxexa" at 8.0pt
+warning: project_milestone.tex:145:  -> ntxexa
+warning: project_milestone.tex:145: Requested font "ntxexa" at 6.2pt
+warning: project_milestone.tex:145:  -> ntxexa
+warning: project_milestone.tex:153: Underfull \hbox (badness 10000) in paragraph at lines 151--153
+warning: project_milestone.tex:153: Underfull \hbox (badness 5622) in paragraph at lines 151--153
+warning: project_milestone.tex:157: Underfull \hbox (badness 10000) in paragraph at lines 155--157
+warning: project_milestone.tex:157: Underfull \hbox (badness 10000) in paragraph at lines 155--157
+warning: project_milestone.tex:163: Underfull \hbox (badness 4660) in paragraph at lines 162--163
+warning: project_milestone.tex:163: Underfull \hbox (badness 10000) in paragraph at lines 162--163
+warning: project_milestone.tex:165: Underfull \hbox (badness 1661) in paragraph at lines 164--165
+warning: project_milestone.tex:169: Underfull \hbox (badness 4036) in paragraph at lines 168--169
+warning: project_milestone.tex:170: Underfull \hbox (badness 3746) in paragraph at lines 169--170
+warning: project_milestone.tex:173: Requested font "[Inconsolatazi4-Regular.otf]/OT:script=latn;language=dflt;+ss03;" at 8.0pt
+warning: project_milestone.tex:190: Underfull \hbox (badness 1062) in paragraph at lines 180--190
+warning: project_milestone.tex:210: Underfull \hbox (badness 1286) in paragraph at lines 199--210
+warning: project_milestone.tex:265: Underfull \hbox (badness 1701) in paragraph at lines 254--265
+warning: project_milestone.tex:265: Underfull \hbox (badness 1028) in paragraph at lines 254--265
+warning: project_milestone.tex:275: Underfull \hbox (badness 1077) in paragraph at lines 266--275
+warning: project_milestone.tex:275: Underfull \hbox (badness 1406) in paragraph at lines 266--275
+warning: project_milestone.tex:294: Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 6.0pt
+warning: project_milestone.tex:301: Underfull \hbox (badness 3547) in paragraph at lines 298--301
+warning: project_milestone.tex:309: Underfull \hbox (badness 2197) in paragraph at lines 306--309
+warning: project_milestone.tex:309: Underfull \hbox (badness 2368) in paragraph at lines 306--309
+warning: project_milestone.tex:314: Underfull \hbox (badness 1259) in paragraph at lines 309--314
+warning: project_milestone.tex:319: Underfull \hbox (badness 1178) in paragraph at lines 314--319
+warning: project_milestone.tex:319: Underfull \hbox (badness 1062) in paragraph at lines 314--319
+warning: project_milestone.tex:331: Underfull \hbox (badness 2181) in paragraph at lines 322--331
+warning: project_milestone.bbl:48: Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;+tnum;+lnum;mapping=tex-text;" at 7.0pt
+warning: project_milestone.bbl:66: Underfull \hbox (badness 1708) in paragraph at lines 58--66
+warning: project_milestone.bbl:66: Underfull \hbox (badness 10000) in paragraph at lines 58--66
+warning: project_milestone.tex:361: Overfull \vbox (1.50447pt too high) has occurred while \output is active
+warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details.
+note: Running xdvipdfmx ...
+note: Writing `../../output/pdf/project_milestone.pdf` (96.041015625 KiB)
+note: Writing `../../output/pdf/project_milestone.soc` (17 B)
+note: Writing `../../output/pdf/project_milestone.loc` (3.30078125 KiB)
+note: Writing `../../output/pdf/project_milestone.bbl` (3.75 KiB)
+note: Writing `../../output/pdf/project_milestone.aux` (9.7490234375 KiB)
+note: Writing `../../output/pdf/project_milestone.blg` (634 B)
+note: Writing `../../output/pdf/project_milestone.out` (3.146484375 KiB)
+note: Writing `../../output/pdf/project_milestone.log` (74.1796875 KiB)

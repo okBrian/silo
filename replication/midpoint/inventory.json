@@ -1,0 +1,3119 @@
+{
+  "date": "2026-11-05",
+  "branch": "erin/local-replication-evidence",
+  "frozen_source": "7319ba60394b6d68a4d8f6382177c5e5758c6b28",
+  "masstree": "1150824e6a10a0384ba4bfed6b916ce62f96315f",
+  "environment": "Historical Apple M5 Pro / Colima-QEMU x86-64 Linux; per-run environment retained",
+  "new_execution": "MAC-11 analysis replay, report compilation/render and package checks only",
+  "submission_deadline": null,
+  "final_deadline": null,
+  "submitter": null,
+  "original_proposal_diff_verified": false,
+  "files": [
+    {
+      "path": "replication/results/mac01-mac02/README.md",
+      "bytes": 6534,
+      "sha256": "573e873f3dfb366c8169be713be3e105cdf358be5ec257c0f9e91a8f26b3d22f"
+    },
+    {
+      "path": "replication/results/mac01-mac02/apt.log.gz",
+      "bytes": 5954,
+      "sha256": "50c9bace3671af27f7fd567bfe474be7319b65a85d62d51f5793bab0b12d88c1"
+    },
+    {
+      "path": "replication/results/mac01-mac02/batch.json",
+      "bytes": 2346,
+      "sha256": "3a67c9d9fbcf1962d74b06ff5747cdcc7267303e50a6002f9ee2229c785d25e3"
+    },
+    {
+      "path": "replication/results/mac01-mac02/batch.tar.gz",
+      "bytes": 591314,
+      "sha256": "944b27d9f96048d6f3ad475862f050d906902e131d47a9bea91842145b338e23"
+    },
+    {
+      "path": "replication/results/mac01-mac02/build-compatibility.diff",
+      "bytes": 771,
+      "sha256": "b123600f39237fb269a4cfb57812d49c11e2881e54ed66211332604b4763b58d"
+    },
+    {
+      "path": "replication/results/mac01-mac02/build.log.gz",
+      "bytes": 25180,
+      "sha256": "4ddd4d514bc2797bf802b57cdf437afd304541473a5e955287b5bbed981380aa"
+    },
+    {
+      "path": "replication/results/mac01-mac02/default-interval-check.log",
+      "bytes": 92,
+      "sha256": "a26c45b8ecb3d8fda8e3984044e5502e611d07d4df3abec772bc33d02e09150a"
+    },
+    {
+      "path": "replication/results/mac01-mac02/default-interval.err",
+      "bytes": 303,
+      "sha256": "5394278b558af8ab400f080ef8c177b49e22e889ce094a4d5e138b10f594b1c5"
+    },
+    {
+      "path": "replication/results/mac01-mac02/default-interval.tsv.gz",
+      "bytes": 26343,
+      "sha256": "ff4f0766f3be17bf2c9f04c3ebfe8c06bd16e836310776561ce30c574c84007d"
+    },
+    {
+      "path": "replication/results/mac01-mac02/environment.log",
+      "bytes": 758,
+      "sha256": "4d062887ef14b270d4699777acc53c8e3e3fe50157466db2beb00354e23a185e"
+    },
+    {
+      "path": "replication/results/mac01-mac02/exit-status",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "replication/results/mac01-mac02/experiment-tests.log",
+      "bytes": 1010,
+      "sha256": "3cb8362929f28b052831e785d380934262f4cf4db2ec655a898526561f906a2a"
+    },
+    {
+      "path": "replication/results/mac01-mac02/host-environment.log",
+      "bytes": 1454,
+      "sha256": "1757c359562da6dfbad57ea68650460975bec74004f656107e6aadbb1d9ba584"
+    },
+    {
+      "path": "replication/results/mac01-mac02/preflight.log.gz",
+      "bytes": 747,
+      "sha256": "8ac9eb39593be49825ebe0a29df3ac562b1f394ac6765df4f8c35556d1feb690"
+    },
+    {
+      "path": "replication/results/mac01-mac02/profile-status.log",
+      "bytes": 151,
+      "sha256": "d07758ca69255bbad02c250737c95e990c9d87b4d861d34cd4e65e48fc762353"
+    },
+    {
+      "path": "replication/results/mac01-mac02/queued-summary.csv",
+      "bytes": 21024,
+      "sha256": "091eb56211c8e7984b3f812ddf883e749d63ae18293bc627a5a652f8b0351275"
+    },
+    {
+      "path": "replication/results/mac01-mac02/reconciliation.log",
+      "bytes": 2008,
+      "sha256": "856599ab60171493153d7b1a1f6b5f20106cde9e87d18c91ddf7c6eb471b687c"
+    },
+    {
+      "path": "replication/results/mac01-mac02/replay-check.log",
+      "bytes": 292,
+      "sha256": "f0a20d64f57a0f4e32d205da94b57fa143fbafca8ce22f4d274a5d6d6db93180"
+    },
+    {
+      "path": "replication/results/mac01-mac02/request-driver.log",
+      "bytes": 886,
+      "sha256": "a7ac3478b60cce5432a52b79c8fd6c5793af84ac42e45720828998d49896b204"
+    },
+    {
+      "path": "replication/results/mac01-mac02/silo-context-test.log",
+      "bytes": 254,
+      "sha256": "c8c9ac9ab9b37220ceb9b5e638c6c557a9c96e215299fb9fe4b0bd7afb9714d8"
+    },
+    {
+      "path": "replication/results/mac01-mac02/tpcc-mixed-test.log",
+      "bytes": 446,
+      "sha256": "00c90130304ab356d13a1189252e8b9dd7eb25e7e35fbaacc1f72dc3ac1b380a"
+    },
+    {
+      "path": "replication/results/mac01-mac02/validate.sh",
+      "bytes": 4412,
+      "sha256": "66055f9f24271115f0ace547e4ba89d16b0d054ed97b795b7c1d9d8067502cd8"
+    },
+    {
+      "path": "replication/results/mac01-mac02/validation.log",
+      "bytes": 10765,
+      "sha256": "53a429ee792b1bc33a79bf0948e89fa7f13b309f9f55e12f087671fd9203a6ff"
+    },
+    {
+      "path": "replication/results/mac01-mac02/worker-context-debug.log",
+      "bytes": 293,
+      "sha256": "6213c508f019d993aa9df7e513366042621633123072c12465f6fa117ee7b274"
+    },
+    {
+      "path": "replication/results/mac01-mac02/worker-context-optimized.log",
+      "bytes": 293,
+      "sha256": "6213c508f019d993aa9df7e513366042621633123072c12465f6fa117ee7b274"
+    },
+    {
+      "path": "replication/results/mac01-mac02/worker-context-ubsan.log",
+      "bytes": 293,
+      "sha256": "6213c508f019d993aa9df7e513366042621633123072c12465f6fa117ee7b274"
+    },
+    {
+      "path": "replication/results/mac03-uintr-kit/README.md",
+      "bytes": 2231,
+      "sha256": "57c19e73827563461b06486e5e6ac4bed1d27554daeb75755c89ac739379436c"
+    },
+    {
+      "path": "replication/results/mac03-uintr-kit/build.log",
+      "bytes": 1662,
+      "sha256": "49ac866c40b3d82cb2aa9df677f01e7f2a8666c3afd01c7e594097d2e5680b1f"
+    },
+    {
+      "path": "replication/results/mac03-uintr-kit/checks.log",
+      "bytes": 3420,
+      "sha256": "6970cb081cbf0dac6e4312d6e5783192a139c0da83bb132a8ac01607986bfa64"
+    },
+    {
+      "path": "replication/results/mac03-uintr-kit/host-probe.exit",
+      "bytes": 3,
+      "sha256": "94d5a38598be77593d4781b8fbd74cb4e2cd05bb006b1b531988ab2db90de9c9"
+    },
+    {
+      "path": "replication/results/mac03-uintr-kit/host-probe.log",
+      "bytes": 3671,
+      "sha256": "eb6b5ac38749cbc102fcaaa8df84a93aa77940c527f5d0ae5de6cd9e346f4941"
+    },
+    {
+      "path": "replication/results/mac04-software-checks/README.md",
+      "bytes": 8566,
+      "sha256": "cc9c476166aaa40be9afb381559ca4860440ced26ef9b5b6e4a9e247e58817ed"
+    },
+    {
+      "path": "replication/results/mac04-software-checks/docker-environment.log",
+      "bytes": 341,
+      "sha256": "191d42d50bec270e2be31cadf776a372f84f396306c499f5cc2d2e2ad4656181"
+    },
+    {
+      "path": "replication/results/mac04-software-checks/engine-build.log.gz",
+      "bytes": 25192,
+      "sha256": "7c9b8a936e76b7402b09469d9571050e2c8995c80d80f66991cc9881a0c724f1"
+    },
+    {
+      "path": "replication/results/mac04-software-checks/exit-status",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "replication/results/mac04-software-checks/macos.log",
+      "bytes": 1133,
+      "sha256": "49c53167f0bd701f7e6898365f8607864348b5efbc83999c34e683f87d06b309"
+    },
+    {
+      "path": "replication/results/mac04-software-checks/validate.sh",
+      "bytes": 2243,
+      "sha256": "53a0c1cd202528fdc22ff5e365d947fec171b711914681527684d0f24d7b957d"
+    },
+    {
+      "path": "replication/results/mac04-software-checks/validation.log",
+      "bytes": 11105,
+      "sha256": "614a501cae3c688e58fec0c86c293367399e556001a5ed67d3fae05cb061a52f"
+    },
+    {
+      "path": "replication/results/mac05-workflow/README.md",
+      "bytes": 8856,
+      "sha256": "5d960552b714e50680e8ef27854e4e0048d9ebab6cecf13d7928832d32f3b6d2"
+    },
+    {
+      "path": "replication/results/mac05-workflow/analysis/analysis.json",
+      "bytes": 263255,
+      "sha256": "b595f0ba6bba03a849d6c5a9194d868ec69771c2d8622b99e2a195034e8497ce"
+    },
+    {
+      "path": "replication/results/mac05-workflow/analysis/per-type.csv",
+      "bytes": 8456,
+      "sha256": "e238af6b8815e4fb29b588336a11ef0e26d0d9d66053e99d70bc7fca722e341f"
+    },
+    {
+      "path": "replication/results/mac05-workflow/analysis/queued-summary.csv",
+      "bytes": 21203,
+      "sha256": "ee23cf074afe0ad7fb0f5b57a805daee2ad6f38a13b4816fab4084108733a911"
+    },
+    {
+      "path": "replication/results/mac05-workflow/analysis/queued-summary.md",
+      "bytes": 14199,
+      "sha256": "08cd875cb2ba59632c8e445abeae4ad8cb9a607805de99a806a92e98910d8d29"
+    },
+    {
+      "path": "replication/results/mac05-workflow/analysis/report.md",
+      "bytes": 6582,
+      "sha256": "fd8993cd5069d23e259ad42231a645176f426a25c82eb3520e9bee20690ae8b8"
+    },
+    {
+      "path": "replication/results/mac05-workflow/analysis/run-health.csv",
+      "bytes": 668,
+      "sha256": "8089bebb0d67f783d79a6b7b09dd7215e0ea686525c5183f5a30916266d369fe"
+    },
+    {
+      "path": "replication/results/mac05-workflow/batch.tar.gz",
+      "bytes": 627319,
+      "sha256": "018b109ee6722dae0dc532b7c2a7aac40143c695e7d0122fd718d7d22f42bc13"
+    },
+    {
+      "path": "replication/results/mac05-workflow/build-compatibility.diff",
+      "bytes": 771,
+      "sha256": "b123600f39237fb269a4cfb57812d49c11e2881e54ed66211332604b4763b58d"
+    },
+    {
+      "path": "replication/results/mac05-workflow/build.log.gz",
+      "bytes": 25133,
+      "sha256": "5789f922f8813472f86e19153f2c1c163c436ef4370cf802b95eb093e8ce94f5"
+    },
+    {
+      "path": "replication/results/mac05-workflow/container-environment.log",
+      "bytes": 162,
+      "sha256": "c4eb32733cdac24c6930b8052a0fbe66d695882ba20c0fc9830132d5c7f07319"
+    },
+    {
+      "path": "replication/results/mac05-workflow/container-processes.log",
+      "bytes": 360,
+      "sha256": "4c333818633c10a13ff6fc599e2c510ffae2dd43d02bf55a46051c190a9cb4bf"
+    },
+    {
+      "path": "replication/results/mac05-workflow/environment.log",
+      "bytes": 3644,
+      "sha256": "ee0de5e050d06ba6e37cfc5ddd1165bfa6ea4cc98029d8c005a209230bae906a"
+    },
+    {
+      "path": "replication/results/mac05-workflow/exit-status",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "replication/results/mac05-workflow/fresh-metric-replay.log",
+      "bytes": 234,
+      "sha256": "4eac8fd532186e5ea27802cd2bcd2d762f7e8029d613db24e2b5b4697fba07b1"
+    },
+    {
+      "path": "replication/results/mac05-workflow/host-checks.log",
+      "bytes": 234,
+      "sha256": "2cf08754b39989eb9d07bd36fd7355a8a32bec8e9f7f9a503ee6934052c0a4ce"
+    },
+    {
+      "path": "replication/results/mac05-workflow/host-replay.log",
+      "bytes": 2331,
+      "sha256": "1b4b53e1e026926fc6fe6bf1a04601cc5794de1bc4391aead748aa8c030159e7"
+    },
+    {
+      "path": "replication/results/mac05-workflow/mac02-metric-replay.log",
+      "bytes": 234,
+      "sha256": "4bd26cf4ed3af7562a0b9af13bbd56cfb2b94cd92ebf7b4e048d413b3cbbf35a"
+    },
+    {
+      "path": "replication/results/mac05-workflow/mac02-per-type.csv",
+      "bytes": 8350,
+      "sha256": "25b7f09154db61a8d2e2ffae87d9c348ad2ce598649ea5d99723d7483626f28c"
+    },
+    {
+      "path": "replication/results/mac05-workflow/mac02-trace-replay.log",
+      "bytes": 2008,
+      "sha256": "856599ab60171493153d7b1a1f6b5f20106cde9e87d18c91ddf7c6eb471b687c"
+    },
+    {
+      "path": "replication/results/mac05-workflow/reconciliation.log",
+      "bytes": 2008,
+      "sha256": "49f6df8087b7617a0c6c552d77fb453b1ca69d7c80f9036d1b56f74ae9177b00"
+    },
+    {
+      "path": "replication/results/mac05-workflow/tools/analyze.py",
+      "bytes": 22225,
+      "sha256": "2111bf5ed1631f62c2ce353a53cc80df9b691ce56a3193569fabcab9923c8d68"
+    },
+    {
+      "path": "replication/results/mac05-workflow/tools/check_cooperative_batch.py",
+      "bytes": 4639,
+      "sha256": "00fae989b6a4ca169a8bd0ef0f8f80ab7c83e457cd7b10b30eb5849607373d1f"
+    },
+    {
+      "path": "replication/results/mac05-workflow/tools/queued-cooperative-smoke.json",
+      "bytes": 767,
+      "sha256": "8215b86feb6fc08b4764d9a0ceb601a7e42f41fa68eccf51af54dbc5bb7b1921"
+    },
+    {
+      "path": "replication/results/mac05-workflow/tools/report.py",
+      "bytes": 5601,
+      "sha256": "f9df66057206daf306b8f7dd27d524daf1d39acd401c38c4175c478614733272"
+    },
+    {
+      "path": "replication/results/mac05-workflow/tools/run.py",
+      "bytes": 14174,
+      "sha256": "b8e33a243bcdddc22a98501b815f98a38d6cf3ee3e320f4c16e88acc5180f030"
+    },
+    {
+      "path": "replication/results/mac05-workflow/tools/test_i05_experiments.py",
+      "bytes": 15297,
+      "sha256": "b075b1775135da57a3c67aadd8b5be3f84aa496de9dd7954016cd9210f4adc1d"
+    },
+    {
+      "path": "replication/results/mac05-workflow/tools/validate-local.sh",
+      "bytes": 4670,
+      "sha256": "4ed4e66d67249685c5e9ca09e43ec857b4491c3f6ffb6fdb440879632734c7e2"
+    },
+    {
+      "path": "replication/results/mac05-workflow/tools.sha256",
+      "bytes": 743,
+      "sha256": "d183a8de91c372604604d4d6cf89d449773314a5b79bbbf7502102f794859a84"
+    },
+    {
+      "path": "replication/results/mac05-workflow/validation.log",
+      "bytes": 12003,
+      "sha256": "ae6ee70e99ffe318685b4bc51e5aa1b29e8ed52d5f1ef9eb72f07dc7edc591d0"
+    },
+    {
+      "path": "replication/results/mac05-workflow/verify-replay.py",
+      "bytes": 3497,
+      "sha256": "e51046f65269381ef32639cbc858b2574e2890ce03b438b8fedce6491bf71abe"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/README.md",
+      "bytes": 12058,
+      "sha256": "b902c931c3608b433761f85b32d7dbbbf9af6f22701be12182f0ca4d09ff5237"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/artifacts.sha256",
+      "bytes": 1361,
+      "sha256": "8006309774cb8afb04db5c364c95b2af136b1f991a83d483aab8806502e31144"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/batched-debug.log",
+      "bytes": 17473,
+      "sha256": "e320cf9eecab9217aab2511ed910af99a113601e9c4b19137fc183b80b9a5301"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/batched-optimized.log",
+      "bytes": 17473,
+      "sha256": "9250bdc44584e5f7ec86d92f0a8684a54801926ecc1135b3ddedd730067d683b"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/batched-ubsan.log",
+      "bytes": 17473,
+      "sha256": "9250bdc44584e5f7ec86d92f0a8684a54801926ecc1135b3ddedd730067d683b"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/batched_notification_cases.h",
+      "bytes": 7536,
+      "sha256": "773111897c2eb4e2fbf1085d2c4e0edd27925a7c9404b669180126678669c3f3"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/driver-cooperative.log",
+      "bytes": 1242,
+      "sha256": "c4b1ca90ce1cad95cbf7097bb1e2e5368761e3422b177be1ac1677c408a1f216"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/driver-wait.log",
+      "bytes": 1135,
+      "sha256": "e46fe7740e1b5389622bd046689f3a83d1c28cc61f5dfc63f075db9aa5a9a32d"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/environment.log",
+      "bytes": 3575,
+      "sha256": "a802a638b9c2034977505adb74d1e8b9cd6ed479822e70fd683b82c75e94daa4"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/exit-status",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-1.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-10.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-11.log",
+      "bytes": 17473,
+      "sha256": "c99afb3ebb262a45f8df16b9564d6bd0e98d5698343ee4eea628868b54044bd1"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-12.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-13.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-14.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-15.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-16.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-17.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-18.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-19.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-2.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-20.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-3.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-4.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-5.log",
+      "bytes": 17473,
+      "sha256": "b1084786a14c81885eddf3dd656db058fdac8a7c2eb32057b53ce45ce8496c5c"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-6.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-7.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-8.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/repeat-9.log",
+      "bytes": 17473,
+      "sha256": "476b98b23db22fd4ff5f9ee9c732d94412b6b89cac16d60ba414166c89179784"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/source.sha256",
+      "bytes": 830,
+      "sha256": "5e594f9aad2acc9cfa465497511f27d253744d68263be8ff1171b5706230bf42"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/validate.sh",
+      "bytes": 2917,
+      "sha256": "ea0d3dc8cb9a75922438fced58cebc686e4d3b832ad83d8d48ca40559d67dbe8"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/attempt1/validation.log",
+      "bytes": 13274,
+      "sha256": "0f49fe0ebdd24b5095589e53201aeed91192dfd3cd5c9cba6e5f399c5badfe1a"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/batched-debug.log",
+      "bytes": 17491,
+      "sha256": "739dea62f09c332bae06c94afc767bcea0bf6d8609cd1aaa6ae76c95f67a7314"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/batched-optimized.log",
+      "bytes": 17491,
+      "sha256": "628ab592bdf8b37475510ca0b41357e582af665b9eb0e7260d57a32639ab4d19"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/batched-ubsan.log",
+      "bytes": 17491,
+      "sha256": "628ab592bdf8b37475510ca0b41357e582af665b9eb0e7260d57a32639ab4d19"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/build-compatibility.diff",
+      "bytes": 771,
+      "sha256": "b123600f39237fb269a4cfb57812d49c11e2881e54ed66211332604b4763b58d"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/build.log.gz",
+      "bytes": 24910,
+      "sha256": "d4f7683b1b0aabac1370289df84b8f4a34469486f7fcaef1088138472eb8186f"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/container.log",
+      "bytes": 183,
+      "sha256": "c8b2d0f16223da8938dc5ad8bf2066e4f63ae8fb8252d220e4009607765de112"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/driver-cooperative.log",
+      "bytes": 1242,
+      "sha256": "ddddac63d63dd4f87861b2c02f7a6d785293c76c9fe6cd2714f06657af7f3acb"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/driver-wait.log",
+      "bytes": 1135,
+      "sha256": "387dd88a6c85e4018545f35b91e02d40eb5c5375a22414254490540b42501a2c"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/environment.log",
+      "bytes": 3577,
+      "sha256": "bad3213298464f0d8f3d25ed0d07762ca0bd5e41f715c9c5f276554d20394db9"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/exit-status",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/experiments-indexed.log",
+      "bytes": 1213,
+      "sha256": "63c6e058779f3bfe647ce6edf764ae9f133e169ff8c736455a75a55bf07d963d"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/git-index-repair.log",
+      "bytes": 568,
+      "sha256": "05ce5401802c5e3b34e3fd727899aed28751965c5babc82344e549d3e27bc3d3"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/host-artifacts.sha256",
+      "bytes": 272,
+      "sha256": "456e855f527fb2b865718c63c0126a32cfc62d62d5beff1845b28bf82005bbf7"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/host-environment.log",
+      "bytes": 412,
+      "sha256": "eca50d7bf9315848738fe93e4b6388e7c8430a2c936ccb36d7bc29181144dc9a"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/input-archive.sha256",
+      "bytes": 259,
+      "sha256": "b882fef4ffbbb6c897fd4e90014fed25e0750a1b94e19ee6d8014d2cc10e01d7"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/macos-batched-tsan.log",
+      "bytes": 4204,
+      "sha256": "c6f9168f6084d94a1cc1130ed02d071e95b6fdaa1eac7c2a16502952829313f9"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/macos-batched-wait.log",
+      "bytes": 4204,
+      "sha256": "c6f9168f6084d94a1cc1130ed02d071e95b6fdaa1eac7c2a16502952829313f9"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/macos-driver.log",
+      "bytes": 1133,
+      "sha256": "49c53167f0bd701f7e6898365f8607864348b5efbc83999c34e683f87d06b309"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/macos-experiments.log",
+      "bytes": 1213,
+      "sha256": "01c196c12ffb84a22a6efe6d8b0e7e942364cf09a03502de0fa8efece1d05da4"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/reconciliation.json",
+      "bytes": 74725,
+      "sha256": "ea70905cd99fc934baf6c5d292e79364fb993a95e28105bafc52b5c4d010f1b4"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/reconciliation.log",
+      "bytes": 80,
+      "sha256": "107c5f4e09683b9368c116a087ab70db9f4acbc79c99dfc0210599adeab2f28f"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-1.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-10.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-11.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-12.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-13.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-14.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-15.log",
+      "bytes": 17491,
+      "sha256": "7f3dc28f67bdd79b508429d12fafdf4f6524e6d1d19448b66c5b1bb99106ab66"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-16.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-17.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-18.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-19.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-2.log",
+      "bytes": 17491,
+      "sha256": "fe72724e5d1b9c7def5b0174937e1b07a86517baf61cd5b96d986ab08d3fc4f0"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-20.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-3.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-4.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-5.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-6.log",
+      "bytes": 17599,
+      "sha256": "6f381301ae4f05761cae62cfd3a4a9651e9c8d3c2245d0aa273a465bd90c1695"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-7.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-8.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/repeat-9.log",
+      "bytes": 17491,
+      "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/silo-context.log",
+      "bytes": 254,
+      "sha256": "c8c9ac9ab9b37220ceb9b5e638c6c557a9c96e215299fb9fe4b0bd7afb9714d8"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/source-base",
+      "bytes": 41,
+      "sha256": "a2b12479bebeded0a1c90c59f4af716e5c363f713781e107ec213a5796efde3a"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/source-changes.tar.gz",
+      "bytes": 15652,
+      "sha256": "3fc7631011cbb64edc6fb4422873278eda6fd01da67b7d5fc545621ab9dd70b7"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/source-tracked.diff",
+      "bytes": 11536,
+      "sha256": "d362f401d3a9a92ccaa75c3d209d16d6715047836a7334e61fcb8bb872d126a0"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/source.sha256",
+      "bytes": 830,
+      "sha256": "f6f8eddccfa251b40f476ff254c8368656e516f9a7ff05b9974328fd70b00eca"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/tpcc-mixed.log",
+      "bytes": 13962,
+      "sha256": "6d0d33630af57aa78212d9ef85c2c55393fb33a05fb4fe0ad9338b793385f215"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/unindexed-source.diff.gz",
+      "bytes": 6908,
+      "sha256": "2dfd59cdf8fa8d2f1793a2b9f91c917aef21766c1fafbf36a8ce4fd3e7419a96"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/validation.log",
+      "bytes": 6655,
+      "sha256": "865aab82f5d36a0101eaebfd75366a83a107f194e87fd5e492582a68d35b21ce"
+    },
+    {
+      "path": "replication/results/mac07-batched-notifications/verify-records.py",
+      "bytes": 3955,
+      "sha256": "1837fe843eec275e8a05ccf99f639e0b170f0f40880cc480a88f5cb900254fad"
+    },
+    {
+      "path": "replication/results/mac08-starvation/README.md",
+      "bytes": 12825,
+      "sha256": "c48f732e3a191b8fe307825c052173d80ac67f10475a9c5a93a532b2bc0609d8"
+    },
+    {
+      "path": "replication/results/mac08-starvation/analysis-100/analysis.json",
+      "bytes": 39405,
+      "sha256": "e33918d16f1b1955983d75b1be43ff29e35023640e3efa03afadae2e457ac300"
+    },
+    {
+      "path": "replication/results/mac08-starvation/analysis-100/queued-summary.csv",
+      "bytes": 3664,
+      "sha256": "b5f308b75c2320977c554dc978c21b339ee3c11f95e98a915055ecfa22888c69"
+    },
+    {
+      "path": "replication/results/mac08-starvation/analysis-100/queued-summary.md",
+      "bytes": 2184,
+      "sha256": "e9403b96fef1c5766321b951c50a63457132e5d152f8150d8d1e3b601a7ce7a4"
+    },
+    {
+      "path": "replication/results/mac08-starvation/analysis-25/analysis.json",
+      "bytes": 39323,
+      "sha256": "0c0e4d486bac7df31fb1a386c5f00736ff4442a018bd01eb8dfbb01e8ca2d45c"
+    },
+    {
+      "path": "replication/results/mac08-starvation/analysis-25/queued-summary.csv",
+      "bytes": 3633,
+      "sha256": "6d639627fdb299207e069a616e58e8dec8185cf7287a9fd9e354f0cbb5080928"
+    },
+    {
+      "path": "replication/results/mac08-starvation/analysis-25/queued-summary.md",
+      "bytes": 2185,
+      "sha256": "d9e236019d8b547899501a0da47cb6b839d8a44a6a362c2a0a6555f3e7892099"
+    },
+    {
+      "path": "replication/results/mac08-starvation/artifacts.sha256",
+      "bytes": 668,
+      "sha256": "9cc1f732f262395cf615b65f2d22dea3c98ccf461ae7e020c1f6d2dd183b146a"
+    },
+    {
+      "path": "replication/results/mac08-starvation/attempt1/starvation-debug.log",
+      "bytes": 86,
+      "sha256": "d22139f359353526d341cc2cfe7fdde4a2750d70a5886cbead5abecb3408f052"
+    },
+    {
+      "path": "replication/results/mac08-starvation/attempt2/starvation-debug.log",
+      "bytes": 2290,
+      "sha256": "92b55928638b96a70d8cc4419fe3a3579c9d90611ef53aac20a72b489b9df736"
+    },
+    {
+      "path": "replication/results/mac08-starvation/build-compatibility.diff",
+      "bytes": 771,
+      "sha256": "b123600f39237fb269a4cfb57812d49c11e2881e54ed66211332604b4763b58d"
+    },
+    {
+      "path": "replication/results/mac08-starvation/build.log.gz",
+      "bytes": 24132,
+      "sha256": "079d59acf4bfe7d19e13132c25e63d2308929dbb6391586ff7d978136e4eefe1"
+    },
+    {
+      "path": "replication/results/mac08-starvation/container.log",
+      "bytes": 183,
+      "sha256": "a1a0aea7e7c709d5d8361727edfb932c008793ea465e0f5b58800c703482f88e"
+    },
+    {
+      "path": "replication/results/mac08-starvation/corrected-validation-script.sha256",
+      "bytes": 107,
+      "sha256": "57222f43cfd2fed73815fbf5fa3b340a972b2338ced6bce67a6b009c4214e751"
+    },
+    {
+      "path": "replication/results/mac08-starvation/driver-cooperative.log",
+      "bytes": 1421,
+      "sha256": "5a2589acaf35642d415d593f089f7ae44ff10253b2cd0bc977a46014f8f82adf"
+    },
+    {
+      "path": "replication/results/mac08-starvation/driver-wait.log",
+      "bytes": 1314,
+      "sha256": "327bcd4929ec1193cd5ab5a66900e5380d064d6f5de1f91eff69ea5224f73db7"
+    },
+    {
+      "path": "replication/results/mac08-starvation/environment.log",
+      "bytes": 3535,
+      "sha256": "84537ff2c77f8ad4e580bbde1963dfe9e6ec064b13660bfb55b32d4d06c599c0"
+    },
+    {
+      "path": "replication/results/mac08-starvation/exit-status",
+      "bytes": 2,
+      "sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "path": "replication/results/mac08-starvation/experiments.log",
+      "bytes": 1308,
+      "sha256": "7bdd87085e827119ff2df549d9f3f6daaedbfea70e438dea617cc85c4ce76e9e"
+    },
+    {
+      "path": "replication/results/mac08-starvation/final-checks.log",
+      "bytes": 145,
+      "sha256": "dd8b9327f8be7afd1505b846b798996669dc00e557888130e8a5edf37b2a67d9"
+    },
+    {
+      "path": "replication/results/mac08-starvation/host-budget-tsan.log",
+      "bytes": 59,
+      "sha256": "470bab252b826be1062737a3189ae0b48e42673f4cd20d6f1358a42295a56266"
+    },
+    {
+      "path": "replication/results/mac08-starvation/host-driver.log",
+      "bytes": 1315,
+      "sha256": "7489e736f8fea205d6e179eb425245276a6dbe3453030692bf935b89a93e00ff"
+    },
+    {
+      "path": "replication/results/mac08-starvation/host-environment.log",
+      "bytes": 369,
+      "sha256": "814bc37e4d893dab9979056a132c4356ab094fdc4ad0d6304b2481adc6d1f8bd"
+    },
+    {
+      "path": "replication/results/mac08-starvation/host-experiments.log",
+      "bytes": 1308,
+      "sha256": "f4fa44c91d53abb335f6913c831b96815c4aea6e77c27c90a295f9152c54dd2e"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-100/queued-starvation-100-eu99eesv/batch.json",
+      "bytes": 2171,
+      "sha256": "918b98e0ca0dfd83f843e9d6893ba88f480b55006c1b354bcfbc5a70bb1c9ae0"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-100/queued-starvation-100-eu99eesv/masstree.diff",
+      "bytes": 271894,
+      "sha256": "71ca5788c3b26870966ae9d19bd9fbe287d2f93642fb31a574111630cb3c28ac"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-100/queued-starvation-100-eu99eesv/queued-starvation-100-eu99eesv-r1-v1/manifest.json",
+      "bytes": 2656,
+      "sha256": "89fa237bfaaa786e2f6aee4cf19d37ed84f7b571b79451799eb07318a219a866"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-100/queued-starvation-100-eu99eesv/queued-starvation-100-eu99eesv-r1-v1/stderr.log",
+      "bytes": 2756,
+      "sha256": "6160597e2b04da270b3e4ccf5dfb9a8d4061cba19b60f4a78bc41f86fad2d94e"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-100/queued-starvation-100-eu99eesv/queued-starvation-100-eu99eesv-r1-v1/stdout.log",
+      "bytes": 2785281,
+      "sha256": "6045f34f74d733fcd8b95eb4541ad16a82374883263e73b7385e9e4d0709ad88"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-100/queued-starvation-100-eu99eesv/queued-starvation-100-eu99eesv-r1-v2/manifest.json",
+      "bytes": 2663,
+      "sha256": "2c69198fcd702d075854ef2c977cdc32f6a38ea35c01f4bfa4b42322c9833298"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-100/queued-starvation-100-eu99eesv/queued-starvation-100-eu99eesv-r1-v2/stderr.log",
+      "bytes": 2995,
+      "sha256": "3f06378ff94fb18b2ae2926b9261a6e39e9b32b5d86300cf0d9cf53a928c69c1"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-100/queued-starvation-100-eu99eesv/queued-starvation-100-eu99eesv-r1-v2/stdout.log",
+      "bytes": 5310983,
+      "sha256": "d8e9c8bc6b25869a0e07bec6adc067cdd80e35e6074a91f7d1ed945916c23636"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-100/queued-starvation-100-eu99eesv/silo.diff",
+      "bytes": 20496,
+      "sha256": "7060b7667bfe9328c0e07f60c0a2430320f7507504a66e8a1702edcc1ca19055"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-25/queued-starvation-25-bfo13vtz/batch.json",
+      "bytes": 2166,
+      "sha256": "3b1f87534b76dfa2c196dbe67d2b3bba6188d6e46f569b1bd946d71a990b78c3"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-25/queued-starvation-25-bfo13vtz/masstree.diff",
+      "bytes": 271894,
+      "sha256": "71ca5788c3b26870966ae9d19bd9fbe287d2f93642fb31a574111630cb3c28ac"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-25/queued-starvation-25-bfo13vtz/queued-starvation-25-bfo13vtz-r1-v1/manifest.json",
+      "bytes": 2652,
+      "sha256": "9bdf795683e01a431c4881907a2318c216f7b703e90c7e750e6abb2146f8005e"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-25/queued-starvation-25-bfo13vtz/queued-starvation-25-bfo13vtz-r1-v1/stderr.log",
+      "bytes": 2759,
+      "sha256": "13e67c3b209f0d4bd96a9497526404cd8ebe4099c55ac3f376100c9084dad852"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-25/queued-starvation-25-bfo13vtz/queued-starvation-25-bfo13vtz-r1-v1/stdout.log",
+      "bytes": 2752584,
+      "sha256": "e873f9b52d3e51500e069ba3eb3c488c7acfb95f1f24f9fcb35016292c22e769"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-25/queued-starvation-25-bfo13vtz/queued-starvation-25-bfo13vtz-r1-v2/manifest.json",
+      "bytes": 2658,
+      "sha256": "4189cf637856e7e6f4f8034694ed41174abce93d1b84c41fedb4d61b563910a2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-25/queued-starvation-25-bfo13vtz/queued-starvation-25-bfo13vtz-r1-v2/stderr.log",
+      "bytes": 3004,
+      "sha256": "585d7f0719a237918532fa024034b9ea06e88f1eb55dbfeeb00c4a28a0fa698b"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-25/queued-starvation-25-bfo13vtz/queued-starvation-25-bfo13vtz-r1-v2/stdout.log",
+      "bytes": 5322993,
+      "sha256": "9b1ec2bd9ec9cc16dc39dc8a56d488aab75a11e336dc690824f1981e64aed777"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-25/queued-starvation-25-bfo13vtz/silo.diff",
+      "bytes": 20496,
+      "sha256": "7060b7667bfe9328c0e07f60c0a2430320f7507504a66e8a1702edcc1ca19055"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-exit-status",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-recovery.log",
+      "bytes": 2453,
+      "sha256": "cc005db549d1a64a0e91d0c58f7ddbe1f7460940be2af8b742a35b81522ef5aa"
+    },
+    {
+      "path": "replication/results/mac08-starvation/pressure-recovery.sh",
+      "bytes": 1576,
+      "sha256": "8864a8693fa1ef873bbb5a7783a8b972994ae2938d700e56b7135f144a6bde4a"
+    },
+    {
+      "path": "replication/results/mac08-starvation/reconciliation.json",
+      "bytes": 3572,
+      "sha256": "83c50073acb756038fe6df85853dd1fc3ecfc3375311048aacb351fbb13cbe4c"
+    },
+    {
+      "path": "replication/results/mac08-starvation/reconciliation.log",
+      "bytes": 3572,
+      "sha256": "83c50073acb756038fe6df85853dd1fc3ecfc3375311048aacb351fbb13cbe4c"
+    },
+    {
+      "path": "replication/results/mac08-starvation/removed-binaries.sha256",
+      "bytes": 600,
+      "sha256": "3a473e5f445d10eb2d210cf1fe74ff2752ca8a48a631c33bf1f076c294f5cc7e"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-1.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-10.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-11.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-12.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-13.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-14.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-15.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-16.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-17.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-18.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-19.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-2.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-20.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-3.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-4.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-5.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-6.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-7.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-8.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/repeat-9.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/replay.log",
+      "bytes": 165,
+      "sha256": "a48c558e3aaa9ee9623cb4476ca500f6018df41c1ad2bb70fb843ad3770eee91"
+    },
+    {
+      "path": "replication/results/mac08-starvation/report-100/per-type.csv",
+      "bytes": 2977,
+      "sha256": "49290f3351b3b51a7d965653ab9fed04d95dd8055d0b88a8ed596c28f82a96c2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/report-100/report.md",
+      "bytes": 2683,
+      "sha256": "056867e5559796f7bdec884b8ea18e9995127b2e6922b7a9b7b4143a07e1c742"
+    },
+    {
+      "path": "replication/results/mac08-starvation/report-100/run-health.csv",
+      "bytes": 240,
+      "sha256": "4e04ca7d49a8b9a6a9fa1945a71a844cdf7ebc1ef30261dfaebd8953774b84c7"
+    },
+    {
+      "path": "replication/results/mac08-starvation/report-25/per-type.csv",
+      "bytes": 2951,
+      "sha256": "879b2c5170a482a898b07846468ffe19a429cac6f131fdc2268e9785cd9b1a8e"
+    },
+    {
+      "path": "replication/results/mac08-starvation/report-25/report.md",
+      "bytes": 2659,
+      "sha256": "8760af9750e0b353f32a42248ccd47230951d00459d34b8dcccff7e2c7d7b1a6"
+    },
+    {
+      "path": "replication/results/mac08-starvation/report-25/run-health.csv",
+      "bytes": 238,
+      "sha256": "052824f3aed48bf2fddf706bf3e1e1c3a51a6dbe420b0ef86044576e1b7340cb"
+    },
+    {
+      "path": "replication/results/mac08-starvation/silo-context.log",
+      "bytes": 254,
+      "sha256": "c8c9ac9ab9b37220ceb9b5e638c6c557a9c96e215299fb9fe4b0bd7afb9714d8"
+    },
+    {
+      "path": "replication/results/mac08-starvation/source-base",
+      "bytes": 41,
+      "sha256": "be6aa10611b3d3b95cb5aa20ac2586e1fc62cb4195dd341e092fd542d5c7977d"
+    },
+    {
+      "path": "replication/results/mac08-starvation/source-changes.tar.gz",
+      "bytes": 56883,
+      "sha256": "59ddaefb0e4ed08147582bb80eb0ff8af4320dcdfab7e95ef2aa06ca57ab1f44"
+    },
+    {
+      "path": "replication/results/mac08-starvation/source-verification.log",
+      "bytes": 160,
+      "sha256": "c0d9511a467062effc0d42947cff9d28f5b7909a5fea841d06414d5afc644673"
+    },
+    {
+      "path": "replication/results/mac08-starvation/source.sha256",
+      "bytes": 1243,
+      "sha256": "4eca0ecb255c46c8cab0f8178c96179bfe13baa822ace93f8ea8464029e9b864"
+    },
+    {
+      "path": "replication/results/mac08-starvation/starvation-debug.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/starvation-optimized.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/starvation-ubsan.log",
+      "bytes": 7515,
+      "sha256": "6d1d8c7e4cc92b97c591c07c60ae775fbc9d1713f35e22ce3f9fbdc76cac9cb2"
+    },
+    {
+      "path": "replication/results/mac08-starvation/tpcc-mixed.log",
+      "bytes": 23491,
+      "sha256": "0fe4899a669ee1e2d871d48f456074fe6ffdcec706719ce16ea040b448052a53"
+    },
+    {
+      "path": "replication/results/mac08-starvation/validation-attempt1-exit-status",
+      "bytes": 2,
+      "sha256": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3"
+    },
+    {
+      "path": "replication/results/mac08-starvation/validation-attempt1.sh",
+      "bytes": 3695,
+      "sha256": "5870e6012ddee8550bf0c984ac50dafda5f97fa5d611f2cbefb832ec9effde78"
+    },
+    {
+      "path": "replication/results/mac08-starvation/validation.log",
+      "bytes": 5642,
+      "sha256": "5578c6f3228dadc92617df91a6eea4d360ef71e4e1a9e43aed4f6ce82456718f"
+    },
+    {
+      "path": "replication/results/mac08-starvation/verify-records.py",
+      "bytes": 5601,
+      "sha256": "160651ed1ba601fba33afce3f7406a79ad0300c615aa915e328ceb65be2812e0"
+    },
+    {
+      "path": "replication/results/mac09-signal/README.md",
+      "bytes": 13216,
+      "sha256": "75f445bc8363f25885652dc5d5a35e101817bd6cb914912fea90cf604c804b3a"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt1/batched.log",
+      "bytes": 5135,
+      "sha256": "f122806930d11a065631e784fad35d00a2a139a4a51ce4cea7a85bea500db924"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt1/signal-fp.log",
+      "bytes": 43,
+      "sha256": "de25f493e2a030af329f5f01121c9f9249da8508936bfa0a119d0a5c8f638731"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt1/signal-interior.log",
+      "bytes": 395,
+      "sha256": "e4c1067f0099313409afaebcf1e465de400a5b787d0549e46d53baa9b4db18ec"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt1/signal.log",
+      "bytes": 224,
+      "sha256": "7eb07863d2f1c94e3bab121584cedf4ca870e257a9a2e42fb59d6a5c05d2d875"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt2/batched_notifications-debug.log",
+      "bytes": 21990,
+      "sha256": "359037e658f24077dc97f8d650192edeaa43d001fd92b4405544fb67918208dc"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt2/environment.log",
+      "bytes": 3536,
+      "sha256": "d27732f9e79ea78dee50d3b62e6ccd3acd371f429d435d31f42c5dfbb09c7c9f"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt2/exit-status",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt2/signal-debug.log",
+      "bytes": 395,
+      "sha256": "30b48e7428d4d3b1e0c6c33b9c171ac4fc3e20b76f50d4c1a59ddf43af03d993"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt2/source-base",
+      "bytes": 41,
+      "sha256": "b1d121e88bc24ef055b85056d119f8f63676ed2f4fe84967455620f8612afbfe"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt2/source-tracked.diff",
+      "bytes": 25627,
+      "sha256": "416dcef199dac42e89efa9b67f2cd9d7d86dfadbc0f06ec6d9ac9b13d1edd07a"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt2/source.sha256",
+      "bytes": 2181,
+      "sha256": "ef42547d14a3bb630a8c7a58cd85633d99b0a8a11b98c68b586725913037bbd5"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt2/starvation_cases.h",
+      "bytes": 9976,
+      "sha256": "4c40f9f98b0add4d67660f1afb1d36316d48ce46cb19781129cc611c28bcb917"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt2/validation.log",
+      "bytes": 3055,
+      "sha256": "075fe409738370d171b6f43d5b8eca1c92ffecb143a3d3ab9fd8f8a1af66083b"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt3/abort-probe-build.log.gz",
+      "bytes": 9066,
+      "sha256": "015b6f4b33c7f67509d79a2fb43ffe03b272fcb0b46159b6f0ec81f758136809"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt3/abort-probe-source.sha256",
+      "bytes": 103,
+      "sha256": "4fde3fa009dc9847d9241fa304bf9fb25cbe8207c2c4b08a0b628a5d649ef764"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt3/exit-status",
+      "bytes": 4,
+      "sha256": "e726b440cc164001999e718b51780d80314709efe06e7857282377be9111127b"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt3/tpcc-checkpoint-aborts.log",
+      "bytes": 20987,
+      "sha256": "20f067967038a3edcaab91f3f2c371f4f87b2a3435a3f8db00b13fc4f56cb788"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt3/tpcc-signal-aborts.log",
+      "bytes": 25908,
+      "sha256": "544d274230ca93d5557a8029016bd453a7c79977190cc04de01ec156112ca7f5"
+    },
+    {
+      "path": "replication/results/mac09-signal/attempt3/tpcc_mixed_test.cc",
+      "bytes": 15396,
+      "sha256": "3ed9e242029a83bf66eb35f680c801ec8b10720ef74b05fc5e0ee6df49abd2ff"
+    },
+    {
+      "path": "replication/results/mac09-signal/container-stop.log",
+      "bytes": 336,
+      "sha256": "f71054b462736bf240272f8158e5627a154a40ce559affdb96ca1163e3887fc9"
+    },
+    {
+      "path": "replication/results/mac09-signal/container.log",
+      "bytes": 125,
+      "sha256": "4b9cec4f2748182cd1b1d1cff1adc661f52fe20ab6737b072a29535aa84ce5c0"
+    },
+    {
+      "path": "replication/results/mac09-signal/excluded-binaries 2.sha256",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "replication/results/mac09-signal/excluded-binaries.sha256",
+      "bytes": 2317,
+      "sha256": "00c101258e561a095766c8d7d2f9cefcd9304d427713d662fdd23cab3a70dbcb"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/analysis-100/analysis.json",
+      "bytes": 39092,
+      "sha256": "d2963e650b4fdab2d359c933f6bfcbe1a3be02c4e1da999cc6937421b52f9172"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/analysis-100/queued-summary.csv",
+      "bytes": 3585,
+      "sha256": "9b4bddc9a0905430246352d864008ba1e5e3f6a21d8b23454473b1300159b7bb"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/analysis-100/queued-summary.md",
+      "bytes": 2159,
+      "sha256": "4475fa5d935885fb692c24ad79d254f328a1909ec441d2801d9207a6f032df6e"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/analysis-25/analysis.json",
+      "bytes": 39142,
+      "sha256": "878d2edd61e2b7786f68f7c6d89ae2bd4db83f0f4c8fb07987c5a3ab6a8dfe72"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/analysis-25/queued-summary.csv",
+      "bytes": 3622,
+      "sha256": "8771a429258104979b8c723fd7f467aab24c53c5912a6f7d8b3232696c21d50c"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/analysis-25/queued-summary.md",
+      "bytes": 2177,
+      "sha256": "e6a1a9a7a5c6295b78e3c5f8e57e93e3628a4229dd0ca5334aa8732a2bd0214e"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/artifacts.sha256",
+      "bytes": 1345,
+      "sha256": "19e10f4a84ad181857397e2269a775466b2fa816d9b801ca5cf79bd393ecbcd1"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-checkpoint.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-debug.log",
+      "bytes": 21993,
+      "sha256": "0a3e94301ce0da8c77736e3d2444125acf59a7ebfee387c5d145b94eeedf30d7"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-optimized.log",
+      "bytes": 21987,
+      "sha256": "632df4b03c15239f47d651c6e13fc63f6da94345ce03643357d854080cfe851e"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-1.log",
+      "bytes": 21987,
+      "sha256": "1544722558fb765ccf362933d2e1f54503bb187337ff3a0448efd4192967c921"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-10.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-11.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-12.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-13.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-14.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-15.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-16.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-17.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-18.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-19.log",
+      "bytes": 21988,
+      "sha256": "92173824d9f0a7b7a9fb11ae08c302d74cb1f056c26390e5f122947bf2ea4f14"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-2.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-20.log",
+      "bytes": 21987,
+      "sha256": "6fb38d549c013ca669e9e5fee815484b4757ffd3b8282f7feff7bd6ec6894fed"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-3.log",
+      "bytes": 21987,
+      "sha256": "fc017ce1b8b1eda2139ad17eeb8808bcc38e5891d27506000951848a64da8aaf"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-4.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-5.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-6.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-7.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-8.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-repeat-9.log",
+      "bytes": 21988,
+      "sha256": "0f0ba79611fc7ecb61e565b747528ee36082f8f7a12efc751e6aaa1319a7281e"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-ubsan 2.log",
+      "bytes": 21987,
+      "sha256": "89000c428436db24d26f8af7910f3aebc664a8bf2c9ca904f7a9cf3c13746b8c"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/batched_notifications-ubsan.log",
+      "bytes": 21987,
+      "sha256": "89000c428436db24d26f8af7910f3aebc664a8bf2c9ca904f7a9cf3c13746b8c"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/build 2.log",
+      "bytes": 712249,
+      "sha256": "1d359a7ccbcc33f489a985c1752624d611c2d6abae5c69eec25527c5021d5618"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/build.log.gz",
+      "bytes": 24169,
+      "sha256": "7e31a2b6b9356bc903e7a358f7ccd3005a847531c0ab57fd99bd8e841cb630d9"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/driver-cooperative 2.log",
+      "bytes": 1569,
+      "sha256": "2b0423939dc82b83722a9fbff8bab124a93ad9e3fdf722d458a4eb892c759ff6"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/driver-cooperative.log",
+      "bytes": 1569,
+      "sha256": "2b0423939dc82b83722a9fbff8bab124a93ad9e3fdf722d458a4eb892c759ff6"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/driver-wait.log",
+      "bytes": 1462,
+      "sha256": "125efbc688a413f4d47330b3443f15bf36ae0b9372dbdb4b4706109f505251c4"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/engine-handler-disassembly 2.txt",
+      "bytes": 5111,
+      "sha256": "3a4c1025a4ec4ccc3be2b1ad844ce2b428c77cd46579c397a5022ab6896f288e"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/engine-handler-disassembly.txt",
+      "bytes": 5111,
+      "sha256": "3a4c1025a4ec4ccc3be2b1ad844ce2b428c77cd46579c397a5022ab6896f288e"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/environment.log",
+      "bytes": 3536,
+      "sha256": "9928b25a2a54839cc4f56773966beb49aaf6bf430ed346406754060054900ec7"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/exit-status",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/exit-status 2",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/experiments.log",
+      "bytes": 1410,
+      "sha256": "50b3f296cc6dd82b44f506e35d4ca408837ee9099d8ec39581306243d54cc211"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/handler-disassembly.txt",
+      "bytes": 5782,
+      "sha256": "13ce84c15d5b80a8a1e1b4611409638f254c574b6609dcc78bc9022e7497f595"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/host-report-replay.log",
+      "bytes": 395,
+      "sha256": "51e38f35e80a962da82add2b95f868522678ef3e6f0e124af899f02516d3e9f3"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/batch.json",
+      "bytes": 2114,
+      "sha256": "e3b2f992fffc8cbfa5470ab325d6947cb56eb1e00032cd3212105dc16ea3a167"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/masstree 2.diff",
+      "bytes": 271894,
+      "sha256": "71ca5788c3b26870966ae9d19bd9fbe287d2f93642fb31a574111630cb3c28ac"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/masstree.diff",
+      "bytes": 271894,
+      "sha256": "71ca5788c3b26870966ae9d19bd9fbe287d2f93642fb31a574111630cb3c28ac"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/queued-signal-100-r36o_fcu-r1-v1/manifest.json",
+      "bytes": 2608,
+      "sha256": "33479b53ecfba7450442628262484f462be362efe449b1e9455d0e526ec6a772"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/queued-signal-100-r36o_fcu-r1-v1/stderr 2.log",
+      "bytes": 2921,
+      "sha256": "fda90d5fedbbc729cd1816158e28d3adb13f9c6b0ae6747c84ced9b243f80ae9"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/queued-signal-100-r36o_fcu-r1-v1/stderr.log",
+      "bytes": 2921,
+      "sha256": "fda90d5fedbbc729cd1816158e28d3adb13f9c6b0ae6747c84ced9b243f80ae9"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/queued-signal-100-r36o_fcu-r1-v1/stdout.log",
+      "bytes": 2691044,
+      "sha256": "b3128fd540ae8ca8a9ffa14c8779542d91f260fc328671da2a17dd1042c48bab"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/queued-signal-100-r36o_fcu-r1-v2/manifest.json",
+      "bytes": 2614,
+      "sha256": "9b08385a2e58fab316a069d539f2888024373f256a6af00025dfabbf1e814613"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/queued-signal-100-r36o_fcu-r1-v2/stderr.log",
+      "bytes": 3328,
+      "sha256": "6ffd8bac4b35e95fd125e796dc767187df79714f3d1491be7ea57235f6d7c8ea"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/queued-signal-100-r36o_fcu-r1-v2/stdout 2.log",
+      "bytes": 5191486,
+      "sha256": "5181b7695cf2bd5ff9207638898f93a77cc96634d4bd231944a3e18d832c782e"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/queued-signal-100-r36o_fcu-r1-v2/stdout.log",
+      "bytes": 5191486,
+      "sha256": "5181b7695cf2bd5ff9207638898f93a77cc96634d4bd231944a3e18d832c782e"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-100/queued-signal-100-r36o_fcu/silo.diff",
+      "bytes": 27718,
+      "sha256": "1c2c3b0ff9f9b501685b7aecc5c34de2df95300fe95220f2bdb4fdd73a00afe8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/batch 2.json",
+      "bytes": 2109,
+      "sha256": "82c961ca813db95ad5f50fc955f9d05eb5803d8ad55e5cd2f13eba69ee0765b3"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/batch.json",
+      "bytes": 2109,
+      "sha256": "82c961ca813db95ad5f50fc955f9d05eb5803d8ad55e5cd2f13eba69ee0765b3"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/masstree.diff",
+      "bytes": 271894,
+      "sha256": "71ca5788c3b26870966ae9d19bd9fbe287d2f93642fb31a574111630cb3c28ac"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/queued-signal-25-ipz89ghd-r1-v1/manifest 2.json",
+      "bytes": 2602,
+      "sha256": "7a7fe68e072be5ca111cdb297c71a3917cf60a30e7e53ea28bb377ccab514522"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/queued-signal-25-ipz89ghd-r1-v1/manifest.json",
+      "bytes": 2602,
+      "sha256": "7a7fe68e072be5ca111cdb297c71a3917cf60a30e7e53ea28bb377ccab514522"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/queued-signal-25-ipz89ghd-r1-v1/stderr.log",
+      "bytes": 2925,
+      "sha256": "5ce73e3272207bf5f38287cc0334ed7a026b1f53548179daaf771b901fa218ab"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/queued-signal-25-ipz89ghd-r1-v1/stdout 2.log",
+      "bytes": 2614867,
+      "sha256": "21800544b5236007ed9f3b483004b7e137998e31b4905df7a28bcc5402cd5e85"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/queued-signal-25-ipz89ghd-r1-v1/stdout.log",
+      "bytes": 2614867,
+      "sha256": "21800544b5236007ed9f3b483004b7e137998e31b4905df7a28bcc5402cd5e85"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/queued-signal-25-ipz89ghd-r1-v2/manifest.json",
+      "bytes": 2609,
+      "sha256": "e2f15491258e8055acafdd03dc22d6eb225fc804ef8103117f638d2243919372"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/queued-signal-25-ipz89ghd-r1-v2/stderr.log",
+      "bytes": 3339,
+      "sha256": "8fa86cb1c8858ab7d1054cda411dc9c2b8c35d2c475993c04160f5f49c2f6205"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/queued-signal-25-ipz89ghd-r1-v2/stdout 2.log",
+      "bytes": 5081435,
+      "sha256": "475f2328f2594285b1ea687b95417212b517bb21ef9a6c4e6e24a05e7459ea73"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/queued-signal-25-ipz89ghd-r1-v2/stdout.log",
+      "bytes": 5081435,
+      "sha256": "475f2328f2594285b1ea687b95417212b517bb21ef9a6c4e6e24a05e7459ea73"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/pressure-25/queued-signal-25-ipz89ghd/silo.diff",
+      "bytes": 27718,
+      "sha256": "1c2c3b0ff9f9b501685b7aecc5c34de2df95300fe95220f2bdb4fdd73a00afe8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/reconciliation 2.json",
+      "bytes": 280681,
+      "sha256": "1a4044fc4978721c3a8de911762c696eee41f789324a0511fcebc634d0f99c4b"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/reconciliation 2.log",
+      "bytes": 3386,
+      "sha256": "8a48cf0b07b5bd04baeb2c6c8185cd37b8bab50da694de36155ada6c98eb506c"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/reconciliation.json",
+      "bytes": 280681,
+      "sha256": "fa802e71c58f877ecb46e64de153753140c63a2d1b2c2377aaccc63263e0ddee"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/reconciliation.log",
+      "bytes": 3386,
+      "sha256": "8a48cf0b07b5bd04baeb2c6c8185cd37b8bab50da694de36155ada6c98eb506c"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/report-100/per-type.csv",
+      "bytes": 2911,
+      "sha256": "b8e57cb176d11f94c2eb34a3e0c52ad0bc5b4723d7b6fcc5c92ccef8979ff352"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/report-100/report 2.md",
+      "bytes": 2622,
+      "sha256": "b401f5b4ed230d0d86dad11ca26958554b7ed5285b3b819e1e04ff8589c33ce9"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/report-100/report.md",
+      "bytes": 2622,
+      "sha256": "b401f5b4ed230d0d86dad11ca26958554b7ed5285b3b819e1e04ff8589c33ce9"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/report-100/run-health 2.csv",
+      "bytes": 235,
+      "sha256": "10edf368aad2ef368db462e987068758ef37642005de396da4ed5947223132a7"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/report-100/run-health.csv",
+      "bytes": 235,
+      "sha256": "10edf368aad2ef368db462e987068758ef37642005de396da4ed5947223132a7"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/report-25/per-type 2.csv",
+      "bytes": 2961,
+      "sha256": "72adab19e404ffe7c8c47237b8f6939e1b1f8cc3c31440bd6e2ecf81fa8d593c"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/report-25/per-type.csv",
+      "bytes": 2961,
+      "sha256": "72adab19e404ffe7c8c47237b8f6939e1b1f8cc3c31440bd6e2ecf81fa8d593c"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/report-25/report.md",
+      "bytes": 2653,
+      "sha256": "8d22bb76016d745716e44ded9989c6ac8e60d80b863f09e6a718a16eaad89e06"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/report-25/run-health 2.csv",
+      "bytes": 233,
+      "sha256": "e6046f9056149e88e82724ebe6919128896a04c5759d8a6cbf545156a7e9f045"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/report-25/run-health.csv",
+      "bytes": 233,
+      "sha256": "e6046f9056149e88e82724ebe6919128896a04c5759d8a6cbf545156a7e9f045"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/runtime-verification.log",
+      "bytes": 1083,
+      "sha256": "c5d04e80338db16c866769dc911721f4c7824a4685c7dadd94929185bd2da38f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-debug.log",
+      "bytes": 395,
+      "sha256": "82f95786beb69aefcc3c7ecb66346a5fbbf5d5680d3df7493ee01f037da9af9e"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-disassembly 2.txt.gz",
+      "bytes": 23004,
+      "sha256": "5cdfb1a356df05774b9504d972b823d4c308a1af92a14d931255a2411babb282"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-disassembly.txt.gz",
+      "bytes": 23004,
+      "sha256": "5cdfb1a356df05774b9504d972b823d4c308a1af92a14d931255a2411babb282"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-optimized 2.log",
+      "bytes": 395,
+      "sha256": "cc90174104f982f6aa356cf2e239a86086568f6f525b1d959a0bb87e1227dd72"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-optimized.log",
+      "bytes": 395,
+      "sha256": "cc90174104f982f6aa356cf2e239a86086568f6f525b1d959a0bb87e1227dd72"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-1 2.log",
+      "bytes": 395,
+      "sha256": "a4a9ff0ca4e3cc12f62528251123cd1cf999d007fd57d03481775fa6ffe25dfe"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-1.log",
+      "bytes": 395,
+      "sha256": "a4a9ff0ca4e3cc12f62528251123cd1cf999d007fd57d03481775fa6ffe25dfe"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-10 2.log",
+      "bytes": 395,
+      "sha256": "1ff3c982f81f5391e296dfe5bb9f65e8c561181b754857d33b75fed9edc80f7f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-10.log",
+      "bytes": 395,
+      "sha256": "1ff3c982f81f5391e296dfe5bb9f65e8c561181b754857d33b75fed9edc80f7f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-11.log",
+      "bytes": 395,
+      "sha256": "7a22e530711bc454d0b1c3cbc78b5e0a3a87b8994e290addb562c2a7eec34709"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-12 2.log",
+      "bytes": 395,
+      "sha256": "b214de4258b3b739aaa03862e1dcfd7f4e1db834202a1950b1aeb39c0110e587"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-12.log",
+      "bytes": 395,
+      "sha256": "b214de4258b3b739aaa03862e1dcfd7f4e1db834202a1950b1aeb39c0110e587"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-13.log",
+      "bytes": 395,
+      "sha256": "7014d79385696736be9bde5a65eeedb10972841f366e5f36b113d9f55c86bdb6"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-14 2.log",
+      "bytes": 395,
+      "sha256": "f735fdd0d1befe7d2761f2c3619b4a4a8fd396e120890bd1511dbe310cfb3ff9"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-14.log",
+      "bytes": 395,
+      "sha256": "f735fdd0d1befe7d2761f2c3619b4a4a8fd396e120890bd1511dbe310cfb3ff9"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-15 2.log",
+      "bytes": 395,
+      "sha256": "598dddfa13ed991c3e0d3cb5fccba130e83a592249885dab7661546227b60924"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-15.log",
+      "bytes": 395,
+      "sha256": "598dddfa13ed991c3e0d3cb5fccba130e83a592249885dab7661546227b60924"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-16 2.log",
+      "bytes": 395,
+      "sha256": "cc90174104f982f6aa356cf2e239a86086568f6f525b1d959a0bb87e1227dd72"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-16.log",
+      "bytes": 395,
+      "sha256": "cc90174104f982f6aa356cf2e239a86086568f6f525b1d959a0bb87e1227dd72"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-17 2.log",
+      "bytes": 395,
+      "sha256": "a7ab331107fff466e55630f0fe2770706387dd0fda3a65ad0cba541d820147e8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-17.log",
+      "bytes": 395,
+      "sha256": "a7ab331107fff466e55630f0fe2770706387dd0fda3a65ad0cba541d820147e8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-18 2.log",
+      "bytes": 395,
+      "sha256": "304563f8fa1f25a01054d0f6f4e7dd1c5657258af9917d6437c0aea1a9ec5c7d"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-18.log",
+      "bytes": 395,
+      "sha256": "304563f8fa1f25a01054d0f6f4e7dd1c5657258af9917d6437c0aea1a9ec5c7d"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-19 2.log",
+      "bytes": 395,
+      "sha256": "cc90174104f982f6aa356cf2e239a86086568f6f525b1d959a0bb87e1227dd72"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-19.log",
+      "bytes": 395,
+      "sha256": "cc90174104f982f6aa356cf2e239a86086568f6f525b1d959a0bb87e1227dd72"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-2 2.log",
+      "bytes": 395,
+      "sha256": "313d4207e6ca5e38cc4531e3d635b4582f747c9f239fb9a7d8fdf1528bc783c5"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-2.log",
+      "bytes": 395,
+      "sha256": "313d4207e6ca5e38cc4531e3d635b4582f747c9f239fb9a7d8fdf1528bc783c5"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-20 2.log",
+      "bytes": 395,
+      "sha256": "598dddfa13ed991c3e0d3cb5fccba130e83a592249885dab7661546227b60924"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-20.log",
+      "bytes": 395,
+      "sha256": "598dddfa13ed991c3e0d3cb5fccba130e83a592249885dab7661546227b60924"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-3.log",
+      "bytes": 395,
+      "sha256": "9c13da75fa8a9f73a302bf07a1dd0b9eb1fdbdcc27f993c71bf21a297a57939d"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-4 2.log",
+      "bytes": 395,
+      "sha256": "598dddfa13ed991c3e0d3cb5fccba130e83a592249885dab7661546227b60924"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-4.log",
+      "bytes": 395,
+      "sha256": "598dddfa13ed991c3e0d3cb5fccba130e83a592249885dab7661546227b60924"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-5 2.log",
+      "bytes": 395,
+      "sha256": "298de53ee694e134ac4090762a23c5e823035d757048a827ed471733f883bd48"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-5.log",
+      "bytes": 395,
+      "sha256": "298de53ee694e134ac4090762a23c5e823035d757048a827ed471733f883bd48"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-6.log",
+      "bytes": 395,
+      "sha256": "970eb32ec3e617f33dfca4ac2150983109b9703d15554ecfbbbdaa4cd5c32ab5"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-7 2.log",
+      "bytes": 395,
+      "sha256": "ea09e408927c62f5b56bbabdbe8fecd467514f28660c73f08cde32e1b42e303c"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-7.log",
+      "bytes": 395,
+      "sha256": "ea09e408927c62f5b56bbabdbe8fecd467514f28660c73f08cde32e1b42e303c"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-8 2.log",
+      "bytes": 395,
+      "sha256": "598dddfa13ed991c3e0d3cb5fccba130e83a592249885dab7661546227b60924"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-8.log",
+      "bytes": 395,
+      "sha256": "598dddfa13ed991c3e0d3cb5fccba130e83a592249885dab7661546227b60924"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-9 2.log",
+      "bytes": 395,
+      "sha256": "7a22e530711bc454d0b1c3cbc78b5e0a3a87b8994e290addb562c2a7eec34709"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-repeat-9.log",
+      "bytes": 395,
+      "sha256": "7a22e530711bc454d0b1c3cbc78b5e0a3a87b8994e290addb562c2a7eec34709"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/signal-ubsan.log",
+      "bytes": 395,
+      "sha256": "36b05e48b212df0dcae3182190e376456f875e915a3c1a3a0a6947dd04e9706c"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/silo-context 2.log",
+      "bytes": 254,
+      "sha256": "c8c9ac9ab9b37220ceb9b5e638c6c557a9c96e215299fb9fe4b0bd7afb9714d8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/silo-context.log",
+      "bytes": 254,
+      "sha256": "c8c9ac9ab9b37220ceb9b5e638c6c557a9c96e215299fb9fe4b0bd7afb9714d8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/source-base",
+      "bytes": 41,
+      "sha256": "b1d121e88bc24ef055b85056d119f8f63676ed2f4fe84967455620f8612afbfe"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/source-tracked 2.diff",
+      "bytes": 26839,
+      "sha256": "d376389cae6d7bebafde8d1063afdce8dd3cc17430d6278ae00d05f942530625"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/source-tracked.diff",
+      "bytes": 26839,
+      "sha256": "d376389cae6d7bebafde8d1063afdce8dd3cc17430d6278ae00d05f942530625"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/source.sha256",
+      "bytes": 2181,
+      "sha256": "54497c7f68066966eb15bf0b7ccb634ff2408c14b7cf4119209525bcdf687541"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-checkpoint 2.log",
+      "bytes": 8171,
+      "sha256": "4b789cef785add0cc0c444f0a84f3be622ea855d85614c596308a827c0cb9db0"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-checkpoint.log",
+      "bytes": 8171,
+      "sha256": "4b789cef785add0cc0c444f0a84f3be622ea855d85614c596308a827c0cb9db0"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-debug 2.log",
+      "bytes": 8171,
+      "sha256": "94efef1eaf8b3ccbef590259170eb3226ecb17aa4ac8c0e52f1119fbd137b590"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-debug.log",
+      "bytes": 8171,
+      "sha256": "94efef1eaf8b3ccbef590259170eb3226ecb17aa4ac8c0e52f1119fbd137b590"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-optimized 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-optimized.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-1 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-1.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-10 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-10.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-11 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-11.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-12 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-12.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-13.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-14 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-14.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-15 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-15.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-16 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-16.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-17.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-18.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-19 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-19.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-20.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-3.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-4.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-5.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-6 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-6.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-7.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-8.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-9 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-repeat-9.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-ubsan 2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/starvation-ubsan.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/tpcc-checkpoint.log",
+      "bytes": 25795,
+      "sha256": "5bf90ef6b7cfe93c6612959eb0dd83f893ec54cff4c67864a7601132c201750d"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/tpcc-signal.log",
+      "bytes": 25812,
+      "sha256": "54913c7a455c97305ca0857cbdef2c832a7551c4d745ad7b4fc1690cac8438aa"
+    },
+    {
+      "path": "replication/results/mac09-signal/final/validation.log",
+      "bytes": 17513,
+      "sha256": "279c385855ca46e3a1a5a9c19316138a94286a1e77a038a8a795356cc1473af2"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/artifacts.sha256",
+      "bytes": 852,
+      "sha256": "31a9070d5cb26c645e25da7f491d5518ec1c5786c8fe99125a54d9d103327437"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-checkpoint.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-debug.log",
+      "bytes": 21993,
+      "sha256": "d00fc0fb0a94594efb1c49246dda0394e73483e4648194455338af1bdd0327b7"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-optimized.log",
+      "bytes": 21987,
+      "sha256": "632df4b03c15239f47d651c6e13fc63f6da94345ce03643357d854080cfe851e"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-1.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-10.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-11.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-12.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-13.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-14.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-15.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-16.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-17.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-18.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-19.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-2.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-20.log",
+      "bytes": 21987,
+      "sha256": "81d297faacb5765b99e4adc39a278ef7ea16f1373145fb159466e48f4d147cc7"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-3.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-4.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-5.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-6.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-7.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-8.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-repeat-9.log",
+      "bytes": 21987,
+      "sha256": "7d43f812b8a1ad4f27bc517fbcf257b2f356e896b78a5dc90ffcd220c00484c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/batched_notifications-ubsan.log",
+      "bytes": 21988,
+      "sha256": "7fd21d1d95508e74bcde3a06f7c744873ef317f3d7f067ea96895e8b7c9419ce"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/build.log.gz",
+      "bytes": 9054,
+      "sha256": "a93cda158cc10ced7b557cc2b9297e87d236b29e1075565756e9cf635a19a645"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/exit-status",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/source.sha256",
+      "bytes": 1215,
+      "sha256": "bdc28fb466f5cf609db50c91b93669360342685085865cfeb3cbe677fb89fd04"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-checkpoint.log",
+      "bytes": 8171,
+      "sha256": "4b789cef785add0cc0c444f0a84f3be622ea855d85614c596308a827c0cb9db0"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-debug.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-optimized.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-1.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-10.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-11.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-12.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-13.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-14.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-15.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-16.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-17.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-18.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-19.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-2.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-20.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-3.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-4.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-5.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-6.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-7.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-8.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-repeat-9.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/starvation-ubsan.log",
+      "bytes": 8171,
+      "sha256": "b95720160ffd744edde618f780dc1eee110d2528855eaf71e1164c93c699d90f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/tpcc-checkpoint.log",
+      "bytes": 25795,
+      "sha256": "5bf90ef6b7cfe93c6612959eb0dd83f893ec54cff4c67864a7601132c201750d"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/tpcc-signal.log",
+      "bytes": 25913,
+      "sha256": "3a894a1156aa61aa0178cf63e9bf0088168836da798e8995c086518809191f4f"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-fixtures/validation.log",
+      "bytes": 10465,
+      "sha256": "0a539c2c850da9759ab988f7f79952097a646b4b671e787b0aeb191d9c1becee"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-launch 2.log",
+      "bytes": 17746,
+      "sha256": "23b9d5ae90374cafed8722e340e83a2299db496c5c81abdbd36501aefac31ab7"
+    },
+    {
+      "path": "replication/results/mac09-signal/final-launch.log",
+      "bytes": 17746,
+      "sha256": "23b9d5ae90374cafed8722e340e83a2299db496c5c81abdbd36501aefac31ab7"
+    },
+    {
+      "path": "replication/results/mac09-signal/fixtures-launch.log",
+      "bytes": 10734,
+      "sha256": "04d5c9db2e1393d623c88643e4d59307c4397fd3fbfb86b844a5a07e30147d93"
+    },
+    {
+      "path": "replication/results/mac09-signal/host-batched.log",
+      "bytes": 5256,
+      "sha256": "7d7b72a9683dc1910b5b1c399440b269a89a646edaf09358e0faf1c1494c11c8"
+    },
+    {
+      "path": "replication/results/mac09-signal/host-driver.log",
+      "bytes": 1460,
+      "sha256": "bcf94138cd50d20f2fe1abb6a5b1c619042664269ca245ad9eb76708648cb907"
+    },
+    {
+      "path": "replication/results/mac09-signal/host-environment.log",
+      "bytes": 685,
+      "sha256": "b00a8cc4e4200346fb8360b253b41e84c30babd80ff96da477e9b40c7fd0516e"
+    },
+    {
+      "path": "replication/results/mac09-signal/host-experiments.log",
+      "bytes": 1410,
+      "sha256": "9055a3086d27eca972c29533b16211c40f61e66dea30577048155af858c2343c"
+    },
+    {
+      "path": "replication/results/mac09-signal/host-reconciliation.log",
+      "bytes": 3386,
+      "sha256": "8a48cf0b07b5bd04baeb2c6c8185cd37b8bab50da694de36155ada6c98eb506c"
+    },
+    {
+      "path": "replication/results/mac09-signal/source-base",
+      "bytes": 41,
+      "sha256": "b1d121e88bc24ef055b85056d119f8f63676ed2f4fe84967455620f8612afbfe"
+    },
+    {
+      "path": "replication/results/mac09-signal/source-changes.tar.gz",
+      "bytes": 82767,
+      "sha256": "ad5bbffc06bde2f9ac99db3a97c898b823a550eb726647223240469e1a783475"
+    },
+    {
+      "path": "replication/results/mac09-signal/source-tracked.diff",
+      "bytes": 59433,
+      "sha256": "cf1c951d6f001d86d7728876170a533d9dda253f891e6b022c4a546ed0a78a76"
+    },
+    {
+      "path": "replication/results/mac09-signal/source-verification.log",
+      "bytes": 1626,
+      "sha256": "8002bd84d204503e3a98ad1df383940c6fa9b4aa0f833166e9b22a406e7ac6da"
+    },
+    {
+      "path": "replication/results/mac09-signal/verification-tools.sha256",
+      "bytes": 332,
+      "sha256": "ad08a66bbda8c3055d8bab3170af7804774ef7aefc31469c5cc5c23d3531eded"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/README.md",
+      "bytes": 9073,
+      "sha256": "60dd102d6d5682f10d1ef3a36a1c8594f1238dc018d5807515bbaad1693c936d"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/container.log",
+      "bytes": 125,
+      "sha256": "c5580f912d4be19fd3632c2e084bfc5b78ae0e800946461efafb3e75ccf178eb"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/evidence.sha256",
+      "bytes": 11180,
+      "sha256": "2d3d9f42a293f7be4e0b5c3b16406b35a74d7d1317207a453f6226a4f682132d"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/excluded-binaries.sha256",
+      "bytes": 1682,
+      "sha256": "ae6dd178dfd094304ed3ae6bee687c1066696feda74e8acd50f77bc23afea52e"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/artifacts.sha256",
+      "bytes": 1348,
+      "sha256": "544e4dcaa4952aab7a0672110009a8c85509b98ec48f5eb080c75ac77706c08c"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-debug.log",
+      "bytes": 22052,
+      "sha256": "0a696fc0fbcff6b1dc3b26a05d32710114dbdf4da075da282a58850576919aa1"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-optimized.log",
+      "bytes": 22044,
+      "sha256": "3871c0218c690f16a52a4c2fb0eeacd2dbf68e1aa59b401578acaff9e499a298"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-1.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-10.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-11.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-12.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-13.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-14.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-15.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-16.log",
+      "bytes": 22044,
+      "sha256": "e9d576f9027298d4f432df7b2ad1bc90eefc4dd4a28aba1921c155ca1002714f"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-17.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-18.log",
+      "bytes": 22045,
+      "sha256": "d99681bcaeaa1d8e32c9ae630cbd945acd17ebdff189ad11cbc58d50f118b982"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-19.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-2.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-20.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-3.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-4.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-5.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-6.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-7.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-8.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-repeat-9.log",
+      "bytes": 22044,
+      "sha256": "b3b09435bf542b1b1d9b683bc01e9bf7ddefaab476788f2c00edfe3958a49f69"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/batched_notifications-ubsan.log",
+      "bytes": 22044,
+      "sha256": "7eed468e787f1039c9a890b50e6906e0ccb34a13ca79ad21e3257ac23d0683c0"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/build.log",
+      "bytes": 349996,
+      "sha256": "3354854c0d4f31b9944c6288976e5a84c2ce2d1d78c7dd94c9028f1b6075ff79"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/driver-cooperative.log",
+      "bytes": 1569,
+      "sha256": "ad18f0055b069a4d274b98eecb5e63ac421c3d84c914f4e61193d3e738693a5b"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/driver-wait.log",
+      "bytes": 1462,
+      "sha256": "8af3ba8671806fbdf35e1a29a042e12be81440d6336a731b7015c85871f49203"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/environment.log",
+      "bytes": 3536,
+      "sha256": "7a83174aa4cb3e938c8905dbee70e21d14863796145515c24e1db21badf3128a"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/exit-status",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/experiments.log",
+      "bytes": 1410,
+      "sha256": "7c08a92a49d0c2f52d94b16a446e92c523eb50e11f9d1b309fc46bdd628e2707"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/hardware-kit-verification.log",
+      "bytes": 204,
+      "sha256": "bfe1ef7a665655ddfac98beafe3a11d760de282e5c1af5b400acadebd8c78bef"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/hardware-kit.sha256",
+      "bytes": 576,
+      "sha256": "3c553f55d3c5e990db5db2c164e14da06c773264dfacf7ad88b57c94cbd14015"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-debug.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-optimized.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-1.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-10.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-11.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-12.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-13.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-14.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-15.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-16.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-17.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-18.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-19.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-2.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-20.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-3.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-4.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-5.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-6.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-7.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-8.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-repeat-9.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/notification_model-ubsan.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/reconciliation.json",
+      "bytes": 9968,
+      "sha256": "7e3a152db6d4b80cc92b8bf6d7662e9eb8f8bdfec8a1f11e775f3625e26e0e79"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/reconciliation.log",
+      "bytes": 120,
+      "sha256": "5fd98f56d7d198d1deb73be3ba6c6d916782918d32d4b01d577510c17f92c275"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/source-base",
+      "bytes": 41,
+      "sha256": "56308f6634bf2db5d84e204b391857103e89ea1bf40d83351caf2666b9819768"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/source.sha256",
+      "bytes": 1752,
+      "sha256": "c5fedd1d11d2e26c3462b84d435a45ac4d3adc1252dd86d82bd428a247e27cf9"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-debug.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-optimized.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-1.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-10.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-11.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-12.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-13.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-14.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-15.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-16.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-17.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-18.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-19.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-2.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-20.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-3.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-4.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-5.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-6.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-7.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-8.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-repeat-9.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/starvation-ubsan.log",
+      "bytes": 8203,
+      "sha256": "8c078695c9c862448eaa383d0e82bca4bffb6eae33f124002dff5ec5424951f8"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/tpcc-checkpoint.log",
+      "bytes": 32446,
+      "sha256": "24f352d7aee771aa1a951f000211035070c1331fbb1e9656e43dc10e33a3ffec"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/tpcc-signal-regression.log",
+      "bytes": 25947,
+      "sha256": "55bde1b51a14981851b616990b8e7a99e7378d0d5227fdcca82729677477423d"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/final/validation.log",
+      "bytes": 16343,
+      "sha256": "29b54f66c5534cab005b1591039db5b73d4e6e935db0d4bfb1e806f124d601cc"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/fixture-attempt2/batched_notifications-debug.log",
+      "bytes": 22052,
+      "sha256": "5008585d73fe1310e11b9999e99d2b406e194333d4b000610c4a9db54db83227"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/fixture-attempt2/environment.log",
+      "bytes": 3535,
+      "sha256": "208af1e7957e469f19cd07f9284f18b4e235c59b19ae7c1776492e1db8a6a510"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/fixture-attempt2/exit-status",
+      "bytes": 4,
+      "sha256": "e726b440cc164001999e718b51780d80314709efe06e7857282377be9111127b"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/fixture-attempt2/hardware-kit.sha256",
+      "bytes": 576,
+      "sha256": "3c553f55d3c5e990db5db2c164e14da06c773264dfacf7ad88b57c94cbd14015"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/fixture-attempt2/notification_model-debug.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/fixture-attempt2/source-base",
+      "bytes": 41,
+      "sha256": "56308f6634bf2db5d84e204b391857103e89ea1bf40d83351caf2666b9819768"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/fixture-attempt2/source.sha256",
+      "bytes": 1752,
+      "sha256": "950ed8092d2d44d693d2d95be5922fc7b212c2f0bde329a1b06c98e5ddee3f1a"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/fixture-attempt2/starvation-debug.log",
+      "bytes": 3490,
+      "sha256": "319b1805718c713167f0b7dc023a03068009d30c169e6b46adfe567f66dc0766"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/fixture-attempt2/starvation_cases.h",
+      "bytes": 10989,
+      "sha256": "3df711c746ade7162f5d9890341b7b196cec989693bacc078c75c076464399c3"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/fixture-attempt2/validation.log",
+      "bytes": 2811,
+      "sha256": "1e9ae24e240c3456041d53c6f5ab9697b2bf0bdf7567efdbeda6789cba6a3b67"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/hardware-kit-host.sha256",
+      "bytes": 576,
+      "sha256": "3c553f55d3c5e990db5db2c164e14da06c773264dfacf7ad88b57c94cbd14015"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/host-driver.log",
+      "bytes": 1460,
+      "sha256": "bcf94138cd50d20f2fe1abb6a5b1c619042664269ca245ad9eb76708648cb907"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/host-environment.log",
+      "bytes": 835,
+      "sha256": "5c3d1ca5170edec082060899c1b00ae95f551ed947b135de62af470f8fef1728"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/host-experiments.log",
+      "bytes": 1410,
+      "sha256": "748463001d0828839f6e68c7e875154d7f0c2705d09bfed5d2c300ef12e256b1"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/host-model-sanitized.log",
+      "bytes": 3486,
+      "sha256": "a7ae62dd3c0713151dd4dbe2615e0476085d3e6f6df8edddaaac14c9f2bcf898"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/host-model.log",
+      "bytes": 3486,
+      "sha256": "a7ae62dd3c0713151dd4dbe2615e0476085d3e6f6df8edddaaac14c9f2bcf898"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/host-reconciliation.log",
+      "bytes": 120,
+      "sha256": "5fd98f56d7d198d1deb73be3ba6c6d916782918d32d4b01d577510c17f92c275"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/model-first.log",
+      "bytes": 9807,
+      "sha256": "db6eacaf5585db707ea9453f91a0c0e2384ebca8c143ca59755e6133e21e3efa"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/setup-attempt1/exit-status",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/setup-attempt1/source-base",
+      "bytes": 41,
+      "sha256": "56308f6634bf2db5d84e204b391857103e89ea1bf40d83351caf2666b9819768"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/setup-attempt1/validation.log",
+      "bytes": 274,
+      "sha256": "4d81f402a01d55f8095dba45d726b1043655f30e64f6cdbd5e9606ff78785335"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/source-base",
+      "bytes": 41,
+      "sha256": "56308f6634bf2db5d84e204b391857103e89ea1bf40d83351caf2666b9819768"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/source-changes.tar.gz",
+      "bytes": 16700,
+      "sha256": "5149298ad4ba1360d8c44bc89554e1d108de6254c33212392036ebeb9a100f0e"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/source-tracked.diff",
+      "bytes": 6553,
+      "sha256": "89c4da99607e67c336641e26abe1b07e137050072680e542695e1cb52bd29ab6"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/source-verification.log",
+      "bytes": 306,
+      "sha256": "d8f1dc512ed65617c1f5a0418162ae611c019ae19069100f137a6c4248eda703"
+    },
+    {
+      "path": "replication/results/mac10-notification-model/source.sha256",
+      "bytes": 960,
+      "sha256": "0a2e8181a297eab323878beec65642c3db1a030f097f8351e639cf9cec6c88fa"
+    }
+  ]
+}

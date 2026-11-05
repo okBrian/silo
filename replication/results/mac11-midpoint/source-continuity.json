@@ -1,0 +1,77 @@
+[
+  {
+    "manifest": "mac10-notification-model/source.sha256",
+    "path": "benchmarks/notification_model.h",
+    "sha256": "3e526c0c6036dc0715bbb3dee09989a82e749d8d9f9e2e698d5338702b894030"
+  },
+  {
+    "manifest": "mac10-notification-model/source.sha256",
+    "path": "benchmarks/notification_schedule.h",
+    "sha256": "3ec86b1c6c65ff1ae06676e8b280264b97b2f773f17030c006a759a42522a158"
+  },
+  {
+    "manifest": "mac10-notification-model/source.sha256",
+    "path": "replication/tests/notification_model_cases.h",
+    "sha256": "10d08cca5f92065485d7d666ddfc5b065bee8b0310b883eaadc9f7eca481b1a2"
+  },
+  {
+    "manifest": "mac10-notification-model/source.sha256",
+    "path": "replication/tests/notification_model_test.cc",
+    "sha256": "8ae6b8cef77acfbe2eb8ee7e93d5bb2927ee65100a9560fb4e2eb7cb3a80b8ef"
+  },
+  {
+    "manifest": "mac10-notification-model/source.sha256",
+    "path": "replication/tests/starvation_cases.h",
+    "sha256": "a27a99a109f27ceb5b8af755a6f309c0224a5d8a788a9ae62ee993290f371bcd"
+  },
+  {
+    "manifest": "mac10-notification-model/source.sha256",
+    "path": "replication/tests/tpcc_mixed_test.cc",
+    "sha256": "53b63fc87ad20f157183b635252610f7aa965d118e32d43c9f1638c70804c4e7"
+  },
+  {
+    "manifest": "mac10-notification-model/source.sha256",
+    "path": "replication/tests/validate_notification_model.sh",
+    "sha256": "4f69e5e848969534bd40febd2dcaaf150fc3b97b65e92aa462db823a8f8b93f1"
+  },
+  {
+    "manifest": "mac10-notification-model/source.sha256",
+    "path": "replication/tests/verify_notification_model.py",
+    "sha256": "6c7bec3dba45b05664b3cad797c3becfaae90b7a79f442a5853f71af83261b78"
+  },
+  {
+    "manifest": "mac10-notification-model/source.sha256",
+    "path": "replication/docs/notification-model.md",
+    "sha256": "93b5a1af353cb1b8e6d711c899781f20630197af4bc4bc157250318a6fad929a"
+  },
+  {
+    "manifest": "mac09-signal/final/source.sha256",
+    "path": "benchmarks/request_driver.cc",
+    "sha256": "e4e69c1c94b6ae89ea4aa41b08fb7c60a658c00c4e05f0939e1f5b933bde8f9e"
+  },
+  {
+    "manifest": "mac09-signal/final/source.sha256",
+    "path": "benchmarks/request_driver.h",
+    "sha256": "34865087d781f85e7930083a4037854da7f97b126d923df1498c976becce6b99"
+  },
+  {
+    "manifest": "mac09-signal/final/source.sha256",
+    "path": "benchmarks/worker_context.cc",
+    "sha256": "fa825c56f324cd36d894a6231f2d3c206fe90a93e5cfa00ae3746226cd8d8f42"
+  },
+  {
+    "manifest": "mac09-signal/final/source.sha256",
+    "path": "benchmarks/worker_context.h",
+    "sha256": "2d8f6df3feb5309f24c923bc25f2c7465dcd0c670f8b11feb253ec943338e7e8"
+  },
+  {
+    "manifest": "mac09-signal/final/source.sha256",
+    "path": "benchmarks/signal_backend.cc",
+    "sha256": "c68a0e06ef3ecbc8042252c14f5c48bec60ea9d2b4c6d0f0640e8090bb7cf32a"
+  },
+  {
+    "manifest": "mac09-signal/final/source.sha256",
+    "path": "benchmarks/signal_backend.h",
+    "sha256": "234402d2e304a08aa68f7597bba5d490e81a91a1aa4eebf36cd7ce696f3f3f05"
+  }
+]
