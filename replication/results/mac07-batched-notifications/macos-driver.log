@@ -1,0 +1,10 @@
+PASS delayed generation and overload: 8 high, 2 low, 5 rejected, 4 cancelled, 1 safe completion after deadline
+phase=measurement cutoff_ns=150 generated=10 completed=1 rejected=5 cancelled=4 dropped=0 cutoff_pending_global=2 cutoff_queued=2 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=1 failed=1
+PASS wake after drain deadline accounts for every pre-cutoff batch
+PASS stable retries, retry exhaustion, user abort, FIFO and duplicate notifications
+PASS high publication: 2 workers, 2 admission passes, 4 notifications, 6 high admissions, 7 high attempts, 6 high commits, 0 switches
+PASS notification failure: 4 published high requests cancelled, active low completed
+PASS starvation budget: inactive/zero time, strict threshold, retry charge, overshoot and recovery, per-low reset, full-width arithmetic
+PASS fatal adapter error stops new attempts and preserves terminal records
+PASS Wait: running low finishes, two shorts start in FIFO order after 7 and 8 us of local queueing, then queued low starts
+PASS three-worker routing and ID reconciliation: high=2392 generated=3292 committed=3292 rejected=0

@@ -1,0 +1,3004 @@
+{
+  "batched-debug.log": {
+    "sha256": "739dea62f09c332bae06c94afc767bcea0bf6d8609cd1aaa6ae76c95f67a7314",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "batched-optimized.log": {
+    "sha256": "628ab592bdf8b37475510ca0b41357e582af665b9eb0e7260d57a32639ab4d19",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "batched-ubsan.log": {
+    "sha256": "628ab592bdf8b37475510ca0b41357e582af665b9eb0e7260d57a32639ab4d19",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-1.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-2.log": {
+    "sha256": "fe72724e5d1b9c7def5b0174937e1b07a86517baf61cd5b96d986ab08d3fc4f0",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-3.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-4.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-5.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-6.log": {
+    "sha256": "6f381301ae4f05761cae62cfd3a4a9651e9c8d3c2245d0aa273a465bd90c1695",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 7,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-7.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-8.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-9.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-10.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-11.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-12.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-13.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-14.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-15.log": {
+    "sha256": "7f3dc28f67bdd79b508429d12fafdf4f6524e6d1d19448b66c5b1bb99106ab66",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-16.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-17.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-18.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-19.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "repeat-20.log": {
+    "sha256": "705c0ff81612aeb924201b09f8a036b138704f6dad58580cefa4c06a482b57cc",
+    "cases": [
+      {
+        "name": "partial-admission",
+        "high_arrivals": 12,
+        "high_admitted": 8,
+        "high_commits": 8,
+        "high_attempts": 9,
+        "switches": 0,
+        "committed": 12,
+        "rejected_queue_full": 4,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "drain-expiry",
+        "high_arrivals": 4,
+        "high_admitted": 1,
+        "high_commits": 0,
+        "high_attempts": 0,
+        "switches": 0,
+        "committed": 1,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 5
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "synthetic-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  },
+  "tpcc-mixed.log": {
+    "sha256": "6d0d33630af57aa78212d9ef85c2c55393fb33a05fb4fe0ad9338b793385f215",
+    "cases": [
+      {
+        "name": "silo-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "silo-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "silo-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 1,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "silo-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "silo-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "silo-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "silo-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "silo-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      },
+      {
+        "name": "silo-q2",
+        "high_arrivals": 4,
+        "high_admitted": 4,
+        "high_commits": 4,
+        "high_attempts": 5,
+        "switches": 2,
+        "committed": 6,
+        "rejected_queue_full": 0,
+        "cancelled_shutdown": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+Unstaged changes after reset:
+M	Makefile
+M	benchmarks/request_driver.cc
+M	benchmarks/request_driver.h
+M	replication/tests/tpcc_mixed_test.cc
+M	util.h
+benchmarks/request_driver.cc: OK
+benchmarks/request_driver.h: OK
+benchmarks/notification_model.h: OK
+benchmarks/worker_context.cc: OK
+replication/tests/batched_notification_cases.h: OK
+replication/tests/batched_notifications_test.cc: OK
+replication/tests/tpcc_mixed_test.cc: OK
+replication/tests/validate_batched_notifications.sh: OK
+ Makefile | 2 +-
+ util.h   | 3 +++
+ 2 files changed, 4 insertions(+), 1 deletion(-)

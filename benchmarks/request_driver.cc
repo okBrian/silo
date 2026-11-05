@@ -87,6 +87,9 @@ struct Worker {
   std::mutex mutex;
   std::condition_variable wake;
   std::vector<Request> records;
+  NotificationStats notifications;
+  std::atomic<uint64_t> deliveries{0};
+  std::atomic<bool> notification_pending{false};
 #ifdef SILO_WORKER_CONTEXTS
   Cooperative *cooperative = nullptr; // Owned by the worker's original stack.
 #endif
@@ -140,14 +143,17 @@ Ns monotonic_now() {
 }
 
 struct Driver::State {
-  State(const Config &config, Clock clock, Wait wait_until, HighPublished high_published)
+  State(const Config &config, Clock clock, Wait wait_until, HighPublished high_published,
+        TransitionHook transition)
     : config(config), clock(clock), wait_until(wait_until),
-      high_published(std::move(high_published)), low_sequence(config.workers) {}
+      high_published(std::move(high_published)), transition(std::move(transition)),
+      low_sequence(config.workers) {}
 
   const Config config;
   const Clock clock;
   const Wait wait_until;
   const HighPublished high_published;
+  const TransitionHook transition;
   std::vector<std::unique_ptr<Worker>> workers;
   std::vector<uint64_t> low_sequence;
   std::deque<Request> global;
@@ -165,18 +171,20 @@ struct Driver::State {
   Ns cutoff = 0;
 };
 
-Driver::Driver(const Config &config, Clock clock, Wait wait_until, HighPublished high_published)
-  : state(new State(config, clock, wait_until, std::move(high_published))) {
+Driver::Driver(const Config &config, Clock clock, Wait wait_until, HighPublished high_published,
+               TransitionHook transition)
+  : state(new State(config, clock, wait_until, std::move(high_published),
+                    std::move(transition))) {
   if (!config.workers || !config.batch_size || !config.interval ||
       !config.global_capacity || !config.high_capacity ||
       config.high_capacity == SIZE_MAX || !config.attempt_limit || !config.yield_interval)
     throw std::invalid_argument("invalid queued request driver configuration");
-  if (config.policy == Policy::cooperative) {
+  if (config.policy != Policy::wait) {
 #ifdef SILO_WORKER_CONTEXTS
     if (!config.generate_low || config.low_kind != Kind::q2)
-      throw std::invalid_argument("Cooperative requires a mixed Q2 workload");
+      throw std::invalid_argument("checkpoint scheduling requires a mixed Q2 workload");
 #else
-    throw std::invalid_argument("Cooperative requires a WORKER_CONTEXTS=1 build");
+    throw std::invalid_argument("checkpoint scheduling requires a WORKER_CONTEXTS=1 build");
 #endif
   }
   for (size_t i = 0; i < config.workers; ++i)
@@ -184,6 +192,20 @@ Driver::Driver(const Config &config, Clock clock, Wait wait_until, HighPublished
 }
 
 Driver::~Driver() = default;
+
+void Driver::deliver_notification(size_t worker) {
+  Worker &w = *state->workers.at(worker);
+  w.deliveries.fetch_add(1, std::memory_order_relaxed);
+  w.notification_pending.store(true, std::memory_order_release);
+}
+
+NotificationStats Driver::notification_stats(size_t worker) const {
+  const Worker &w = *state->workers.at(worker);
+  NotificationStats result = w.notifications;
+  result.deliveries = w.deliveries.load(std::memory_order_relaxed);
+  result.pending_hint = w.notification_pending.load(std::memory_order_relaxed);
+  return result;
+}
 
 void Driver::notify(size_t worker) {
   // Pair the wake with the waiter's predicate check. The queue itself uses
@@ -262,8 +284,12 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id, uint64_t first_hi
         break;
       }
       published[request.worker] = true;
+      ++s.workers[request.worker]->notifications.admitted_high;
       s.global.pop_front();
     }
+    for (size_t i = 0; i < config.workers; ++i)
+      if (published[i])
+        ++s.workers[i]->notifications.publication_passes;
     if (s.high_published) {
       try {
         for (size_t i = 0; i < config.workers; ++i)
@@ -333,6 +359,30 @@ void Driver::on_record_read(size_t worker) {
   Worker &w = *s.workers[worker];
   Cooperative &scheduler = *w.cooperative;
   Request &request = *scheduler.low;
+  if (s.config.policy == Policy::notification_checkpoint) {
+    // Clear the hint BEFORE checking the authoritative queue. A delayed or
+    // coalesced hint cannot hide work published at high-empty/low-resume.
+    const bool hinted = w.notification_pending.exchange(false, std::memory_order_acq_rel);
+    if (hinted)
+      ++w.notifications.hints_consumed;
+    if (w.high.empty()) {
+      if (hinted)
+        ++w.notifications.spurious_checks;
+      return;
+    }
+    if (!hinted)
+      ++w.notifications.queue_fallbacks;
+    if (ScopedNonPreemptible::blocked()) {
+      ++w.notifications.deferrals;
+      return;
+    }
+    if (!s.fatal.load(std::memory_order_acquire) &&
+        s.clock() < s.drain_deadline.load(std::memory_order_acquire)) {
+      ++w.notifications.switches;
+      scheduler.context.yield();
+    }
+    return;
+  }
   ++request.cooperative_reads;
   if (--scheduler.reads_left == 0) {
     scheduler.reads_left = s.config.yield_interval;
@@ -344,6 +394,7 @@ void Driver::on_record_read(size_t worker) {
     if (!s.fatal.load(std::memory_order_acquire) &&
         s.clock() < s.drain_deadline.load(std::memory_order_acquire)) {
       ++request.cooperative_yields;
+      ++w.notifications.switches;
       scheduler.context.yield();
     }
   }
@@ -411,7 +462,7 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
   };
 #ifdef SILO_WORKER_CONTEXTS
   std::unique_ptr<Cooperative> cooperative;
-  if (s.config.policy == Policy::cooperative) {
+  if (s.config.policy != Policy::wait) {
     try {
       cooperative.reset(new Cooperative(execute_request));
       w.cooperative = cooperative.get();
@@ -452,10 +503,22 @@ void Driver::run_prepared_worker(size_t worker, const Prepare &prepare) {
           // The Q2 is paused at an audited read. Only consume high work
           // before returning to its live transaction on the alternate stack.
           Request high;
+          ++w.notifications.high_entries;
+          if (s.transition)
+            s.transition(worker, ServiceTransition::high_entry);
           while (!s.fatal.load(std::memory_order_acquire) &&
-                 s.clock() < s.drain_deadline.load(std::memory_order_acquire) &&
-                 w.high.pop(high))
+                 s.clock() < s.drain_deadline.load(std::memory_order_acquire)) {
+            if (!w.high.pop(high)) {
+              ++w.notifications.empty_checks;
+              if (s.transition)
+                s.transition(worker, ServiceTransition::high_empty);
+              break;
+            }
             execute_request(high);
+          }
+          if (s.transition)
+            s.transition(worker, ServiceTransition::before_low_resume);
+          ++w.notifications.low_resumes;
         }
       } while (cooperative->low);
       continue;

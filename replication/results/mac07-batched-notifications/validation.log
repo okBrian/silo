@@ -1,0 +1,112 @@
++ trap 'status=$?; printf "%s\n" "$status" > "$evidence/exit-status"' EXIT
+++ git rev-parse --show-toplevel
++ test /mac07-input/source = /mac07-input/source
++ git rev-parse HEAD
++ uname -a
++ cat /etc/os-release
++ c++ --version
++ getconf GNU_LIBC_VERSION
++ lscpu
++ taskset -pc 446
++ git -C masstree rev-parse HEAD
+++ git -C masstree rev-parse HEAD
++ test 1150824e6a10a0384ba4bfed6b916ce62f96315f = 1150824e6a10a0384ba4bfed6b916ce62f96315f
++ sha256sum benchmarks/request_driver.cc benchmarks/request_driver.h benchmarks/notification_model.h benchmarks/worker_context.cc replication/tests/batched_notification_cases.h replication/tests/batched_notifications_test.cc replication/tests/tpcc_mixed_test.cc replication/tests/validate_batched_notifications.sh
++ flags=(-std=c++11 -Wall -Wextra -Werror -pedantic -pthread)
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O0 -g)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O0 -g -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc replication/tests/batched_notifications_test.cc -o /mac07-evidence/batched-debug
++ timeout 60s /mac07-evidence/batched-debug
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O3)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O3 -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc replication/tests/batched_notifications_test.cc -o /mac07-evidence/batched-optimized
++ timeout 60s /mac07-evidence/batched-optimized
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 -fsanitize=undefined -fno-sanitize-recover=all -DSILO_WORKER_CONTEXTS benchmarks/request_driver.cc benchmarks/worker_context.cc replication/tests/batched_notifications_test.cc -o /mac07-evidence/batched-ubsan
++ timeout 60s /mac07-evidence/batched-ubsan
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for repetition in {1..20}
++ timeout 60s /mac07-evidence/batched-optimized
++ for build in wait cooperative
++ context=()
++ [[ wait == cooperative ]]
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /mac07-evidence/driver-wait
++ timeout 60s /mac07-evidence/driver-wait
++ for build in wait cooperative
++ context=()
++ [[ cooperative == cooperative ]]
++ context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 -DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /mac07-evidence/driver-cooperative
++ timeout 60s /mac07-evidence/driver-cooperative
++ python3 -B -m unittest discover -s replication/tests -p test_i05_experiments.py -v
+test_i06_archives (test_i05_experiments.AnalysisTests) ... ok
+test_nearest_rank_and_tail_threshold (test_i05_experiments.AnalysisTests) ... ok
+test_pace_archive_matches_published_values (test_i05_experiments.AnalysisTests) ... ok
+test_queued_cohort (test_i05_experiments.AnalysisTests) ... ok
+test_stock_columns_and_units (test_i05_experiments.AnalysisTests) ... ok
+test_report_does_not_turn_partial_or_failed_runs_into_success (test_i05_experiments.ReportTests) ... ok
+test_report_keeps_outcomes_and_per_type_samples_separate (test_i05_experiments.ReportTests) ... ok
+test_matrix_continues_after_failure_and_retains_outputs (test_i05_experiments.RunnerTests) ... ok
+test_mixed_configuration_records_q2_dataset_and_profile (test_i05_experiments.RunnerTests) ... ok
+test_paired_policy_configuration_preserves_inputs (test_i05_experiments.RunnerTests) ... ok
+test_queued_configuration_passes_seed_and_phase_options (test_i05_experiments.RunnerTests) ... ok
+test_timeout_retains_run (test_i05_experiments.RunnerTests) ... ok
+test_wait_configuration_selects_policy_explicitly (test_i05_experiments.RunnerTests) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 3.922s
+
+OK
++ git apply replication/results/mac01-mac02/build-compatibility.diff
++ make -j1 -C third-party/lz4 library
++ make -j1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 masstree/config.h
++ make -j2 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 dbtest tpcc_mixed_test silo_context_test
++ out=out-perf.masstree.contexts
++ timeout 120s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test
++ timeout 120s ./out-perf.masstree.contexts/replication/tests/silo_context_test
++ sha256sum out-perf.masstree.contexts/benchmarks/dbtest out-perf.masstree.contexts/replication/tests/tpcc_mixed_test out-perf.masstree.contexts/replication/tests/silo_context_test /mac07-evidence/batched-debug /mac07-evidence/batched-debug.log /mac07-evidence/batched-optimized /mac07-evidence/batched-optimized.log /mac07-evidence/batched-ubsan /mac07-evidence/batched-ubsan.log /mac07-evidence/driver-cooperative /mac07-evidence/driver-cooperative.log /mac07-evidence/driver-wait /mac07-evidence/driver-wait.log
++ echo 'PASS MAC-07 controlled notification matrix and Silo Q2 integration; signal repeat pending MAC-09'
+PASS MAC-07 controlled notification matrix and Silo Q2 integration; signal repeat pending MAC-09
++ status=0
++ printf '%s\n' 0

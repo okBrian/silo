@@ -3,6 +3,7 @@
 #include "../../benchmarks/ndb_wrapper_impl.h"
 #ifdef SILO_WORKER_CONTEXTS
 #include "../../benchmarks/worker_context.h"
+#include "batched_notification_cases.h"
 #endif
 
 namespace {
@@ -154,6 +155,25 @@ struct Fixture {
     }
     ALWAYS_ASSERT(paused.reads == 18 && yields == 9 && paused.checksum == expected[0]);
     std::cout << "PASS Q2 checkpoint count and snapshot checksum across nine write handoffs\n";
+    // Same controlled transition matrix as the standalone driver, now with a
+    // real Silo snapshot and intervening committed stock writes. Recompute the
+    // unpaused oracle before each case because previous cases update stock.
+    for (auto point : {queued::ServiceTransition::high_entry,
+                       queued::ServiceTransition::high_empty,
+                       queued::ServiceTransition::before_low_resume}) {
+      for (unsigned mode = 0; mode < 3; ++mode) {
+        uint64_t oracle = 0;
+        ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
+        notification_cases::transition_case(point, mode,
+          [&](uint64_t &result, const std::function<void()> &checkpoint) {
+            bench_txn_context low(1, db, transaction_base::TXN_FLAG_READ_ONLY);
+            return q2.run(&db, low, 0, result, checkpoint);
+          }, [&](const queued::Request &request) {
+            write("stock", stock::key(1, 2), stock::value(20 + request.high_sequence, 0, 0, 0));
+          }, oracle, "silo-q2");
+      }
+    }
+    std::cout << "PASS nine Silo Q2 notification transition cases with committed writes\n";
 #endif
   }
 

@@ -15,7 +15,27 @@ constexpr Ns ms = 1000000;
 constexpr Ns second = 1000 * ms;
 
 enum class Kind { new_order, payment, synthetic_low, q2 };
-enum class Policy { wait, cooperative };
+// notification_checkpoint is a local C++ test backend, serviced only at audited
+// reads. It is deliberately not exposed as the native Preemptive policy.
+enum class Policy { wait, cooperative, notification_checkpoint };
+enum class ServiceTransition { high_entry, high_empty, before_low_resume };
+
+// Read only after producer and workers join. Notifications are hints; queue
+// admission, attempts and terminal outcomes remain independent record counts.
+struct NotificationStats {
+  uint64_t publication_passes = 0;
+  uint64_t admitted_high = 0;
+  uint64_t deliveries = 0;
+  uint64_t hints_consumed = 0;
+  uint64_t queue_fallbacks = 0;
+  uint64_t spurious_checks = 0;
+  uint64_t deferrals = 0;
+  uint64_t switches = 0;
+  uint64_t high_entries = 0;
+  uint64_t empty_checks = 0;
+  uint64_t low_resumes = 0;
+  bool pending_hint = false;
+};
 enum class Attempt { committed, conflict, user_aborted, failed };
 enum class Outcome { pending, committed, user_aborted, retry_exhausted, failed,
                      rejected_queue_full, cancelled_shutdown };
@@ -74,9 +94,12 @@ public:
   // nonempty admission pass. The callback must not wait for worker service.
   // An exception stops the run through the normal fatal-error drain path.
   using HighPublished = std::function<void(size_t)>;
+  // Worker-side deterministic test seam, outside index/protection regions.
+  using TransitionHook = std::function<void(size_t, ServiceTransition)>;
 
   explicit Driver(const Config &config, Clock clock = monotonic_now,
-                  Wait wait_until = {}, HighPublished high_published = {});
+                  Wait wait_until = {}, HighPublished high_published = {},
+                  TransitionHook transition = {});
   ~Driver();
 
   void produce(Ns duration, Ns drain, uint64_t first_id = 0, uint64_t first_high = 0);
@@ -86,6 +109,9 @@ public:
   void on_record_read(size_t worker);
   void wait_for_drain();
   void notify(size_t worker);
+  // Ordinary-thread modeled delivery; not an async-signal-safe handler API.
+  void deliver_notification(size_t worker);
+  NotificationStats notification_stats(size_t worker) const;
   void visit_records(const Visit &visit) const;
 
   uint64_t generated() const;
