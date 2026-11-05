@@ -1,5 +1,6 @@
 #pragma once
 #include "batched_notification_cases.h"
+#include "../../benchmarks/notification_schedule.h"
 
 namespace starvation_cases {
 using notification_cases::LowRun;
@@ -37,6 +38,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
   bool exact = false, retained = false;
   Driver *ptr = nullptr;
   NotificationModel model(1, [&](size_t w) { ptr->deliver_notification(w); });
+  using EventKind = NotificationSchedule::Kind;
   Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
     if (next == 110) { started_f.wait(); advance(110); }
     else if (next == 120) { first_pass.set_value(); overrun_f.wait(); advance(130); }
@@ -51,8 +53,12 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
       else { advance(500); std::this_thread::yield(); }
     }
   }, [&](size_t w) {
-    model.send(w);
-    STARVE_CHECK(model.deliver(w));
+    // A refill can span several admission passes as capacity/budget recover.
+    // Apply the same ordered send/deliver pair for each actual publication.
+    const Ns at = time.load();
+    NotificationSchedule events(model, {{at, EventKind::send, w}, {at, EventKind::deliver, w}});
+    events.run_through(at);
+    STARVE_CHECK(w == 0 && events.complete());
     if (++passes == 1) initial.set_value();
     if (passes == 2) refill.set_value();
   });
@@ -123,6 +129,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
   const auto stats = driver.starvation_stats(0);
   const auto budget = driver.budget_snapshot(0);
   const auto notifications = driver.notification_stats(0);
+  STARVE_CHECK(model.stats(0).sends == passes && model.stats(0).deliveries == passes);
   std::vector<Request> records;
   driver.visit_records([&](const Request &r) { records.push_back(r); });
   std::sort(records.begin(), records.end(), [](const Request &a, const Request &b) { return a.id < b.id; });
@@ -149,6 +156,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
             << " q2_commits=" << low_commits << " cancelled=" << cancelled
             << " forced_returns=" << stats.forced_low_returns << " low_service_ns=" << stats.low_service_ns
             << " high_service_ns=" << stats.high_service_ns << " switches=" << notifications.switches
+            << " modeled_sends=" << model.stats(0).sends
             << " modeled_deliveries=" << model.stats(0).deliveries << " real_handlers=" << notifications.signal_handlers << " async_captures=" << notifications.signal_captures << " checksum=" << oracle << '\n';
   write_header(std::cout);
   write_results(driver, std::cout, std::cout, label, "controlled");

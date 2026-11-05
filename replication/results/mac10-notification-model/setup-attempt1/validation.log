@@ -1,0 +1,7 @@
++ trap 'status=$?; printf "%s\n" "$status" > "$evidence/exit-status"' EXIT
++ git rev-parse HEAD
+++ git -C masstree rev-parse HEAD
+fatal: cannot change to 'masstree': No such file or directory
++ test '' = 1150824e6a10a0384ba4bfed6b916ce62f96315f
++ status=1
++ printf '%s\n' 1

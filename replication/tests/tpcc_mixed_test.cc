@@ -5,6 +5,7 @@
 #include "../../benchmarks/worker_context.h"
 #include "batched_notification_cases.h"
 #include "starvation_cases.h"
+#include "notification_model_cases.h"
 #endif
 
 namespace {
@@ -237,6 +238,19 @@ struct Fixture {
       ALWAYS_ASSERT(signal_abort_probes == 53);
       std::cout << "PASS 53 actual Silo failed-write rollback/cleanup probes while Q2 remains suspended in signal backend\n";
       probe_signal_abort = false;
+    }
+    if (!notification_cases::signal_backend()) {
+      for (bool delayed : {false, true}) {
+        uint64_t oracle = 0;
+        ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
+        notification_model_cases::receiver_case(delayed,
+          [&](uint64_t &result, const std::function<void()> &checkpoint) {
+            return run_signal_low(q2, result, checkpoint);
+          }, [&](const queued::Request &request) {
+            write("stock", stock::key(1, 2), stock::value(30 + request.high_sequence, 0, 0, 0));
+          }, oracle, "silo-model-receiver");
+      }
+      std::cout << "PASS two Silo Q2 scheduled receiver/resumption/teardown cases\n";
     }
 
 #endif

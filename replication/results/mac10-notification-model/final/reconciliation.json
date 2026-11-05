@@ -1,0 +1,507 @@
+{
+  "totals": {
+    "cases": 419,
+    "records": 2848,
+    "events": 822,
+    "schedules": 94
+  },
+  "logs": [
+    {
+      "log": "notification_model-debug.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-optimized.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-ubsan.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-1.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-2.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-3.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-4.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-5.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-6.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-7.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-8.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-9.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-10.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-11.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-12.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-13.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-14.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-15.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-16.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-17.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-18.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-19.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "notification_model-repeat-20.log",
+      "cases": 2,
+      "records": 8,
+      "events": 35,
+      "schedules": 4
+    },
+    {
+      "log": "batched_notifications-debug.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-optimized.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-ubsan.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-1.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-2.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-3.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-4.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-5.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-6.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-7.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-8.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-9.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-10.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-11.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-12.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-13.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-14.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-15.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-16.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-17.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-18.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-19.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "batched_notifications-repeat-20.log",
+      "cases": 11,
+      "records": 76,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-debug.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-optimized.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-ubsan.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-1.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-2.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-3.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-4.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-5.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-6.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-7.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-8.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-9.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-10.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-11.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-12.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-13.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-14.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-15.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-16.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-17.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-18.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-19.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "starvation-repeat-20.log",
+      "cases": 4,
+      "records": 32,
+      "events": 0,
+      "schedules": 0
+    },
+    {
+      "log": "tpcc-checkpoint.log",
+      "cases": 15,
+      "records": 94,
+      "events": 17,
+      "schedules": 2
+    },
+    {
+      "log": "tpcc-signal-regression.log",
+      "cases": 13,
+      "records": 86,
+      "events": 0,
+      "schedules": 0
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+CASE standalone-limits threshold=0 clock=controlled_ns seed=1 active_highs=1 high_commits=4 forced_returns=1 low_service_ns=395 real_handlers=0 async_captures=0 checksum=171
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+standalone-limits	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	120	130	1	0	committed	0	null	0	0	0	0
+standalone-limits	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	500	1	0	committed	0	171	0	0	0	390
+standalone-limits	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	500	510	1	0	committed	0	null	0	0	0	0
+standalone-limits	controlled	3	1	Payment	high	0	1	2185194620014831856	110	110	110	510	520	1	0	committed	0	null	0	0	0	0
+standalone-limits	controlled	4	1	NewOrder	high	0	1	13232826040865663252	110	110	110	520	530	1	0	committed	0	null	0	0	0	0
+standalone-limits	controlled	5	null	Q2	low	0	1	13040959721820390457	110	110	110	530	535	1	0	committed	0	171	0	0	0	5
+phase=controlled cutoff_ns=120 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=5 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=6 failed=0
+notifications phase=controlled worker=0 signal_sends=0 real_handlers=0 async_captures=0 signal_deferred=0 signal_rearms=0 switches=1 low_resumes=1
+starvation phase=controlled worker=0 clock=driver_ns threshold=0 admission_blocks=0 checkpoint_blocks=17 forced_low_returns=1 low_requests=2 high_service_ns=10 low_service_ns=395
+CASE standalone-limits threshold=100 clock=controlled_ns seed=1 active_highs=4 high_commits=4 forced_returns=0 low_service_ns=365 real_handlers=0 async_captures=0 checksum=171
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+standalone-limits	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	120	130	1	0	committed	0	null	0	0	0	0
+standalone-limits	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	130	140	1	0	committed	0	null	0	0	0	0
+standalone-limits	controlled	3	1	Payment	high	0	1	2185194620014831856	110	110	110	140	150	1	0	committed	0	null	0	0	0	0
+standalone-limits	controlled	4	1	NewOrder	high	0	1	13232826040865663252	110	110	110	150	160	1	0	committed	0	null	0	0	0	0
+standalone-limits	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	500	1	0	committed	0	171	0	0	0	360
+standalone-limits	controlled	5	null	Q2	low	0	1	13040959721820390457	110	110	110	500	505	1	0	committed	0	171	0	0	0	5
+phase=controlled cutoff_ns=120 generated=6 completed=6 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=5 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=6 failed=0
+notifications phase=controlled worker=0 signal_sends=0 real_handlers=0 async_captures=0 signal_deferred=0 signal_rearms=0 switches=1 low_resumes=1
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=40 low_service_ns=365
+FAIL batched notification case at line 58
+timeout: the monitored command dumped core

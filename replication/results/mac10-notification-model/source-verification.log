@@ -1,0 +1,6 @@
+PASS source.sha256 matches current checkout
+PASS final/source.sha256 matches current checkout
+PASS final/hardware-kit.sha256 matches current checkout
+PASS hardware-kit-host.sha256 matches current checkout
+PASS retained failed fixture source matches its recorded hash
+PASS Mac and guest replay totals match

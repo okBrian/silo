@@ -1,0 +1,6 @@
+replication/uintr/Makefile: OK
+replication/uintr/README.md: OK
+replication/uintr/cpuid.c: OK
+replication/uintr/cpuid_uintr.h: OK
+replication/uintr/probe-host.sh: OK
+replication/uintr/uintr_delivery.c: OK

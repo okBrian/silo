@@ -1,0 +1,141 @@
+diff --git a/benchmarks/notification_model.h b/benchmarks/notification_model.h
+index bb45f80..5a72beb 100644
+--- a/benchmarks/notification_model.h
++++ b/benchmarks/notification_model.h
+@@ -18,6 +18,8 @@ public:
+   struct Stats {
+     uint64_t sends, coalesced, deliveries, unsolicited;
+     bool pending;
++    uint64_t delivery_attempts, dropped_sends, dropped_deliveries, cancelled;
++    bool closed;
+   };
+   using Deliver = std::function<void(size_t)>;
+ 
+@@ -27,12 +29,15 @@ public:
+   void send(size_t worker) {
+     Slot &slot = slots.at(worker);
+     ++slot.sends;
++    if (slot.closed.load()) { ++slot.dropped_sends; return; }
+     if (slot.pending.exchange(true, std::memory_order_acq_rel))
+       ++slot.coalesced;
+   }
+ 
+   bool deliver(size_t worker, bool unsolicited = false) {
+     Slot &slot = slots.at(worker);
++    ++slot.delivery_attempts;
++    if (slot.closed.load()) { ++slot.dropped_deliveries; return false; }
+     const bool pending = slot.pending.exchange(false, std::memory_order_acq_rel);
+     if (!pending && !unsolicited)
+       return false;
+@@ -46,13 +51,28 @@ public:
+   Stats stats(size_t worker) const {
+     const Slot &slot = slots.at(worker);
+     return {slot.sends.load(), slot.coalesced.load(), slot.deliveries.load(),
+-            slot.unsolicited.load(), slot.pending.load()};
++            slot.unsolicited.load(), slot.pending.load(), slot.delivery_attempts.load(),
++            slot.dropped_sends.load(), slot.dropped_deliveries.load(),
++            slot.cancelled.load(), slot.closed.load()};
+   }
+ 
++  // Quiescent teardown: join senders/deliverers before close(), and close every
++  // destination before destroying the receiver. This is NOT a concurrent
++  // unregister/drain primitive. Later scheduled events are counted and dropped.
++  void close(size_t worker) {
++    Slot &slot = slots.at(worker);
++    slot.closed = true;
++    if (slot.pending.exchange(false)) ++slot.cancelled;
++  }
++
++  size_t worker_count() const { return slots.size(); }
++
+ private:
+   struct Slot {
+     std::atomic<bool> pending{false};
+     std::atomic<uint64_t> sends{0}, coalesced{0}, deliveries{0}, unsolicited{0};
++    std::atomic<uint64_t> delivery_attempts{0}, dropped_sends{0}, dropped_deliveries{0}, cancelled{0};
++    std::atomic<bool> closed{false};
+   };
+   std::deque<Slot> slots;
+   const Deliver receiver;
+diff --git a/replication/tests/starvation_cases.h b/replication/tests/starvation_cases.h
+index e48d11b..4e5f956 100644
+--- a/replication/tests/starvation_cases.h
++++ b/replication/tests/starvation_cases.h
+@@ -1,5 +1,6 @@
+ #pragma once
+ #include "batched_notification_cases.h"
++#include "../../benchmarks/notification_schedule.h"
+ 
+ namespace starvation_cases {
+ using notification_cases::LowRun;
+@@ -37,6 +38,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+   bool exact = false, retained = false;
+   Driver *ptr = nullptr;
+   NotificationModel model(1, [&](size_t w) { ptr->deliver_notification(w); });
++  using EventKind = NotificationSchedule::Kind;
+   Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
+     if (next == 110) { started_f.wait(); advance(110); }
+     else if (next == 120) { first_pass.set_value(); overrun_f.wait(); advance(130); }
+@@ -51,8 +53,12 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+       else { advance(500); std::this_thread::yield(); }
+     }
+   }, [&](size_t w) {
+-    model.send(w);
+-    STARVE_CHECK(model.deliver(w));
++    // A refill can span several admission passes as capacity/budget recover.
++    // Apply the same ordered send/deliver pair for each actual publication.
++    const Ns at = time.load();
++    NotificationSchedule events(model, {{at, EventKind::send, w}, {at, EventKind::deliver, w}});
++    events.run_through(at);
++    STARVE_CHECK(w == 0 && events.complete());
+     if (++passes == 1) initial.set_value();
+     if (passes == 2) refill.set_value();
+   });
+@@ -123,6 +129,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+   const auto stats = driver.starvation_stats(0);
+   const auto budget = driver.budget_snapshot(0);
+   const auto notifications = driver.notification_stats(0);
++  STARVE_CHECK(model.stats(0).sends == passes && model.stats(0).deliveries == passes);
+   std::vector<Request> records;
+   driver.visit_records([&](const Request &r) { records.push_back(r); });
+   std::sort(records.begin(), records.end(), [](const Request &a, const Request &b) { return a.id < b.id; });
+@@ -149,6 +156,7 @@ inline void controlled(const LowRun &run_low, const HighCommit &commit_high,
+             << " q2_commits=" << low_commits << " cancelled=" << cancelled
+             << " forced_returns=" << stats.forced_low_returns << " low_service_ns=" << stats.low_service_ns
+             << " high_service_ns=" << stats.high_service_ns << " switches=" << notifications.switches
++            << " modeled_sends=" << model.stats(0).sends
+             << " modeled_deliveries=" << model.stats(0).deliveries << " real_handlers=" << notifications.signal_handlers << " async_captures=" << notifications.signal_captures << " checksum=" << oracle << '\n';
+   write_header(std::cout);
+   write_results(driver, std::cout, std::cout, label, "controlled");
+diff --git a/replication/tests/tpcc_mixed_test.cc b/replication/tests/tpcc_mixed_test.cc
+index c28a799..cbd79fe 100644
+--- a/replication/tests/tpcc_mixed_test.cc
++++ b/replication/tests/tpcc_mixed_test.cc
+@@ -5,6 +5,7 @@
+ #include "../../benchmarks/worker_context.h"
+ #include "batched_notification_cases.h"
+ #include "starvation_cases.h"
++#include "notification_model_cases.h"
+ #endif
+ 
+ namespace {
+@@ -238,6 +239,19 @@ struct Fixture {
+       std::cout << "PASS 53 actual Silo failed-write rollback/cleanup probes while Q2 remains suspended in signal backend\n";
+       probe_signal_abort = false;
+     }
++    if (!notification_cases::signal_backend()) {
++      for (bool delayed : {false, true}) {
++        uint64_t oracle = 0;
++        ALWAYS_ASSERT(q2.run(&db, state, 0, oracle));
++        notification_model_cases::receiver_case(delayed,
++          [&](uint64_t &result, const std::function<void()> &checkpoint) {
++            return run_signal_low(q2, result, checkpoint);
++          }, [&](const queued::Request &request) {
++            write("stock", stock::key(1, 2), stock::value(30 + request.high_sequence, 0, 0, 0));
++          }, oracle, "silo-model-receiver");
++      }
++      std::cout << "PASS two Silo Q2 scheduled receiver/resumption/teardown cases\n";
++    }
+ 
+ #endif
+   }

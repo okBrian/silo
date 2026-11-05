@@ -1,0 +1,216 @@
++ trap 'status=$?; printf "%s\n" "$status" > "$evidence/exit-status"' EXIT
++ git rev-parse HEAD
+++ git -C masstree rev-parse HEAD
++ test 1150824e6a10a0384ba4bfed6b916ce62f96315f = 1150824e6a10a0384ba4bfed6b916ce62f96315f
++ uname -a
++ cat /etc/os-release
++ c++ --version
++ getconf GNU_LIBC_VERSION
++ lscpu
++ taskset -pc 205
++ sha256sum benchmarks/notification_model.h benchmarks/notification_schedule.h benchmarks/request_driver.cc benchmarks/request_driver.h benchmarks/worker_context.cc benchmarks/worker_context.h benchmarks/signal_backend.cc benchmarks/signal_backend.h replication/tests/notification_model_cases.h replication/tests/notification_model_test.cc replication/tests/batched_notification_cases.h replication/tests/batched_notifications_test.cc replication/tests/starvation_cases.h replication/tests/starvation_test.cc replication/tests/tpcc_mixed_test.cc replication/tests/validate_notification_model.sh replication/tests/verify_notification_model.py
++ sha256sum replication/uintr/Makefile replication/uintr/README.md replication/uintr/cpuid.c replication/uintr/cpuid_uintr.h replication/uintr/probe-host.sh replication/uintr/uintr_delivery.c
++ flags=(-std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS)
++ runtime=(benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc)
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O0 -g)
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O0 -g benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/notification_model_test.cc -o /mac10-evidence/final/notification_model-debug
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-debug
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O0 -g benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac10-evidence/final/batched_notifications-debug
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-debug
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O0 -g benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac10-evidence/final/starvation-debug
++ timeout -k 5s 60s /mac10-evidence/final/starvation-debug
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O3)
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O3 benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/notification_model_test.cc -o /mac10-evidence/final/notification_model-optimized
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O3 benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac10-evidence/final/batched_notifications-optimized
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O3 benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac10-evidence/final/starvation-optimized
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O2 -fsanitize=undefined -fno-sanitize-recover=all)
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O2 -fsanitize=undefined -fno-sanitize-recover=all benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/notification_model_test.cc -o /mac10-evidence/final/notification_model-ubsan
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-ubsan
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O2 -fsanitize=undefined -fno-sanitize-recover=all benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac10-evidence/final/batched_notifications-ubsan
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-ubsan
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O2 -fsanitize=undefined -fno-sanitize-recover=all benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac10-evidence/final/starvation-ubsan
++ timeout -k 5s 60s /mac10-evidence/final/starvation-ubsan
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for repetition in {1..20}
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-optimized
++ for suite in notification_model batched_notifications starvation
++ timeout -k 5s 60s /mac10-evidence/final/starvation-optimized
++ for build in wait cooperative
++ context=()
++ [[ wait == cooperative ]]
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /mac10-evidence/final/driver-wait
++ timeout -k 5s 60s /mac10-evidence/final/driver-wait
++ for build in wait cooperative
++ context=()
++ [[ cooperative == cooperative ]]
++ context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/signal_backend.cc)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -O2 -DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/signal_backend.cc benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /mac10-evidence/final/driver-cooperative
++ timeout -k 5s 60s /mac10-evidence/final/driver-cooperative
++ python3 -B -m unittest discover -s replication/tests -p test_i05_experiments.py -v
++ git apply replication/results/mac01-mac02/build-compatibility.diff
++ make -j1 -C third-party/lz4 library
++ make -j1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 masstree/config.h
++ make -j2 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 tpcc_mixed_test
++ out=out-perf.masstree.contexts/replication/tests/tpcc_mixed_test
++ timeout -k 5s 120s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test
++ timeout -k 5s 120s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test signal
++ sha256sum out-perf.masstree.contexts/replication/tests/tpcc_mixed_test /mac10-evidence/final/notification_model-debug /mac10-evidence/final/notification_model-optimized /mac10-evidence/final/notification_model-ubsan /mac10-evidence/final/batched_notifications-debug /mac10-evidence/final/batched_notifications-optimized /mac10-evidence/final/batched_notifications-ubsan /mac10-evidence/final/starvation-debug /mac10-evidence/final/starvation-optimized /mac10-evidence/final/starvation-ubsan /mac10-evidence/final/driver-wait /mac10-evidence/final/driver-cooperative
++ sha256sum -c /mac10-evidence/final/hardware-kit.sha256
++ python3 -B replication/tests/verify_notification_model.py /mac10-evidence/final
++ echo 'PASS MAC-10 controlled software notification model; native I12 remains prepared'
+PASS MAC-10 controlled software notification model; native I12 remains prepared
++ status=0
++ printf '%s\n' 0

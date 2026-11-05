@@ -1,0 +1,21 @@
+EVENT transport at=1 kind=1 worker=0 delivered=0 sends=0 coalesced=0 deliveries=0 unsolicited=0 pending=0 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=2 kind=0 worker=0 delivered=0 sends=1 coalesced=0 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=3 kind=0 worker=0 delivered=0 sends=2 coalesced=1 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=3 kind=0 worker=1 delivered=0 sends=1 coalesced=0 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=0 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=4 kind=1 worker=1 delivered=1 sends=1 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=5 kind=1 worker=0 delivered=1 sends=2 coalesced=1 deliveries=1 unsolicited=0 pending=0 closed=0 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=5 kind=2 worker=0 delivered=1 sends=2 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=0 delivery_attempts=3 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=6 kind=1 worker=1 delivered=0 sends=1 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=0 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=6 kind=0 worker=1 delivered=0 sends=2 coalesced=0 deliveries=1 unsolicited=0 pending=1 closed=0 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=7 kind=3 worker=1 delivered=0 sends=2 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=1 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=1
+EVENT transport at=8 kind=1 worker=1 delivered=0 sends=2 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=1 delivery_attempts=3 dropped_sends=0 dropped_deliveries=1 cancelled=1
+EVENT transport at=8 kind=0 worker=1 delivered=0 sends=3 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=1 delivery_attempts=3 dropped_sends=1 dropped_deliveries=1 cancelled=1
+EVENT transport at=8 kind=2 worker=1 delivered=0 sends=3 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=1 delivery_attempts=4 dropped_sends=1 dropped_deliveries=2 cancelled=1
+EVENT transport at=9 kind=3 worker=0 delivered=0 sends=2 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=1 delivery_attempts=3 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=9 kind=3 worker=1 delivered=0 sends=3 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=1 delivery_attempts=4 dropped_sends=1 dropped_deliveries=2 cancelled=1
+PASS transport routing, coalescing, no-op, equal-time ordering, pending teardown
+EVENT rearm at=1 kind=0 worker=0 delivered=0 sends=1 coalesced=0 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=0 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT rearm at=2 kind=1 worker=0 delivered=1 sends=2 coalesced=0 deliveries=1 unsolicited=0 pending=1 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT rearm at=3 kind=1 worker=0 delivered=1 sends=2 coalesced=0 deliveries=2 unsolicited=0 pending=0 closed=0 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+PASS arrival during receiver callback remains pending
+PASS invalid schedules and backward clock rejected

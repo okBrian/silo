@@ -1,0 +1,29 @@
++ trap 'status=$?; printf "%s\n" "$status" > "$evidence/exit-status"' EXIT
++ git rev-parse HEAD
+++ git -C masstree rev-parse HEAD
++ test 1150824e6a10a0384ba4bfed6b916ce62f96315f = 1150824e6a10a0384ba4bfed6b916ce62f96315f
++ uname -a
++ cat /etc/os-release
++ c++ --version
++ getconf GNU_LIBC_VERSION
++ lscpu
++ taskset -pc 89
++ sha256sum benchmarks/notification_model.h benchmarks/notification_schedule.h benchmarks/request_driver.cc benchmarks/request_driver.h benchmarks/worker_context.cc benchmarks/worker_context.h benchmarks/signal_backend.cc benchmarks/signal_backend.h replication/tests/notification_model_cases.h replication/tests/notification_model_test.cc replication/tests/batched_notification_cases.h replication/tests/batched_notifications_test.cc replication/tests/starvation_cases.h replication/tests/starvation_test.cc replication/tests/tpcc_mixed_test.cc replication/tests/validate_notification_model.sh replication/tests/verify_notification_model.py
++ sha256sum replication/uintr/Makefile replication/uintr/README.md replication/uintr/cpuid.c replication/uintr/cpuid_uintr.h replication/uintr/probe-host.sh replication/uintr/uintr_delivery.c
++ flags=(-std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS)
++ runtime=(benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc)
++ for build in debug optimized ubsan
++ case "$build" in
++ opt=(-O0 -g)
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O0 -g benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/notification_model_test.cc -o /mac10-evidence/final/notification_model-debug
++ timeout -k 5s 60s /mac10-evidence/final/notification_model-debug
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O0 -g benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/batched_notifications_test.cc -o /mac10-evidence/final/batched_notifications-debug
++ timeout -k 5s 60s /mac10-evidence/final/batched_notifications-debug
++ for suite in notification_model batched_notifications starvation
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -pthread -DSILO_WORKER_CONTEXTS -O0 -g benchmarks/request_driver.cc benchmarks/worker_context.cc benchmarks/signal_backend.cc replication/tests/starvation_test.cc -o /mac10-evidence/final/starvation-debug
++ timeout -k 5s 60s /mac10-evidence/final/starvation-debug
+replication/tests/validate_notification_model.sh: line 26:   178 Aborted                 timeout -k 5s 60s "$evidence/$suite-$build" > "$evidence/$suite-$build.log" 2>&1
++ status=134
++ printf '%s\n' 134

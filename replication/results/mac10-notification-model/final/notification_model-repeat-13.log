@@ -1,0 +1,58 @@
+EVENT transport at=1 kind=1 worker=0 delivered=0 sends=0 coalesced=0 deliveries=0 unsolicited=0 pending=0 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=2 kind=0 worker=0 delivered=0 sends=1 coalesced=0 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=3 kind=0 worker=0 delivered=0 sends=2 coalesced=1 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=3 kind=0 worker=1 delivered=0 sends=1 coalesced=0 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=0 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=4 kind=1 worker=1 delivered=1 sends=1 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=5 kind=1 worker=0 delivered=1 sends=2 coalesced=1 deliveries=1 unsolicited=0 pending=0 closed=0 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=5 kind=2 worker=0 delivered=1 sends=2 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=0 delivery_attempts=3 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=6 kind=1 worker=1 delivered=0 sends=1 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=0 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=6 kind=0 worker=1 delivered=0 sends=2 coalesced=0 deliveries=1 unsolicited=0 pending=1 closed=0 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=7 kind=3 worker=1 delivered=0 sends=2 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=1 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=1
+EVENT transport at=8 kind=1 worker=1 delivered=0 sends=2 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=1 delivery_attempts=3 dropped_sends=0 dropped_deliveries=1 cancelled=1
+EVENT transport at=8 kind=0 worker=1 delivered=0 sends=3 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=1 delivery_attempts=3 dropped_sends=1 dropped_deliveries=1 cancelled=1
+EVENT transport at=8 kind=2 worker=1 delivered=0 sends=3 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=1 delivery_attempts=4 dropped_sends=1 dropped_deliveries=2 cancelled=1
+EVENT transport at=9 kind=3 worker=0 delivered=0 sends=2 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=1 delivery_attempts=3 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT transport at=9 kind=3 worker=1 delivered=0 sends=3 coalesced=0 deliveries=1 unsolicited=0 pending=0 closed=1 delivery_attempts=4 dropped_sends=1 dropped_deliveries=2 cancelled=1
+PASS transport routing, coalescing, no-op, equal-time ordering, pending teardown
+EVENT rearm at=1 kind=0 worker=0 delivered=0 sends=1 coalesced=0 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=0 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT rearm at=2 kind=1 worker=0 delivered=1 sends=2 coalesced=0 deliveries=1 unsolicited=0 pending=1 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT rearm at=3 kind=1 worker=0 delivered=1 sends=2 coalesced=0 deliveries=2 unsolicited=0 pending=0 closed=0 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+PASS arrival during receiver callback remains pending
+PASS invalid schedules and backward clock rejected
+CASE model-receiver delayed=0 clock=controlled_ns seed=1 backend=checkpoint high_commits=2 high_attempts=3 publications=1 real_handlers=0 async_captures=0 switches=1 low_resumes=1 deferrals=2 checksum=153
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+model-receiver	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	110	110	2	1	committed	0	null	0	0	0	0
+model-receiver	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	110	110	1	0	committed	0	null	0	0	0	0
+model-receiver	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	130	1	0	committed	0	153	0	0	0	30
+model-receiver	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	130	130	1	0	committed	0	153	0	0	0	0
+phase=controlled cutoff_ns=120 generated=4 completed=4 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=1 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=2 drain_commits=2 failed=0
+notifications phase=controlled worker=0 signal_sends=0 real_handlers=0 async_captures=0 signal_deferred=0 signal_rearms=0 switches=1 low_resumes=1
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=30
+EVENT model-receiver at=110 kind=0 worker=0 delivered=0 sends=1 coalesced=0 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=0 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=110 kind=0 worker=0 delivered=0 sends=2 coalesced=1 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=0 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=110 kind=1 worker=0 delivered=1 sends=2 coalesced=1 deliveries=1 unsolicited=0 pending=0 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=120 kind=1 worker=0 delivered=0 sends=2 coalesced=1 deliveries=1 unsolicited=0 pending=0 closed=0 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=120 kind=2 worker=0 delivered=1 sends=2 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=0 delivery_attempts=3 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=130 kind=3 worker=0 delivered=0 sends=2 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=1 delivery_attempts=3 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=140 kind=1 worker=0 delivered=0 sends=2 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=1 delivery_attempts=4 dropped_sends=0 dropped_deliveries=1 cancelled=0
+EVENT model-receiver at=140 kind=0 worker=0 delivered=0 sends=3 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=1 delivery_attempts=4 dropped_sends=1 dropped_deliveries=1 cancelled=0
+EVENT model-receiver at=150 kind=2 worker=0 delivered=0 sends=3 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=1 delivery_attempts=5 dropped_sends=1 dropped_deliveries=2 cancelled=0
+PASS receiver schedule delayed=0 callbacks_after_destroy=0
+CASE model-receiver delayed=1 clock=controlled_ns seed=1 backend=checkpoint high_commits=2 high_attempts=3 publications=1 real_handlers=0 async_captures=0 switches=1 low_resumes=1 deferrals=2 checksum=153
+run_id	phase	request_id	batch_id	type	priority	worker	home_warehouse	input_seed	scheduled_ns	generated_ns	admitted_ns	first_start_ns	finished_ns	attempts	aborts	outcome	generation_delay_ns	q2_checksum	cooperative_reads	cooperative_checks	cooperative_yields	low_service_ns
+model-receiver	controlled	1	1	Payment	high	0	1	6238072747940578789	110	110	110	110	110	2	1	committed	0	null	0	0	0	0
+model-receiver	controlled	2	1	NewOrder	high	0	1	15839785061582574730	110	110	110	110	110	1	0	committed	0	null	0	0	0	0
+model-receiver	controlled	0	null	Q2	low	0	1	13097412088287921567	100	100	100	100	130	1	0	committed	0	153	0	0	0	30
+model-receiver	controlled	3	null	Q2	low	0	1	13040959721820390457	110	110	110	130	130	1	0	committed	0	153	0	0	0	0
+phase=controlled cutoff_ns=120 generated=4 completed=4 rejected=0 cancelled=0 dropped=0 cutoff_pending_global=0 cutoff_queued=1 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=2 drain_commits=2 failed=0
+notifications phase=controlled worker=0 signal_sends=0 real_handlers=0 async_captures=0 signal_deferred=0 signal_rearms=0 switches=1 low_resumes=1
+starvation phase=controlled worker=0 clock=driver_ns threshold=100 admission_blocks=0 checkpoint_blocks=0 forced_low_returns=0 low_requests=2 high_service_ns=0 low_service_ns=30
+EVENT model-receiver at=110 kind=0 worker=0 delivered=0 sends=1 coalesced=0 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=0 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=110 kind=0 worker=0 delivered=0 sends=2 coalesced=1 deliveries=0 unsolicited=0 pending=1 closed=0 delivery_attempts=0 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=120 kind=1 worker=0 delivered=1 sends=2 coalesced=1 deliveries=1 unsolicited=0 pending=0 closed=0 delivery_attempts=1 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=120 kind=2 worker=0 delivered=1 sends=2 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=0 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=130 kind=3 worker=0 delivered=0 sends=2 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=1 delivery_attempts=2 dropped_sends=0 dropped_deliveries=0 cancelled=0
+EVENT model-receiver at=140 kind=1 worker=0 delivered=0 sends=2 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=1 delivery_attempts=3 dropped_sends=0 dropped_deliveries=1 cancelled=0
+EVENT model-receiver at=140 kind=0 worker=0 delivered=0 sends=3 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=1 delivery_attempts=3 dropped_sends=1 dropped_deliveries=1 cancelled=0
+EVENT model-receiver at=150 kind=2 worker=0 delivered=0 sends=3 coalesced=1 deliveries=2 unsolicited=1 pending=0 closed=1 delivery_attempts=4 dropped_sends=1 dropped_deliveries=2 cancelled=0
+PASS receiver schedule delayed=1 callbacks_after_destroy=0
