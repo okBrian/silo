@@ -1,0 +1,5 @@
+PASS lifecycle, thread ownership, invalid transitions and exception cleanup
+PASS glibc signal-mask save/restore
+PASS 1 round trips, original=19 alternate=32
+PASS 10000 round trips, original=100010017 alternate=150015029
+PASS 1000000 round trips, original=1000001000017 alternate=1500001500029

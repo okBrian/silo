@@ -1,0 +1,77 @@
+{
+  "contract_version": 1,
+  "batch_id": "queued-cooperative-smoke-xaq1i8c_",
+  "config": {
+    "name": "queued-cooperative-smoke",
+    "format": "queued",
+    "policy": "wait",
+    "variants": [
+      {
+        "workers": 1,
+        "warehouses": 1,
+        "policy": "wait"
+      },
+      {
+        "workers": 1,
+        "warehouses": 1,
+        "policy": "cooperative"
+      },
+      {
+        "workers": 2,
+        "warehouses": 2,
+        "policy": "wait"
+      },
+      {
+        "workers": 2,
+        "warehouses": 2,
+        "policy": "cooperative"
+      }
+    ],
+    "repeats": 2,
+    "phases_s": {
+      "warmup": 1,
+      "measurement": 1,
+      "drain_limit": 30
+    },
+    "timeout_s": 210,
+    "queue": {
+      "first_seed": 1,
+      "interval_us": 100000,
+      "batch_per_worker": 4,
+      "global_capacity_per_worker": 4,
+      "worker_capacity": 4,
+      "q2_variant": "q2_min_stock_v1"
+    },
+    "yield_interval": 64
+  },
+  "created_at_utc": "2026-11-05T04:10:37+00:00",
+  "hostname": "39882f945f31",
+  "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.35",
+  "slurm_job_id": null,
+  "source_checkout": "/work.35jZzy/source",
+  "revisions": {
+    "masstree": {
+      "head": "1150824e6a10a0384ba4bfed6b916ce62f96315f",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked_paths": []
+    },
+    "silo": {
+      "head": "8395daba617e83e6805268bda793ab0d5359d63b",
+      "tracked_diff_sha256": "b123600f39237fb269a4cfb57812d49c11e2881e54ed66211332604b4763b58d",
+      "untracked_paths": []
+    }
+  },
+  "binary_sha256": "f2d35f0fb03f8fdf7fb6cf3f31fc71249aff276927233a63c7176ab19371c8e3",
+  "build_info": "GCC 11.4; glibc 2.35; MODE=perf MASSTREE=1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1; temporary -O1 and GCC pair formatter patch; x86-64 QEMU/Colima Ubuntu 22.04 container",
+  "tool_sha256": "b8e33a243bcdddc22a98501b815f98a38d6cf3ee3e320f4c16e88acc5180f030",
+  "run_ids": [
+    "queued-cooperative-smoke-xaq1i8c_-r1-v1",
+    "queued-cooperative-smoke-xaq1i8c_-r1-v2",
+    "queued-cooperative-smoke-xaq1i8c_-r1-v3",
+    "queued-cooperative-smoke-xaq1i8c_-r1-v4",
+    "queued-cooperative-smoke-xaq1i8c_-r2-v4",
+    "queued-cooperative-smoke-xaq1i8c_-r2-v3",
+    "queued-cooperative-smoke-xaq1i8c_-r2-v2",
+    "queued-cooperative-smoke-xaq1i8c_-r2-v1"
+  ]
+}

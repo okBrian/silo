@@ -1,0 +1,25 @@
+Linux 6.8.0-117-generic x86_64
+PRETTY_NAME="Ubuntu 22.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.5 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
+g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+ldd (Ubuntu GLIBC 2.35-0ubuntu3.15) 2.35
+GNU Make 4.3
+Python 3.10.12
+2
+pid 1's current affinity list: 0,1
+model name	: QEMU TCG CPU version 2.5+
+MemTotal:        2009372 kB
+8395daba617e83e6805268bda793ab0d5359d63b
+ 1150824e6a10a0384ba4bfed6b916ce62f96315f masstree (1150824)
+ M Makefile
+ M util.h

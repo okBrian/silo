@@ -1,0 +1,4 @@
+PASS all 8 runs and 16 phase summaries reconcile, with zero aborts, rejections, cancellations or failures
+wait total=4143 short=216 q2=3927 drain=9 handoffs=0
+cooperative total=3982 short=216 q2=3766 drain=7 handoffs=36
+PASS the archived batch regenerated the same CSV and reconciliation log

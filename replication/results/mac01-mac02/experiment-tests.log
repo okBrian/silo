@@ -1,0 +1,16 @@
+test_i06_archives (test_i05_experiments.AnalysisTests) ... ok
+test_nearest_rank_and_tail_threshold (test_i05_experiments.AnalysisTests) ... ok
+test_pace_archive_matches_published_values (test_i05_experiments.AnalysisTests) ... ok
+test_queued_cohort (test_i05_experiments.AnalysisTests) ... ok
+test_stock_columns_and_units (test_i05_experiments.AnalysisTests) ... ok
+test_matrix_continues_after_failure_and_retains_outputs (test_i05_experiments.RunnerTests) ... ok
+test_mixed_configuration_records_q2_dataset_and_profile (test_i05_experiments.RunnerTests) ... ok
+test_paired_policy_configuration_preserves_inputs (test_i05_experiments.RunnerTests) ... ok
+test_queued_configuration_passes_seed_and_phase_options (test_i05_experiments.RunnerTests) ... ok
+test_timeout_retains_run (test_i05_experiments.RunnerTests) ... ok
+test_wait_configuration_selects_policy_explicitly (test_i05_experiments.RunnerTests) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 1.796s
+
+OK

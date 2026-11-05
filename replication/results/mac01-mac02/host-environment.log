@@ -1,0 +1,43 @@
+2026-11-04 23:01:49 EST
+Darwin 27.0.0 arm64
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+Apple M5 Pro
+colima version 0.10.3
+git commit: 00f6c297e92a82c04a4ab507db0a61435650d7e8
+
+runtime: docker
+arch: x86_64
+client: v29.7.2
+server: v29.5.2
+QEMU emulator version 11.1.1
+vmType: qemu
+arch: x86_64
+images:
+    - location: /Users/erin/Library/Caches/colima/caches/5bfdf1067a8e288910a570fb8c6edbb2340ab7bbc09d2133d64ced3c888a78ed
+      arch: x86_64
+cpus: 2
+memory: 2048MiB
+disk: 20GiB
+Linux 6.8.0-117-generic x86_64
+PRETTY_NAME="Ubuntu 24.04.4 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.4 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+2
+               total        used        free      shared  buff/cache   available
+Mem:            1962         429         814           0         895        1532
+Swap:              0           0           0
+Docker 29.5.2 linux/amd64
+Image sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 linux/amd64 ["ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11"]
+Container /silo-mac01-mac02 image=sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 mounts=0
