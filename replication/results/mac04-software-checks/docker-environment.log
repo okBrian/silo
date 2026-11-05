@@ -1,0 +1,3 @@
+Docker guest 29.5.2 linux/x86_64 kernel=6.8.0-117-generic vCPUs=2
+Ubuntu base sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11 ["ubuntu@sha256:076e7bf82319619f28dd0aa9c02ab34b055ad37100395b4f49a2ffba04fb5e11"]
+Validation container image=sha256:0927a5715a28df53f0a9baf9eb8fb94e4f38af684dfef4989dcdd53d11f2abb7 mounts=0

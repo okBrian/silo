@@ -1,4 +1,5 @@
 #include "../../benchmarks/worker_context.h"
+#include "../../preemption.h"
 
 #include <cfenv>
 #include <cstdint>
@@ -145,6 +146,48 @@ void run_lifecycle_checks()
   std::puts("PASS lifecycle, thread ownership, invalid transitions and exception cleanup");
 }
 
+void run_deferred_service_checks()
+{
+  struct Service {
+    unsigned pauses = 0;
+    unsigned resumes = 0;
+  } service;
+  constexpr unsigned rounds = 32;
+  WorkerContext context([](WorkerContext &context, void *argument) {
+    auto &service = *static_cast<Service *>(argument);
+    CHECK(!context.checkpoint());
+    for (unsigned i = 0; i < rounds; ++i) {
+      {
+        ScopedNonPreemptible outer;
+        {
+          ScopedNonPreemptible inner;
+          if (i % 2 == 0) {
+            context.request_service();
+            context.request_service();
+          }
+          CHECK(!context.checkpoint());
+        }
+        CHECK(!context.checkpoint());
+      }
+      ++service.pauses;
+      CHECK(context.checkpoint());
+      ++service.resumes;
+    }
+    CHECK(!context.checkpoint());
+  }, &service);
+
+  for (unsigned i = 0; i < rounds; ++i) {
+    CHECK(context.resume());
+    CHECK(service.pauses == i + 1 && service.resumes == i);
+    CHECK(!ScopedNonPreemptible::blocked());
+    if (i % 2 == 0)
+      context.request_service(); // A notification while high service is active.
+  }
+  CHECK(!context.resume());
+  CHECK(service.resumes == rounds);
+  std::puts("PASS nested deferral, coalescing and 32 repeated pauses and resumes");
+}
+
 bool usr1_blocked()
 {
   sigset_t mask;
@@ -198,6 +241,7 @@ extern "C" void context_test_entry(WorkerContext &context, void *argument)
 int main()
 {
   run_lifecycle_checks();
+  run_deferred_service_checks();
   run_signal_mask_check();
   run_round_trips(1);
   run_round_trips(10000);

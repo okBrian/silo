@@ -1,4 +1,5 @@
 #include "../../benchmarks/request_driver.h"
+#include "../../benchmarks/starvation_budget.h"
 #ifdef SILO_WORKER_CONTEXTS
 #include "../../preemption.h"
 #endif
@@ -12,6 +13,7 @@
 #include <iostream>
 #include <map>
 #include <sstream>
+#include <stdexcept>
 #include <thread>
 #include <vector>
 
@@ -160,6 +162,136 @@ static void retries_and_duplicate_notifications() {
   assert(records[2].outcome == Outcome::user_aborted && records[2].attempts == 1);
   assert(records[3].outcome == Outcome::committed && records[3].attempts == 1);
   std::cout << "PASS stable retries, retry exhaustion, user abort, FIFO and duplicate notifications\n";
+}
+
+static void high_publication_batches() {
+  std::atomic<Ns> time{100};
+  std::promise<void> low_started[2], first_high_served[2], release_low;
+  auto release = release_low.get_future().share();
+  std::vector<std::pair<Ns, size_t>> notifications;
+  notifications.reserve(4);
+  Config config;
+  config.workers = 2;
+  config.interval = 10;
+  config.batch_size = config.global_capacity = 6;
+  config.high_capacity = 2;
+  Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
+    if (next == 110) {
+      for (auto &started : low_started)
+        started.get_future().wait();
+      assert(notifications.empty()); // Low publication only wakes idle workers.
+    } else if (next == 120) {
+      assert((notifications == std::vector<std::pair<Ns, size_t>>{{110, 0}, {110, 1}}));
+      driver.notify(0);
+      driver.notify(1);
+      assert(notifications.size() == 2); // Empty/duplicate wakes are separate.
+      release_low.set_value();
+      for (auto &served : first_high_served)
+        served.get_future().wait();
+    }
+    time = next;
+  }, [&](size_t worker) {
+    notifications.emplace_back(time.load(), worker);
+  });
+
+  std::vector<uint64_t> sequences[2];
+  auto run = [&](size_t worker) {
+    driver.run_worker(worker, [&](const Request &r) {
+      if (!r.batch) {
+        if (r.id == worker) {
+          low_started[worker].set_value();
+          release.wait();
+        }
+        return Attempt::committed;
+      }
+      sequences[worker].push_back(r.high_sequence);
+      if (r.high_sequence == 0 && r.attempts == 1)
+        return Attempt::conflict;
+      if (r.high_sequence == worker + 2)
+        first_high_served[worker].set_value();
+      return Attempt::committed;
+    });
+  };
+  std::thread first(run, 0), second(run, 1);
+  driver.produce(20, 100);
+  first.join();
+  second.join();
+
+  assert(!driver.failed());
+  assert((notifications == std::vector<std::pair<Ns, size_t>>{
+    {110, 0}, {110, 1}, {120, 0}, {120, 1}}));
+  assert((sequences[0] == std::vector<uint64_t>{0, 0, 2, 4}));
+  assert((sequences[1] == std::vector<uint64_t>{1, 3, 5}));
+  size_t high_commits = 0;
+  for (const Request &r : checked_records(driver)) {
+    assert(r.outcome == Outcome::committed);
+    if (r.batch) {
+      assert(r.scheduled == 110 && r.admitted == (r.high_sequence < 4 ? 110 : 120));
+      assert(r.aborts == (r.high_sequence == 0 ? 1u : 0u));
+      assert(r.cooperative_yields == 0);
+      ++high_commits;
+    }
+  }
+  assert(driver.high_generated() == 6 && high_commits == 6);
+  std::cout << "PASS high publication: 2 workers, 2 admission passes, 4 notifications, "
+               "6 high admissions, 7 high attempts, 6 high commits, 0 switches\n";
+}
+
+static void high_publication_failure() {
+  std::atomic<Ns> time{100};
+  std::promise<void> low_started, release_low;
+  auto started = low_started.get_future();
+  auto release = release_low.get_future();
+  Config config;
+  config.interval = 10;
+  Driver driver(config, [&] { return time.load(); }, [&](Ns next) {
+    started.wait();
+    time = next;
+  }, [](size_t) { throw std::runtime_error("notification failed"); });
+  std::thread worker([&] {
+    driver.run_worker(0, [&](const Request &r) {
+      assert(!r.batch);
+      low_started.set_value();
+      release.wait();
+      return Attempt::committed;
+    });
+  });
+  driver.produce(20, 100);
+  release_low.set_value();
+  worker.join();
+
+  auto records = checked_records(driver);
+  assert(driver.failed() && records.size() == 5 && driver.high_generated() == 4);
+  assert(records[0].outcome == Outcome::committed);
+  for (size_t i = 1; i < records.size(); ++i) {
+    assert(records[i].admitted == 110 && records[i].outcome == Outcome::cancelled_shutdown);
+    assert(!records[i].attempts);
+  }
+  std::cout << "PASS notification failure: 4 published high requests cancelled, active low completed\n";
+}
+
+static void starvation_budget() {
+  StarvationBudget budget;
+  budget.charge_high(0, 10);
+  assert(!budget.starved(10, 0)); // No low request to protect.
+  budget.begin_low(0);
+  assert(!budget.starved(0, 0)); // A zero cycle timestamp and zero elapsed are valid.
+  budget.charge_high(50, 100);
+  assert(!budget.starved(100, 50)); // Strict threshold, exactly 50%.
+  assert(budget.starved(100, 49) && budget.starved(100, 0));
+  budget.charge_high(100, 180); // One long high request, including its retries.
+  assert(budget.high_cycles == 130 && budget.starved(180, 50));
+  assert(budget.starved(259, 50) && !budget.starved(260, 50));
+  assert(!budget.starved(180, 100));
+  budget.end_low();
+  assert(!budget.starved(260, 0));
+  budget.begin_low(260);
+  assert(budget.high_cycles == 0 && !budget.starved(261, 0));
+  budget.begin_low(0);
+  budget.charge_high(0, UINT64_MAX / 2 + 1);
+  assert(budget.starved(UINT64_MAX, 50) && !budget.starved(UINT64_MAX, 100));
+  std::cout << "PASS starvation budget: inactive/zero time, strict threshold, retry charge, "
+               "overshoot and recovery, per-low reset, full-width arithmetic\n";
 }
 
 static void late_past_cutoff() {
@@ -409,6 +541,9 @@ int main() {
   late_batches_and_cancellation();
   late_past_cutoff();
   retries_and_duplicate_notifications();
+  high_publication_batches();
+  high_publication_failure();
+  starvation_budget();
   fatal_attempt();
   wait_policy();
 #ifdef SILO_WORKER_CONTEXTS

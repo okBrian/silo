@@ -70,9 +70,13 @@ public:
   using Clock = std::function<Ns()>;
   using Wait = std::function<void(Ns)>;
   using Visit = std::function<void(const Request &)>;
+  // Producer-side callback after high queue publication, once per worker per
+  // nonempty admission pass. The callback must not wait for worker service.
+  // An exception stops the run through the normal fatal-error drain path.
+  using HighPublished = std::function<void(size_t)>;
 
   explicit Driver(const Config &config, Clock clock = monotonic_now,
-                  Wait wait_until = {});
+                  Wait wait_until = {}, HighPublished high_published = {});
   ~Driver();
 
   void produce(Ns duration, Ns drain, uint64_t first_id = 0, uint64_t first_high = 0);

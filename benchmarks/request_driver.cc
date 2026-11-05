@@ -140,12 +140,14 @@ Ns monotonic_now() {
 }
 
 struct Driver::State {
-  State(const Config &config, Clock clock, Wait wait_until)
-    : config(config), clock(clock), wait_until(wait_until), low_sequence(config.workers) {}
+  State(const Config &config, Clock clock, Wait wait_until, HighPublished high_published)
+    : config(config), clock(clock), wait_until(wait_until),
+      high_published(std::move(high_published)), low_sequence(config.workers) {}
 
   const Config config;
   const Clock clock;
   const Wait wait_until;
+  const HighPublished high_published;
   std::vector<std::unique_ptr<Worker>> workers;
   std::vector<uint64_t> low_sequence;
   std::deque<Request> global;
@@ -163,8 +165,8 @@ struct Driver::State {
   Ns cutoff = 0;
 };
 
-Driver::Driver(const Config &config, Clock clock, Wait wait_until)
-  : state(new State(config, clock, wait_until)) {
+Driver::Driver(const Config &config, Clock clock, Wait wait_until, HighPublished high_published)
+  : state(new State(config, clock, wait_until, std::move(high_published))) {
   if (!config.workers || !config.batch_size || !config.interval ||
       !config.global_capacity || !config.high_capacity ||
       config.high_capacity == SIZE_MAX || !config.attempt_limit || !config.yield_interval)
@@ -261,6 +263,16 @@ void Driver::produce(Ns duration, Ns drain, uint64_t first_id, uint64_t first_hi
       }
       published[request.worker] = true;
       s.global.pop_front();
+    }
+    if (s.high_published) {
+      try {
+        for (size_t i = 0; i < config.workers; ++i)
+          if (published[i])
+            s.high_published(i);
+      } catch (...) {
+        s.fatal.store(true, std::memory_order_release);
+        break;
+      }
     }
     if (config.generate_low) {
       for (size_t i = 0; i < config.workers && s.clock() < s.cutoff; ++i) {

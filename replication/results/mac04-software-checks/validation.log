@@ -1,0 +1,161 @@
+++ uname -m
++ test x86_64 = x86_64
++ uname -smr
+Linux 6.8.0-117-generic x86_64
++ cat /etc/os-release
+PRETTY_NAME="Ubuntu 22.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="22.04"
+VERSION="22.04.5 LTS (Jammy Jellyfish)"
+VERSION_CODENAME=jammy
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=jammy
++ c++ --version
+c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
++ getconf GNU_LIBC_VERSION
+glibc 2.35
++ taskset -pc 1
+pid 1's current affinity list: 0,1
+++ mktemp -d
++ work=/tmp/tmp.bXY8p0aTiw
++ tar --no-same-owner -xf /source.tar -C /tmp/tmp.bXY8p0aTiw
++ cd /tmp/tmp.bXY8p0aTiw/source
+++ git rev-parse HEAD:masstree
+++ git -C masstree rev-parse HEAD
++ test 1150824e6a10a0384ba4bfed6b916ce62f96315f = 1150824e6a10a0384ba4bfed6b916ce62f96315f
++ git rev-parse HEAD
+c645f16c347289557262c24f602d69fe3705c412
++ git submodule status
+ 1150824e6a10a0384ba4bfed6b916ce62f96315f masstree (1150824)
++ git diff --check
++ sha256sum benchmarks/request_driver.cc benchmarks/request_driver.h benchmarks/starvation_budget.h replication/tests/request_driver_test.cc replication/tests/worker_context_test.cc replication/tests/interrupt_state_abi.S replication/tests/interrupt_state_test.cc
+ce9f0f131a4624a32e9aa0c27c669820b9e2c56e2efbd22b14848dae656f3a1a  benchmarks/request_driver.cc
+5482c200d94e9ccdb99208f425bb5606d416ec2cbd8588ea9f8dc86de8a78e10  benchmarks/request_driver.h
+af2e1ccd7bd80363884697b4f215df56ee74a4ca63b31aa444ed09ea679cfd40  benchmarks/starvation_budget.h
+67bf98b13f860bacc0610508dd2bd15970649ce5702fbad310a308b6b6864546  replication/tests/request_driver_test.cc
+4741740d5bafac7083a1848d066871fa2b08929cac0b9c00f98973670a6dc230  replication/tests/worker_context_test.cc
+832eb21763aba4678d3d825afdc8df8a250193fea7df9e8ffeac12b57227969a  replication/tests/interrupt_state_abi.S
+b1cb67ca35155c5b1cdea589a3ca6121393da4c6e3c04598dfdfa0ce1a381b54  replication/tests/interrupt_state_test.cc
++ flags=(-std=c++11 -Wall -Wextra -Werror -pedantic)
++ for build in debug optimized
++ case "$build" in
++ opt=(-O0 -g)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -O0 -g -mno-avx replication/tests/interrupt_state_test.cc replication/tests/interrupt_state_abi.S -o /tmp/tmp.bXY8p0aTiw/interrupt_state_test
++ timeout 30s /tmp/tmp.bXY8p0aTiw/interrupt_state_test
+PASS 256 Linux trap returns: GPRs/RSP, RFLAGS, red zone, x87/MXCSR/XMM0-15
+PASS negative control: saved RAX and XMM0 corruption detected
++ for build in debug optimized
++ case "$build" in
++ opt=(-O3 -DNDEBUG)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -O3 -DNDEBUG -mno-avx replication/tests/interrupt_state_test.cc replication/tests/interrupt_state_abi.S -o /tmp/tmp.bXY8p0aTiw/interrupt_state_test
++ timeout 30s /tmp/tmp.bXY8p0aTiw/interrupt_state_test
+PASS 256 Linux trap returns: GPRs/RSP, RFLAGS, red zone, x87/MXCSR/XMM0-15
+PASS negative control: saved RAX and XMM0 corruption detected
++ for build in wait cooperative ubsan
++ opt=(-O2)
++ context=()
++ [[ wait != wait ]]
++ [[ wait == ubsan ]]
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -O2 -pthread benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /tmp/tmp.bXY8p0aTiw/request_driver_test
++ timeout 60s /tmp/tmp.bXY8p0aTiw/request_driver_test
+PASS delayed generation and overload: 8 high, 2 low, 5 rejected, 4 cancelled, 1 safe completion after deadline
+phase=measurement cutoff_ns=150 generated=10 completed=1 rejected=5 cancelled=4 dropped=0 cutoff_pending_global=2 cutoff_queued=2 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=1 failed=1
+PASS wake after drain deadline accounts for every pre-cutoff batch
+PASS stable retries, retry exhaustion, user abort, FIFO and duplicate notifications
+PASS high publication: 2 workers, 2 admission passes, 4 notifications, 6 high admissions, 7 high attempts, 6 high commits, 0 switches
+PASS notification failure: 4 published high requests cancelled, active low completed
+PASS starvation budget: inactive/zero time, strict threshold, retry charge, overshoot and recovery, per-low reset, full-width arithmetic
+PASS fatal adapter error stops new attempts and preserves terminal records
+PASS Wait: running low finishes, two shorts start in FIFO order after 7 and 8 us of local queueing, then queued low starts
+PASS three-worker routing and ID reconciliation: high=2392 generated=2498 committed=384 rejected=2114
++ for build in wait cooperative ubsan
++ opt=(-O2)
++ context=()
++ [[ cooperative != wait ]]
++ context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc)
++ [[ cooperative == ubsan ]]
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -O2 -pthread -DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /tmp/tmp.bXY8p0aTiw/request_driver_test
++ timeout 60s /tmp/tmp.bXY8p0aTiw/request_driver_test
+PASS delayed generation and overload: 8 high, 2 low, 5 rejected, 4 cancelled, 1 safe completion after deadline
+phase=measurement cutoff_ns=150 generated=10 completed=1 rejected=5 cancelled=4 dropped=0 cutoff_pending_global=2 cutoff_queued=2 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=1 failed=1
+PASS wake after drain deadline accounts for every pre-cutoff batch
+PASS stable retries, retry exhaustion, user abort, FIFO and duplicate notifications
+PASS high publication: 2 workers, 2 admission passes, 4 notifications, 6 high admissions, 7 high attempts, 6 high commits, 0 switches
+PASS notification failure: 4 published high requests cancelled, active low completed
+PASS starvation budget: inactive/zero time, strict threshold, retry charge, overshoot and recovery, per-low reset, full-width arithmetic
+PASS fatal adapter error stops new attempts and preserves terminal records
+PASS Wait: running low finishes, two shorts start in FIFO order after 7 and 8 us of local queueing, then queued low starts
+PASS Cooperative: empty interval, nested deferral, FIFO, repeated yields, high aborts and stable low retry
+PASS three-worker routing and ID reconciliation: high=2392 generated=2512 committed=421 rejected=2091
++ for build in wait cooperative ubsan
++ opt=(-O2)
++ context=()
++ [[ ubsan != wait ]]
++ context=(-DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc)
++ [[ ubsan == ubsan ]]
++ opt+=(-fsanitize=undefined -fno-sanitize-recover=all)
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -O2 -fsanitize=undefined -fno-sanitize-recover=all -pthread -DSILO_WORKER_CONTEXTS benchmarks/worker_context.cc benchmarks/request_driver.cc replication/tests/request_driver_test.cc -o /tmp/tmp.bXY8p0aTiw/request_driver_test
++ timeout 60s /tmp/tmp.bXY8p0aTiw/request_driver_test
+PASS delayed generation and overload: 8 high, 2 low, 5 rejected, 4 cancelled, 1 safe completion after deadline
+phase=measurement cutoff_ns=150 generated=10 completed=1 rejected=5 cancelled=4 dropped=0 cutoff_pending_global=2 cutoff_queued=2 cutoff_running=1 cutoff_due_ungenerated=0 commits_in_window=0 drain_commits=1 failed=1
+PASS wake after drain deadline accounts for every pre-cutoff batch
+PASS stable retries, retry exhaustion, user abort, FIFO and duplicate notifications
+PASS high publication: 2 workers, 2 admission passes, 4 notifications, 6 high admissions, 7 high attempts, 6 high commits, 0 switches
+PASS notification failure: 4 published high requests cancelled, active low completed
+PASS starvation budget: inactive/zero time, strict threshold, retry charge, overshoot and recovery, per-low reset, full-width arithmetic
+PASS fatal adapter error stops new attempts and preserves terminal records
+PASS Wait: running low finishes, two shorts start in FIFO order after 7 and 8 us of local queueing, then queued low starts
+PASS Cooperative: empty interval, nested deferral, FIFO, repeated yields, high aborts and stable low retry
+PASS three-worker routing and ID reconciliation: high=2392 generated=2501 committed=442 rejected=2059
++ c++ -std=c++11 -Wall -Wextra -Werror -pedantic -O3 -DNDEBUG -pthread benchmarks/worker_context.cc replication/tests/worker_context_test.cc replication/tests/worker_context_abi.S -o /tmp/tmp.bXY8p0aTiw/worker_context_test
++ timeout 120s /tmp/tmp.bXY8p0aTiw/worker_context_test
+PASS lifecycle, thread ownership, invalid transitions and exception cleanup
+PASS nested deferral, coalescing and 32 repeated pauses and resumes
+PASS glibc signal-mask save/restore
+PASS 1 round trips, original=19 alternate=32
+PASS 10000 round trips, original=100010017 alternate=150015029
+PASS 1000000 round trips, original=1000001000017 alternate=1500001500029
++ python3 -B -m unittest discover -s replication/tests -p test_i05_experiments.py -v
+test_i06_archives (test_i05_experiments.AnalysisTests) ... ok
+test_nearest_rank_and_tail_threshold (test_i05_experiments.AnalysisTests) ... ok
+test_pace_archive_matches_published_values (test_i05_experiments.AnalysisTests) ... ok
+test_queued_cohort (test_i05_experiments.AnalysisTests) ... ok
+test_stock_columns_and_units (test_i05_experiments.AnalysisTests) ... ok
+test_matrix_continues_after_failure_and_retains_outputs (test_i05_experiments.RunnerTests) ... ok
+test_mixed_configuration_records_q2_dataset_and_profile (test_i05_experiments.RunnerTests) ... ok
+test_paired_policy_configuration_preserves_inputs (test_i05_experiments.RunnerTests) ... ok
+test_queued_configuration_passes_seed_and_phase_options (test_i05_experiments.RunnerTests) ... ok
+test_timeout_retains_run (test_i05_experiments.RunnerTests) ... ok
+test_wait_configuration_selects_policy_explicitly (test_i05_experiments.RunnerTests) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 1.669s
+
+OK
++ git apply replication/results/mac01-mac02/build-compatibility.diff
++ make -j1 -C third-party/lz4 library
++ make -j1 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 masstree/config.h
++ make -j2 MYSQL=0 USE_MALLOC_MODE=0 WORKER_CONTEXTS=1 dbtest tpcc_mixed_test silo_context_test
++ out=out-perf.masstree.contexts
++ timeout 90s ./out-perf.masstree.contexts/replication/tests/tpcc_mixed_test
+wait_an_epoch(): consistent reads happening in e-1, but e=0 so special case
+PASS Q2 region 0 checksum 12860241382490130518
+PASS Q2 region 1 checksum 11649938069444573197
+PASS Q2 region 2 checksum 14695981039346656037
+PASS Q2 checkpoint count and snapshot checksum across nine write handoffs
+PASS queued New-Order rollback, retry, linked rows and remote stock changes
+PASS queued Payment rollback, retry, remote lower median, balances and history
++ timeout 90s ./out-perf.masstree.contexts/replication/tests/silo_context_test
+PASS live snapshot and isolated context state across a short commit
+PASS nested scan protection, deferred service, callback unwind and insert abort
+PASS conflict, abort cleanup and balanced worker guards
+PASS deferred reclamation after the snapshot ends
